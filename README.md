@@ -1,3 +1,8 @@
+#Brandon Maddy Github Repository
+
+#Link to Shared Google Doc of Road Map
+https://docs.google.com/document/d/1_yZp0PqxzRHkoOPmO9z-ACW-awMI4X-gydiXJsOXBC4/edit
+
 # Team Research Project: A Systems Biology Approach to Investigate the Role of Cholesterol in Neurodegenerative Diseases
 This GitHub repository contains the complete computational work done as part of the team research project for the 2019 cohort of the MPhil in Biotechnology at the University of Cambridge. The project investigated the role of cholesterol in the following neurodegenerative diseases:
 - [x] Alzheimer's disease (AD)
