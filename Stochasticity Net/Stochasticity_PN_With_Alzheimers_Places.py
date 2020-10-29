@@ -54,15 +54,15 @@ class InArc(BaseArc):
     def __str__(self):
         return f"InArc from {self.place}"
 
-    def fire(self): # have another argument called coefficient, actually have coefficient argument go to base Arc
+    def fire(self): 
         """Remove tokens from the input place.
 
-        """ #
+        """
 
         #print("coefficient_scalar", self.coefficient_scalar)#debugging
         #print("arcweight", self.arc_weight) #debugging
         self.place.tokens -= self.arc_weight*self.coefficient_scalar #added
-        #print(self.arc_weight)filip3
+        #print(self.arc_weight)debugging
 
 
     def allowed_firing(self):
@@ -86,7 +86,7 @@ class InhibArc(BaseArc):
     def allowed_firing(self):
         """Arc weight is the number of tokens for which the transition is inhibited."""
         return self.place.tokens < self.arc_weight*self.coefficient_scalar #added
-class Catalysis()
+class Catalysis(BaseArc):
         def allowed_firing(self):
             return self.place.tokens > 0
     #catalyis arc with allowed firing condition
@@ -114,7 +114,7 @@ class Transition:
     def fire(self):
         """Fire!"""  
         # Check if transition can occur by inspecting whether each place has enough tokens
-        random_integer = random.randint(0,5)#added can change distribution here
+        random_integer = random.randint(0,3)#added can change distribution here
         #can try random.gauss(2,1) or randint(0,5)) #having negative numbers can be like having reverse reaction happening
         #TODO Make it so that different transitions can have different distributions
         #print("coefficient_scalar is", random_integer)#debugging
@@ -434,50 +434,118 @@ if __name__ == "__main__":
     #BSL: Change the number of runs to higher if you want to start calculating variance
 
     # Add places for each chemical species
-    pn.add_place(initial_tokens=200, place_id="p_H2", label="hydrogen")
-    pn.add_place(100, place_id="p_O2", label="oxygen")
-    pn.add_place(0, place_id="p_H2O", label="water")
-    pn.add_place(0, place_id="p_I", label="inhibitor")
-
-    # Add transition corresponding to chemical reaction
-    pn.add_transition(transition_id = 't_water',
-                label                = "Water production",
-                input_place_ids       = ['p_H2', 'p_O2'],
-                input_arc_weights  = [2, 1], #set equal to a function
-                output_place_ids       = ['p_H2O'],
-                output_arc_weights = [2],
-                #input_coefficient_scalar = [1],#so 0,5 are the min and max values
-                inhib_place_ids       = ['p_I'],
-                inhib_arc_weights  = [10])
-                #coefficient_scalar = random.randint(0,5))
+# =============================================================================
+#     pn.add_place(initial_tokens=200, place_id="p_H2", label="hydrogen")
+#     pn.add_place(100, place_id="p_O2", label="oxygen")
+#     pn.add_place(0, place_id="p_H2O", label="water")
+#     pn.add_place(0, place_id="p_I", label="inhibitor")
+# =============================================================================
+    pn.add_place(initial_tokens=100, place_id="p_asec", label="alpha secretase")
+    pn.add_place(100, place_id="p_APP_PM", label="APP at plasma membrane")
+    pn.add_place(100, place_id="p_APP_endo", label="endocytosed APP")
+    pn.add_place(0, place_id="p_sAPPa", label="soluble sAPP alpha")
+    pn.add_place(0, place_id="p_CTF83", label="CTF83")
+    pn.add_place(1, place_id="p_bsec", label="beta secretase")
+    pn.add_place(0, place_id="p_sAPPb", label="soluble sAPP beta")
+    pn.add_place(0, place_id="p_CTF99", label="CTF99")
+    pn.add_place(1, place_id="p_AB", label="Amyloid beta peptide")
+    pn.add_place(0, place_id="p_AICD", label="AICD")
+    pn.add_place(1, place_id="p_gsec", label="gamma secretase")
     
-    #pn.add_transition(transition_id = 't_water_faster',
-                #label                = "Water production",
-                #input_place_ids       = ['p_H2', 'p_O2'],
-                #input_arc_weights  = [4, 2], 
-                #output_place_ids       = ['p_H2O'],
-                #output_arc_weights = [4],
-                #inhib_place_ids       = ['p_I'],
-                #inhib_arc_weights  = [10])    
+    pn.add_transition(transition_id = 't_asec_exp',
+                   label                = "alpha secretase expression",
+                   input_place_ids       = [],
+                   input_arc_weights  = [], 
+                   output_place_ids       = ['p_asec'],
+                output_arc_weights = [1])
+   
+    pn.add_transition(transition_id = 't_asec_deg',
+                label      =     "alpha secretase degradation",
+                input_place_ids         =  ['p_asec'],
+                input_arc_weights  =  [1],
+                output_place_ids         =  [],
+                output_arc_weights =  [])
+   
+    pn.add_transition(transition_id = 't_APP_asec_cleav',
+                   label      =     "APP cleavage by alpha secretase",
+                   input_place_ids         =  ['p_APP_PM'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  ['p_sAPPa', 'p_CTF83'],
+                   output_arc_weights =  [1, 1])
+           
+    pn.add_transition(transition_id = 't_APP_endo',
+                   label      =     "APP endocytosis",
+                   input_place_ids         =  ['p_APP_PM'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  ['p_APP_endo'],
+                   output_arc_weights =  [1])
+               
+    pn.add_transition(transition_id = 't_APP_endo_bsec_cleav',
+                   label      =     "APP cleavage by beta secretase",
+                   input_place_ids         =  ['p_APP_endo'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  ['p_sAPPb', 'p_CTF99'],
+                   output_arc_weights =  [1, 1])
+   
+   
+    pn.add_transition(transition_id = 't_bsec_exp',
+                   label      =     "beta secretase expression",
+                   input_place_ids         =  [],
+                   input_arc_weights  =  [],
+                   output_place_ids         =  ['p_bsec'],
+                   output_arc_weights =  [1])
+       
+    pn.add_transition(transition_id = 't_bsec_deg',
+                   label      =     "beta secretase degradation",
+                   input_place_ids         =  ['p_bsec'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  [],
+                   output_arc_weights =  [])
+       
+    pn.add_transition(transition_id = 't_CTF99_gsec_cleav',
+                   label      =     "CTF99 cleavage by gamma secretase",
+                   input_place_ids         =  ['p_CTF99'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  ['p_AB', 'p_AICD'],
+                   output_arc_weights =  [1, 1])
+       
+    pn.add_transition(transition_id = 't_gsec_exp',
+                   label      =     "gamma secretase expression",
+                   input_place_ids         =  [],
+                   input_arc_weights  =  [],
+                   output_place_ids         =  ['p_gsec'],
+                   output_arc_weights =  [1])
+       
+    pn.add_transition(transition_id = 't_gsec_deg',
+                   label      =     "gamma secretase degradation",
+                   input_place_ids         =  ['p_gsec'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  [],
+                   output_arc_weights =  [])
+       
+    pn.add_transition(transition_id = 't_bsec_deg',
+                   label      =     "beta secretase degradation",
+                   input_place_ids         =  ['p_bsec'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  [],
+                   output_arc_weights =  [])
     
-    
-    #pn.add_transition(transition_id = 't_creator',
-                #label      =     "Token creator",
-                #input_place_ids         =  ['p_O2'],
-                #input_arc_weights  =  [0],
-                #output_place_ids         =  ['p_O2'],
-                #output_arc_weights =  [1])
-    #BRANDON SPENCER LOCKEY freeze transition
-# So I just added an extra transition which does not change any token counts so that there is a random selection between this transition, and the other transition.
-    #pn.add_transition(transition_id = 't_pause',
-                #label                = "Pause for Stochasticity",
-                #input_place_ids       = ['p_H2', 'p_O2'],
-                #input_arc_weights  = [0, 0], 
-                #output_place_ids       = ['p_H2O'],
-                #output_arc_weights = [0])
+# =============================================================================
+#     pn.add_transition(transition_id = 't_water',
+#                 label                = "Water production",
+#                 input_place_ids       = ['p_H2', 'p_O2'],
+#                 input_arc_weights  = [2, 1], #set equal to a function
+#                 output_place_ids       = ['p_H2O'],
+#                 output_arc_weights = [2],
+#                 #input_coefficient_scalar = [1],#so 0,5 are the min and max values
+#                 inhib_place_ids       = ['p_I'],
+#                 inhib_arc_weights  = [10])
+#                 #coefficient_scalar = random.randint(0,5))
+#     
+# =============================================================================
                 
     # Run the network X times
-    pn.run(100, print_stats=False)
+    pn.run(1000, print_stats=False)
 
     # Plot the time-evolution of the system
     pn.plot_time_evolution()
