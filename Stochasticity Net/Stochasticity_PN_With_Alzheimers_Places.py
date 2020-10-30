@@ -553,3 +553,6 @@ if __name__ == "__main__":
     # Generate block diagram of the Petri net
     pn.generate_diagram("test-diagram")
     #commenting the above line out does nothing
+
+
+#HI BRANDON just checking how the heck this works
