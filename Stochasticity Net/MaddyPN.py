@@ -229,11 +229,34 @@ class PetriNet:
         """Plots time-evolution using mean number of tokens for each place in the net.
         TODO: Only plot evolution of places spesified in place_ids if place_ids is not empty.
         """
-
-        for tokens, place in zip(self.timeseries_mean.T, self.petri_net_model.places.values()):
-            plt.plot(tokens, label=f'{place.label}')
+#Info On the New Plotting Code Below:
+        #places is a dictionary. So you can get the actual places using places.keys()
+        #In the zip method below, self.petri_net_model.places.values() was changed to self.petri_net_model.places.keys() because this was more readable.
         
-        plt.legend()
+        dict_of_tokens = {} #brandonadded. creates dictionary
+        for tokens, place in zip(self.timeseries_mean.T, self.petri_net_model.places.keys()):
+            dict_of_tokens["place {}".format(place)]=tokens#brandonadded. this line assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
+            
+        #Good Debugging Commands:       
+        #print(dict_of_tokens.keys()) #tells you all the keys so you can plot whichever one you want.
+        #print(dict_of_tokens.get('place p_asec')) #Gives you the list of tokens for that place
+        #print(self.petri_net_model.places.keys()) # prints out all the places
+            
+        #Comment out whichever places you don't want to plot (Ctrl-1 on Spyder)
+        plt.plot(dict_of_tokens.get('place p_asec'), label="place p_asec")
+        plt.plot(dict_of_tokens.get('place p_APP_PM'), label="place p_APP_PM")
+        plt.plot(dict_of_tokens.get('place p_APP_endo'), label="place p_APP_endo")
+        plt.plot(dict_of_tokens.get('place p_sAPPa'), label="place p_sAPPa")
+        plt.plot(dict_of_tokens.get('place p_CTF83'), label="place p_CTF83")
+        plt.plot(dict_of_tokens.get('place p_bsec'), label="place p_bsec")
+        plt.plot(dict_of_tokens.get('place p_sAPPb'), label="place p_sAPPb")
+        plt.plot(dict_of_tokens.get('place p_CTF99'), label="place p_CTF99")
+        plt.plot(dict_of_tokens.get('place p_AB'), label="place p_AB")
+        plt.plot(dict_of_tokens.get('place p_AICD'), label="place p_AICD")
+        plt.plot(dict_of_tokens.get('place p_gsec'), label="place p_gsec")
+        
+        
+        plt.legend(fontsize=5) #brandon
         plt.xlabel('Time-step')
         plt.ylabel('Mean tokens')
         plt.show()
