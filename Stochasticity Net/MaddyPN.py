@@ -243,20 +243,25 @@ class PetriNet:
         #print(self.petri_net_model.places.keys()) # prints out all the places
             
         #Comment out whichever places you don't want to plot (Ctrl-1 on Spyder)
-        plt.plot(dict_of_tokens.get('place p_asec'), label="place p_asec")
-        plt.plot(dict_of_tokens.get('place p_APP_PM'), label="place p_APP_PM")
-        plt.plot(dict_of_tokens.get('place p_APP_endo'), label="place p_APP_endo")
-        plt.plot(dict_of_tokens.get('place p_sAPPa'), label="place p_sAPPa")
-        plt.plot(dict_of_tokens.get('place p_CTF83'), label="place p_CTF83")
-        plt.plot(dict_of_tokens.get('place p_bsec'), label="place p_bsec")
-        plt.plot(dict_of_tokens.get('place p_sAPPb'), label="place p_sAPPb")
-        plt.plot(dict_of_tokens.get('place p_CTF99'), label="place p_CTF99")
-        plt.plot(dict_of_tokens.get('place p_AB'), label="place p_AB")
-        plt.plot(dict_of_tokens.get('place p_AICD'), label="place p_AICD")
-        plt.plot(dict_of_tokens.get('place p_gsec'), label="place p_gsec")
+        # plt.plot(dict_of_tokens.get('place p_asec'), label="alpha secretase")
+        # plt.plot(dict_of_tokens.get('place p_APP_PM'), label="APP at the plasma membrane")
+        #plt.plot(dict_of_tokens.get('place p_APP_endo'), label="endocytosed APP")
+        # plt.plot(dict_of_tokens.get('place p_sAPPa'), label="place p_sAPPa")
+        # plt.plot(dict_of_tokens.get('place p_CTF83'), label="place p_CTF83")
+        # plt.plot(dict_of_tokens.get('place p_bsec'), label="place p_bsec")
+        # plt.plot(dict_of_tokens.get('place p_sAPPb'), label="place p_sAPPb")
+        # plt.plot(dict_of_tokens.get('place p_CTF99'), label="place p_CTF99")
+        #plt.plot(dict_of_tokens.get('place p_AB'), label="place p_AB")
+        # plt.plot(dict_of_tokens.get('place p_AICD'), label="place p_AICD")
+        # plt.plot(dict_of_tokens.get('place p_gsec'), label="place p_gsec")
+        
+        plt.plot(dict_of_tokens.get('place p_GSK3b_act'), label="Active GSK3 beta kinase")
+        plt.plot(dict_of_tokens.get('place p_GSK3b_inact'), label="Inactive GSK3 beta kinase")
+        plt.plot(dict_of_tokens.get('place p_tauP'), label="Phosphorylated tau")
+        plt.plot(dict_of_tokens.get('place p_tau'), label="Dephosphorylated tau")
         
         
-        plt.legend(fontsize=5) #brandon
+        plt.legend(fontsize=10) #brandon
         plt.xlabel('Time-step')
         plt.ylabel('Mean tokens')
         plt.show()
@@ -384,78 +389,78 @@ class PetriNetModel:
     
 # class PetriNetDiagram:
 
-#      def __init__(self, petri_net):
-#          """Initializes a Petri net diagram generator instance.
+#       def __init__(self, petri_net):
+#           """Initializes a Petri net diagram generator instance.
 
 #             Args:
-#                  petri_net: class instance of PetriNet to be plotted 
-#          """
-#          self.petri_net = petri_net
+#                   petri_net: class instance of PetriNet to be plotted 
+#           """
+#           self.petri_net = petri_net
 
 
-#      def build_string(self):
-#          """Generates string needed for drawing diagram with blockdiag"""
-#          strings = []
+#       def build_string(self):
+#           """Generates string needed for drawing diagram with blockdiag"""
+#           strings = []
 
-#          # List all places
-#          for place_id, place in self.petri_net.places.items():
-#              strings.append(f'{place_id} [label = "{place_id}\n{place.tokens}", shape = circle, color=lime];')
+#           # List all places
+#           for place_id, place in self.petri_net.places.items():
+#               strings.append(f'{place_id} [label = "{place_id}\n{place.tokens}", shape = circle, color=lime];')
 
-#          # List all transitions
-#          for transition_id, transition in self.petri_net.transitions.items():
-#              strings.append(f'{transition_id} [label = "{transition.transition_id}"];')
+#           # List all transitions
+#           for transition_id, transition in self.petri_net.transitions.items():
+#               strings.append(f'{transition_id} [label = "{transition.transition_id}"];')
 
-#              # Connect places to transitions (InArcs)
-#              for in_arc in transition.in_arcs:
-#                  strings.append(f'{in_arc.place.place_id} -> {transition_id} [label = "{in_arc.arc_weight}", fontsize = 11, color=black];')
+#               # Connect places to transitions (InArcs)
+#               for in_arc in transition.in_arcs:
+#                   strings.append(f'{in_arc.place.place_id} -> {transition_id} [label = "{in_arc.arc_weight}", fontsize = 11, color=black];')
 
-#              # Connect transitions to places (OutArcs)
-#              for out_arc in transition.out_arcs:
-#                  strings.append(f'{transition_id} -> {out_arc.place.place_id} [label = "{out_arc.arc_weight}", fontsize = 11, color=blue];')
+#               # Connect transitions to places (OutArcs)
+#               for out_arc in transition.out_arcs:
+#                   strings.append(f'{transition_id} -> {out_arc.place.place_id} [label = "{out_arc.arc_weight}", fontsize = 11, color=blue];')
 #             #connect catal arc brandon. I want to connect place to transition
-#              for catal_arc in transition.catal_arcs:
-#                  strings.append(f'{transition_id} -> {catal_arc.place.place_id} [label = "{catal_arc.arc_weight}", fontsize = 11, color=pink];')
+#               for catal_arc in transition.catal_arcs:
+#                   strings.append(f'{transition_id} -> {catal_arc.place.place_id} [label = "{catal_arc.arc_weight}", fontsize = 11, color=pink];')
                  
             
                  
                  
 
-#          # build into string
-#          return_string = 'blockdiag {\n'
-#          for string in strings:
-#              return_string += string + '\n'
-#          return_string += '}'
+#           # build into string
+#           return_string = 'blockdiag {\n'
+#           for string in strings:
+#               return_string += string + '\n'
+#           return_string += '}'
 
-#          return return_string
+#           return return_string
 
-#          ## Example format of generated string
-#          # blockdiag {
-#          #    // Set labels to nodes.
-#          #    A [label = "foo"];
-#          #    B [label = "bar"];
-#          #    // And set text-color
-#          #    C [label = "baz"];
+#           ## Example format of generated string
+#           # blockdiag {
+#           #    // Set labels to nodes.
+#           #    A [label = "foo"];
+#           #    B [label = "bar"];
+#           #    // And set text-color
+#           #    C [label = "baz"];
 
-#          #    // Set labels to edges. (short text only)
-#          #    A -> B [label = "click bar", textcolor="red"];
-#          #    B -> C [label = "click baz"];
-#          #    C -> A;
-#          # }
+#           #    // Set labels to edges. (short text only)
+#           #    A -> B [label = "click bar", textcolor="red"];
+#           #    B -> C [label = "click baz"];
+#           #    C -> A;
+#           # }
 
 
 
-#      def generate_image(self, file_name = 'petri-net-block-diagram'):
-#          """Generates image file of block diagram.
+#       def generate_image(self, file_name = 'petri-net-block-diagram'):
+#           """Generates image file of block diagram.
 
-#              Args:
-#                  file_name (str): name of image-file
-#          """
+#               Args:
+#                   file_name (str): name of image-file
+#           """
 
-#          tree = parser.parse_string(self.build_string())
-#          diagram = builder.ScreenNodeBuilder.build(tree)
-#          draw = drawer.DiagramDraw('PNG', diagram, filename=file_name + '.png')
-#          draw.draw()
-#          draw.save()
+#           tree = parser.parse_string(self.build_string())
+#           diagram = builder.ScreenNodeBuilder.build(tree)
+#           draw = drawer.DiagramDraw('PNG', diagram, filename=file_name + '.png')
+#           draw.draw()
+#           draw.save()
 
 
 
@@ -463,25 +468,24 @@ if __name__ == "__main__":
         #only runs this chunk of code if running the file directly, not as an import
 
     
-        # Initialize an empty Petri net
+    #Initialize an empty Petri net
     pn = PetriNet(number_of_runs=100)
     
-        # Add places for each chemical species
+    #AB pathology
     pn.add_place(initial_tokens=1, place_id="p_asec", label="alpha secretase")
-    pn.add_place(10, place_id="p_APP_PM", label="APP at plasma membrane")
-    pn.add_place(10, place_id="p_APP_endo", label="endocytosed APP")
+    pn.add_place(1, place_id="p_APP_PM", label="APP at plasma membrane")
+    pn.add_place(0, place_id="p_APP_endo", label="endocytosed APP")
     pn.add_place(0, place_id="p_sAPPa", label="soluble sAPP alpha")
     pn.add_place(0, place_id="p_CTF83", label="CTF83")
     pn.add_place(1, place_id="p_bsec", label="beta secretase")
     pn.add_place(0, place_id="p_sAPPb", label="soluble sAPP beta")
     pn.add_place(0, place_id="p_CTF99", label="CTF99")
-    pn.add_place(1, place_id="p_AB", label="Amyloid beta peptide")
+    pn.add_place(0, place_id="p_AB", label="Amyloid beta peptide")
     pn.add_place(0, place_id="p_AICD", label="AICD")
     pn.add_place(1, place_id="p_gsec", label="gamma secretase")
 
    
-       #Add transition corresponding to chemical reaction
-    #brandon so try commenting out expression so when app levels reach zero, there should be no more cleavage occurring.
+    #AB pathology transitions
     pn.add_transition(transition_id = 't_asec_exp',
                    label                = "alpha secretase expression",
                    input_place_ids       = [],
@@ -490,12 +494,11 @@ if __name__ == "__main__":
                    output_arc_weights = [1])
    
     pn.add_transition(transition_id = 't_asec_deg',
-                label      =     "alpha secretase degradation",
-                input_place_ids         =  ['p_asec'],
-                input_arc_weights  =  [1],
-                output_place_ids         =  [],
-                output_arc_weights =  [])
-    #degradation can make it go into the negatives because you are removing tokens, this transition should be illegal if there are not enough tokens.
+                   label      =     "alpha secretase degradation",
+                   input_place_ids         =  ['p_asec'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  [],
+                   output_arc_weights =  [])
    
     pn.add_transition(transition_id = 't_APP_asec_cleav',
                    label      =     "APP cleavage by alpha secretase",
@@ -566,7 +569,75 @@ if __name__ == "__main__":
                    input_arc_weights  =  [1],
                    output_place_ids         =  [],
                    output_arc_weights =  [])
-       
+    
+    
+    #Tau pathology
+    
+    pn.add_place(initial_tokens=0, place_id="p_GSK3b_inact", label="Inactive GSK3 beta kinase")
+    pn.add_place(1, place_id="p_GSK3b_act", label="Active GSK3 beta kinase")
+    pn.add_place(0, place_id="p_tauP", label="Phosphorylated tau")
+    pn.add_place(1, place_id="p_tau", label="Unphosphorylated tau (microtubule)")
+
+    #Tau pathology transitions
+    
+    pn.add_transition(transition_id = 't_GSK3b_exp',
+                   label                = "GSK3 beta expression",
+                   input_place_ids       = [],
+                   input_arc_weights  = [], 
+                   output_place_ids       = ['p_GSK3b_inact'],
+                   output_arc_weights = [1])
+   
+    pn.add_transition(transition_id = 't_GSK3b_deg',
+                   label      =     "GSK3 beta degradation",
+                   input_place_ids         =  ['p_GSK3b_inact'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  [],
+                   output_arc_weights =  [])
+   
+    pn.add_transition(transition_id = 't_actv_GSK3b',
+                   label      =     "GSK3 beta activation",
+                   input_place_ids         =  ['p_GSK3b_inact'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  ['p_GSK3b_act'],
+                   output_arc_weights =  [1])
+                 
+    pn.add_transition(transition_id = 't_inactv_GSK3b',
+                   label      =     "GSK3 beta inactivation",
+                   input_place_ids         =  ['p_GSK3b_act'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  ['p_GSK3b_inact'],
+                   output_arc_weights =  [1])
+    
+    pn.add_transition(transition_id = 't_phos_tau',
+                   label      =     "Phosphorylation of tau",
+                   input_place_ids         =  ['p_tau'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  ['p_tauP'],
+                   output_arc_weights =  [1],
+                   catal_place_ids= ['p_GSK3b_act'],
+                   catal_arc_weights= [1])
+    
+    pn.add_transition(transition_id = 't_dephos_tau',
+                   label      =     "Dephosphorylation of tau",
+                   input_place_ids         =  ['p_tauP'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  ['p_tau'],
+                   output_arc_weights =  [1])
+    
+    pn.add_transition(transition_id = 't_inactv_GSK3b',
+                   label      =     "GSK3 beta inactivation",
+                   input_place_ids         =  ['p_GSK3b_act'],
+                   input_arc_weights  =  [1],
+                   output_place_ids         =  ['p_GSK3b_inact'],
+                   output_arc_weights =  [1])
+            
+    
+    
+    
+    
+    
+    
+    
        # Run the network X times
     pn.run(100, print_stats=False)
 
