@@ -233,15 +233,15 @@ class PetriNet:
         #places is a dictionary. So you can get the actual places using places.keys()
         #In the zip method below, self.petri_net_model.places.values() was changed to self.petri_net_model.places.keys() because this was more readable.
         
-        dict_of_tokens = {} #brandonadded. creates dictionary
+        dict_of_tokens = {} 
         for tokens, place in zip(self.timeseries_mean.T, self.petri_net_model.places.keys()):
-            dict_of_tokens["place {}".format(place)]=tokens#brandonadded. this line assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
+            dict_of_tokens["place {}".format(place)]=tokens #This line assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
                    
         #AB 
         
         plt.plot(dict_of_tokens.get('place p_asec'), label="alpha secretase")
-        # plt.plot(dict_of_tokens.get('place p_APP_PM'), label="APP at the plasma membrane")
-        # plt.plot(dict_of_tokens.get('place p_APP_endo'), label="endocytosed APP")
+        plt.plot(dict_of_tokens.get('place p_APP_PM'), label="APP at the plasma membrane")
+        plt.plot(dict_of_tokens.get('place p_APP_endo'), label="endocytosed APP")
         # plt.plot(dict_of_tokens.get('place p_sAPPa'), label="place p_sAPPa")
         # plt.plot(dict_of_tokens.get('place p_CTF83'), label="place p_CTF83")
         # plt.plot(dict_of_tokens.get('place p_bsec'), label="place p_bsec")
@@ -259,19 +259,19 @@ class PetriNet:
         # plt.plot(dict_of_tokens.get('place p_tau'), label="Dephosphorylated tau")
 
 
-        #plt.plot(dict_of_tokens.get("place p_ApoEchol_extra", label="ApoE-cholesterol complex (extracellular)")
         #Cholesterol in different organelles
-        # pn.add_place(0, place_id="p_chol_LE", label="Cholesterol (late endosome)")
-        # pn.add_place(0, place_id="p_chol_mito", label="Cholesterol (mitochondria)")
-        # pn.add_place(0, place_id="p_chol_ER", label="Cholesterol (ER)")
-        # pn.add_place(0, place_id="p_chol_PM", label="Cholesterol (plasma membrane)") 
-        # Oxysterols
-        # pn.add_place(0, place_id="p_24OHchol_extra", label="24-hydroxycholesterol (extracellular)")
-        # pn.add_place(0, place_id="p_24OHchol_intra", label="24-hydroxycholesterol (intracellular)")
-        # pn.add_place(0, place_id="p_27OHchol_extra", label="27-hydroxycholesterol (extracellular)")
-        # pn.add_place(0, place_id="p_27OHchol_intra", label="27-hydroxycholesterol (intracellular)")
-        # pn.add_place(0, place_id="p_7HOCA", label="7-HOCA")
-        # pn.add_place(0, place_id="p_preg", label="Pregnenolon")
+        # plt.plot(dict_of_tokens.get('place p_ApoEchol_extra'), label="ApoE-cholesterol complex (extracellular)")
+        plt.plot(dict_of_tokens.get('place p_chol_mito'), label="Cholesterol (mitochondria)")
+        # plt.plot(dict_of_tokens.get('place p_chol_LE'), label="Cholesterol (late endosome)")
+        # plt.plot(dict_of_tokens.get('place p_chol_ER'), label="Cholesterol (ER)")
+        # plt.plot(dict_of_tokens.get('place p_chol_PM'), label="Cholesterol (plasma membrane)") 
+        # # Oxysterols
+        plt.plot(dict_of_tokens.get("place p_24OHchol_extra"), label="24-hydroxycholesterol (extracellular)")
+        # plt.plot(dict_of_tokens.get("place p_24OHchol_intra"), label="24-hydroxycholesterol (intracellular)")
+        # plt.plot(dict_of_tokens.get("place p_27OHchol_extra"), label="27-hydroxycholesterol (extracellular)")
+        # plt.plot(dict_of_tokens.get("place p_27OHchol_intra"), label="27-hydroxycholesterol (intracellular)")
+        # plt.plot(dict_of_tokens.get("place p_7HOCA"), label="7-HOCA")
+        # plt.plot(dict_of_tokens.get("place p_preg"), label="Pregnenolon")
         
         
         plt.legend(fontsize=5)
@@ -647,19 +647,19 @@ if __name__ == "__main__":
     
     #Cholesterol homeostasis 
     # Cholesterol-ApoE
-    pn.add_place(0, place_id="p_ApoEchol_extra", label="ApoE-cholesterol complex (extracellular)")
+    pn.add_place(10, place_id="p_ApoEchol_extra", label="ApoE-cholesterol complex (extracellular)")
     #Cholesterol in different organelles
-    pn.add_place(0, place_id="p_chol_LE", label="Cholesterol (late endosome)")
-    pn.add_place(0, place_id="p_chol_mito", label="Cholesterol (mitochondria)")
-    pn.add_place(0, place_id="p_chol_ER", label="Cholesterol (ER)")
-    pn.add_place(0, place_id="p_chol_PM", label="Cholesterol (plasma membrane)") 
+    pn.add_place(10, place_id="p_chol_LE", label="Cholesterol (late endosome)")
+    pn.add_place(1, place_id="p_chol_mito", label="Cholesterol (mitochondria)")
+    pn.add_place(1, place_id="p_chol_ER", label="Cholesterol (ER)")
+    pn.add_place(1, place_id="p_chol_PM", label="Cholesterol (plasma membrane)") 
      # Oxysterols
-    pn.add_place(0, place_id="p_24OHchol_extra", label="24-hydroxycholesterol (extracellular)")
-    pn.add_place(0, place_id="p_24OHchol_intra", label="24-hydroxycholesterol (intracellular)")
-    pn.add_place(0, place_id="p_27OHchol_extra", label="27-hydroxycholesterol (extracellular)")
-    pn.add_place(0, place_id="p_27OHchol_intra", label="27-hydroxycholesterol (intracellular)")
-    pn.add_place(0, place_id="p_7HOCA", label="7-HOCA")
-    pn.add_place(0, place_id="p_preg", label="Pregnenolon")
+    pn.add_place(1, place_id="p_24OHchol_extra", label="24-hydroxycholesterol (extracellular)")
+    pn.add_place(1, place_id="p_24OHchol_intra", label="24-hydroxycholesterol (intracellular)")
+    pn.add_place(1, place_id="p_27OHchol_extra", label="27-hydroxycholesterol (extracellular)")
+    pn.add_place(1, place_id="p_27OHchol_intra", label="27-hydroxycholesterol (intracellular)")
+    pn.add_place(1, place_id="p_7HOCA", label="7-HOCA")
+    pn.add_place(1, place_id="p_preg", label="Pregnenolon")
     
     #Transitions
     pn.add_transition(transition_id = 't_LDLR_endocyto',
