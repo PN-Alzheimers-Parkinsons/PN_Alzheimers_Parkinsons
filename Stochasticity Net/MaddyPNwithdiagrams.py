@@ -2,7 +2,7 @@ import random
 import copy
 import numpy as np
 import matplotlib.pyplot as plt
-# from blockdiag import parser, builder, drawer
+from blockdiag import parser, builder, drawer
 #from blockdiag import parser, builder, drawer
 # Examples: http://blockdiag.com/en/blockdiag/examples.html#simple-diagram
 
@@ -279,9 +279,9 @@ class PetriNet:
         plt.ylabel('Mean tokens')
         plt.show()
 
-    # def generate_diagram(self, file_name='diagram_petri_net'):
-    #     petri_net_diagram = PetriNetDiagram(self.petri_net_model)
-    #     petri_net_diagram.generate_image(file_name)
+    def generate_diagram(self, file_name='diagram_petri_net'):
+        petri_net_diagram = PetriNetDiagram(self.petri_net_model)
+        petri_net_diagram.generate_image(file_name)
 
 
 # Contains the information of a single petri net
@@ -400,80 +400,80 @@ class PetriNetModel:
 
         return [place.tokens for place in self.places.values()]
     
-# class PetriNetDiagram:
+class PetriNetDiagram:
 
-#       def __init__(self, petri_net):
-#           """Initializes a Petri net diagram generator instance.
+      def __init__(self, petri_net):
+          """Initializes a Petri net diagram generator instance.
 
-#             Args:
-#                   petri_net: class instance of PetriNet to be plotted 
-#           """
-#           self.petri_net = petri_net
+            Args:
+                  petri_net: class instance of PetriNet to be plotted 
+          """
+          self.petri_net = petri_net
 
 
-#       def build_string(self):
-#           """Generates string needed for drawing diagram with blockdiag"""
-#           strings = []
+      def build_string(self):
+          """Generates string needed for drawing diagram with blockdiag"""
+          strings = []
 
-#           # List all places
-#           for place_id, place in self.petri_net.places.items():
-#               strings.append(f'{place_id} [label = "{place_id}\n{place.tokens}", shape = circle, color=lime];')
+          # List all places
+          for place_id, place in self.petri_net.places.items():
+              strings.append(f'{place_id} [label = "{place_id}\n{place.tokens}", shape = circle, color=lime];')
 
-#           # List all transitions
-#           for transition_id, transition in self.petri_net.transitions.items():
-#               strings.append(f'{transition_id} [label = "{transition.transition_id}"];')
+          # List all transitions
+          for transition_id, transition in self.petri_net.transitions.items():
+              strings.append(f'{transition_id} [label = "{transition.transition_id}"];')
 
-#               # Connect places to transitions (InArcs)
-#               for in_arc in transition.in_arcs:
-#                   strings.append(f'{in_arc.place.place_id} -> {transition_id} [label = "{in_arc.arc_weight}", fontsize = 11, color=black];')
+              # Connect places to transitions (InArcs)
+              for in_arc in transition.in_arcs:
+                  strings.append(f'{in_arc.place.place_id} -> {transition_id} [label = "{in_arc.arc_weight}", fontsize = 11, color=black];')
 
-#               # Connect transitions to places (OutArcs)
-#               for out_arc in transition.out_arcs:
-#                   strings.append(f'{transition_id} -> {out_arc.place.place_id} [label = "{out_arc.arc_weight}", fontsize = 11, color=blue];')
-#             #connect catal arc brandon. I want to connect place to transition
-#               for catal_arc in transition.catal_arcs:
-#                   strings.append(f'{transition_id} -> {catal_arc.place.place_id} [label = "{catal_arc.arc_weight}", fontsize = 11, color=pink];')
+              # Connect transitions to places (OutArcs)
+              for out_arc in transition.out_arcs:
+                  strings.append(f'{transition_id} -> {out_arc.place.place_id} [label = "{out_arc.arc_weight}", fontsize = 11, color=blue];')
+            #connect catal arc brandon. I want to connect place to transition
+              for catal_arc in transition.catal_arcs:
+                  strings.append(f'{transition_id} -> {catal_arc.place.place_id} [label = "{catal_arc.arc_weight}", fontsize = 11, color=pink];')
                  
             
                  
                  
 
-#           # build into string
-#           return_string = 'blockdiag {\n'
-#           for string in strings:
-#               return_string += string + '\n'
-#           return_string += '}'
+          # build into string
+          return_string = 'blockdiag {\n'
+          for string in strings:
+              return_string += string + '\n'
+          return_string += '}'
 
-#           return return_string
+          return return_string
 
-#           ## Example format of generated string
-#           # blockdiag {
-#           #    // Set labels to nodes.
-#           #    A [label = "foo"];
-#           #    B [label = "bar"];
-#           #    // And set text-color
-#           #    C [label = "baz"];
+          ## Example format of generated string
+          # blockdiag {
+          #    // Set labels to nodes.
+          #    A [label = "foo"];
+          #    B [label = "bar"];
+          #    // And set text-color
+          #    C [label = "baz"];
 
-#           #    // Set labels to edges. (short text only)
-#           #    A -> B [label = "click bar", textcolor="red"];
-#           #    B -> C [label = "click baz"];
-#           #    C -> A;
-#           # }
+          #    // Set labels to edges. (short text only)
+          #    A -> B [label = "click bar", textcolor="red"];
+          #    B -> C [label = "click baz"];
+          #    C -> A;
+          # }
 
 
 
-#       def generate_image(self, file_name = 'petri-net-block-diagram'):
-#           """Generates image file of block diagram.
+      def generate_image(self, file_name = 'petri-net-block-diagram'):
+          """Generates image file of block diagram.
 
-#               Args:
-#                   file_name (str): name of image-file
-#           """
+              Args:
+                  file_name (str): name of image-file
+          """
 
-#           tree = parser.parse_string(self.build_string())
-#           diagram = builder.ScreenNodeBuilder.build(tree)
-#           draw = drawer.DiagramDraw('PNG', diagram, filename=file_name + '.png')
-#           draw.draw()
-#           draw.save()
+          tree = parser.parse_string(self.build_string())
+          diagram = builder.ScreenNodeBuilder.build(tree)
+          draw = drawer.DiagramDraw('PNG', diagram, filename=file_name + '.png')
+          draw.draw()
+          draw.save()
 
 
 
@@ -770,4 +770,4 @@ if __name__ == "__main__":
 
 
     # Generate block diagram of the Petri net
-    # pn.generate_diagram("maddy_diagram")
+    pn.generate_diagram("maddy_diagram")

@@ -238,10 +238,12 @@ class PetriNet:
             dict_of_tokens["place {}".format(place)]=tokens #This line assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
                    
         #AB 
+        # for places in place_ids:
+        #     plt.plot(dict_of_tokens.get('place places'))
         
         plt.plot(dict_of_tokens.get('place p_asec'), label="alpha secretase")
-        plt.plot(dict_of_tokens.get('place p_APP_PM'), label="APP at the plasma membrane")
-        plt.plot(dict_of_tokens.get('place p_APP_endo'), label="endocytosed APP")
+        # plt.plot(dict_of_tokens.get('place p_APP_PM'), label="APP at the plasma membrane")
+        # plt.plot(dict_of_tokens.get('place p_APP_endo'), label="endocytosed APP")
         # plt.plot(dict_of_tokens.get('place p_sAPPa'), label="place p_sAPPa")
         # plt.plot(dict_of_tokens.get('place p_CTF83'), label="place p_CTF83")
         # plt.plot(dict_of_tokens.get('place p_bsec'), label="place p_bsec")
@@ -261,12 +263,12 @@ class PetriNet:
 
         #Cholesterol in different organelles
         # plt.plot(dict_of_tokens.get('place p_ApoEchol_extra'), label="ApoE-cholesterol complex (extracellular)")
-        plt.plot(dict_of_tokens.get('place p_chol_mito'), label="Cholesterol (mitochondria)")
+        # plt.plot(dict_of_tokens.get('place p_chol_mito'), label="Cholesterol (mitochondria)")
         # plt.plot(dict_of_tokens.get('place p_chol_LE'), label="Cholesterol (late endosome)")
         # plt.plot(dict_of_tokens.get('place p_chol_ER'), label="Cholesterol (ER)")
         # plt.plot(dict_of_tokens.get('place p_chol_PM'), label="Cholesterol (plasma membrane)") 
         # # Oxysterols
-        plt.plot(dict_of_tokens.get("place p_24OHchol_extra"), label="24-hydroxycholesterol (extracellular)")
+        # plt.plot(dict_of_tokens.get("place p_24OHchol_extra"), label="24-hydroxycholesterol (extracellular)")
         # plt.plot(dict_of_tokens.get("place p_24OHchol_intra"), label="24-hydroxycholesterol (intracellular)")
         # plt.plot(dict_of_tokens.get("place p_27OHchol_extra"), label="27-hydroxycholesterol (extracellular)")
         # plt.plot(dict_of_tokens.get("place p_27OHchol_intra"), label="27-hydroxycholesterol (intracellular)")
@@ -274,7 +276,7 @@ class PetriNet:
         # plt.plot(dict_of_tokens.get("place p_preg"), label="Pregnenolon")
         
         
-        plt.legend(fontsize=5)
+        plt.legend(fontsize=20)
         plt.xlabel('Time-step')
         plt.ylabel('Mean tokens')
         plt.show()
