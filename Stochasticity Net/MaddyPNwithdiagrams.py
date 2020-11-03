@@ -240,7 +240,7 @@ class PetriNet:
         #AB 
         
         plt.plot(dict_of_tokens.get('place p_asec'), label="alpha secretase")
-        # plt.plot(dict_of_tokens.get('place p_APP_PM'), label="APP at the plasma membrane")
+        plt.plot(dict_of_tokens.get('place p_APP_PM'), label="APP at the plasma membrane")
         # plt.plot(dict_of_tokens.get('place p_APP_endo'), label="endocytosed APP")
         # plt.plot(dict_of_tokens.get('place p_sAPPa'), label="place p_sAPPa")
         # plt.plot(dict_of_tokens.get('place p_CTF83'), label="place p_CTF83")

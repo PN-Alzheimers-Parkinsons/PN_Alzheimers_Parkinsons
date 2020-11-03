@@ -208,7 +208,6 @@ class PetriNet:
             
             runstep_tokens = [pn.run_one_step() for pn in self.petri_net_copies] 
             self.timeseries_mean[step] = np.mean(runstep_tokens, axis = 0) # averaging across the different copies for each place
-            print(self.timeseries_mean[step])#debugging1
             self.timeseries_std[step] = np.std(runstep_tokens, axis = 0) 
 
         if print_stats:
@@ -235,46 +234,10 @@ class PetriNet:
         
         dict_of_tokens = {} 
         for tokens, place in zip(self.timeseries_mean.T, self.petri_net_model.places.keys()):
-            dict_of_tokens["place {}".format(place)]=tokens #This line assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
-                   
-        #AB 
-        # for places in place_ids:
-        #     plt.plot(dict_of_tokens.get('place places'))
+            dict_of_tokens["{}".format(place)]=tokens #This line assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
         
-        plt.plot(dict_of_tokens.get('place p_asec'), label="alpha secretase")
-        # plt.plot(dict_of_tokens.get('place p_APP_PM'), label="APP at the plasma membrane")
-        # plt.plot(dict_of_tokens.get('place p_APP_endo'), label="endocytosed APP")
-        # plt.plot(dict_of_tokens.get('place p_sAPPa'), label="place p_sAPPa")
-        # plt.plot(dict_of_tokens.get('place p_CTF83'), label="place p_CTF83")
-        # plt.plot(dict_of_tokens.get('place p_bsec'), label="place p_bsec")
-        # plt.plot(dict_of_tokens.get('place p_sAPPb'), label="place p_sAPPb")
-        # plt.plot(dict_of_tokens.get('place p_CTF99'), label="place p_CTF99")
-        # plt.plot(dict_of_tokens.get('place p_AB'), label="place p_AB")
-        # plt.plot(dict_of_tokens.get('place p_AICD'), label="place p_AICD")
-        # plt.plot(dict_of_tokens.get('place p_gsec'), label="place p_gsec")
-            
-        #TAU
-        
-        # plt.plot(dict_of_tokens.get('place p_GSK3b_act'), label="Active GSK3 beta kinase")
-        # plt.plot(dict_of_tokens.get('place p_GSK3b_inact'), label="Inactive GSK3 beta kinase")
-        # plt.plot(dict_of_tokens.get('place p_tauP'), label="Phosphorylated tau")
-        # plt.plot(dict_of_tokens.get('place p_tau'), label="Dephosphorylated tau")
-
-
-        #Cholesterol in different organelles
-        # plt.plot(dict_of_tokens.get('place p_ApoEchol_extra'), label="ApoE-cholesterol complex (extracellular)")
-        # plt.plot(dict_of_tokens.get('place p_chol_mito'), label="Cholesterol (mitochondria)")
-        # plt.plot(dict_of_tokens.get('place p_chol_LE'), label="Cholesterol (late endosome)")
-        # plt.plot(dict_of_tokens.get('place p_chol_ER'), label="Cholesterol (ER)")
-        # plt.plot(dict_of_tokens.get('place p_chol_PM'), label="Cholesterol (plasma membrane)") 
-        # # Oxysterols
-        # plt.plot(dict_of_tokens.get("place p_24OHchol_extra"), label="24-hydroxycholesterol (extracellular)")
-        # plt.plot(dict_of_tokens.get("place p_24OHchol_intra"), label="24-hydroxycholesterol (intracellular)")
-        # plt.plot(dict_of_tokens.get("place p_27OHchol_extra"), label="27-hydroxycholesterol (extracellular)")
-        # plt.plot(dict_of_tokens.get("place p_27OHchol_intra"), label="27-hydroxycholesterol (intracellular)")
-        # plt.plot(dict_of_tokens.get("place p_7HOCA"), label="7-HOCA")
-        # plt.plot(dict_of_tokens.get("place p_preg"), label="Pregnenolon")
-        
+        for x in place_ids:
+            plt.plot(dict_of_tokens.get(x), label=x)        
         
         plt.legend(fontsize=20)
         plt.xlabel('Time-step')
@@ -768,7 +731,8 @@ if __name__ == "__main__":
     pn.run(100, print_stats=False)
 
     # Plot the time-evolution of the system
-    pn.plot_time_evolution()
+    places_to_plot = ['p_asec']
+    pn.plot_time_evolution(places_to_plot)
 
 
     # Generate block diagram of the Petri net
