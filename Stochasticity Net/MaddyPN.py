@@ -692,12 +692,14 @@ if __name__ == "__main__":
                    output_place_ids         =  ['p_7HOCA'],
                    output_arc_weights =  [1])                                                  
     
-    pn.add_transition(transition_id = 't_27OHchol_endocytp',
+    pn.add_transition(transition_id = 't_27OHchol_endocyto',
                    label      =     "27OHchol endocyto",
                    input_place_ids         =  ['p_27OHchol_extra'],
                    input_arc_weights  =  [1],
                    output_place_ids         =  ['p_27OHchol_extra', 'p_27OHchol_intra'],
-                   output_arc_weights =  [1,1])  
+                   output_arc_weights =  [1,1])
+    
+    # This is an artificial transition !!
                                                 
     pn.add_transition(transition_id = 't_CYP46A1_metab',
                    label      =     "Chol metab CYP46A1",
@@ -718,20 +720,15 @@ if __name__ == "__main__":
                    input_place_ids         =  ['p_chol_PM', 'p_24OHchol_intra'],
                    input_arc_weights  =  [1, 0],
                    output_place_ids         =  [],
-                   output_arc_weights =  [])                                                  
+                   output_arc_weights =  [])                                               
      
- 
- 
- 
- 
- 
- 
+
  
        # Run the network X times
     pn.run(100, print_stats=False)
 
     # Plot the time-evolution of the system
-    places_to_plot = ['p_asec']
+    places_to_plot = ['p_asec', 'p_tau', 'p_tauP']
     pn.plot_time_evolution(places_to_plot)
 
 
