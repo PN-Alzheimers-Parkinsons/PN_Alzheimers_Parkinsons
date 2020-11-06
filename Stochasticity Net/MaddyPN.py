@@ -94,7 +94,7 @@ class CatalArc(BaseArc):
     
     
 class Transition:
-    def __init__(self, in_arcs, out_arcs, inhib_arcs, catal_arcs, transition_id, label):
+    def __init__(self, in_arcs, out_arcs, inhib_arcs, catal_arcs, transition_id, label, distribution_type):
         """Put a transition T in the Petri net.
         
             Args:
@@ -109,14 +109,26 @@ class Transition:
         self.catal_arcs = set(catal_arcs)
         self.transition_id = transition_id
         self.label = label
+        self.distribution_type = distribution_type
+    def stochastic_distribution(self, distribution_type):
+        
+        pass
 
 
     def __str__(self):
         return f"Transition {self.label}"
         
     def fire(self):
-        """Fire!"""  
-        random_integer = random.randint(0,5)
+        """Fire!"""
+        
+        #poisson and bernoulli try, gene transcribed maybe bernoulli
+        #have the function in here? [g,2,1] # 10% standard deviation try, also try 20% SD, how does it differ for HFPN
+        if self.distribution_type[0] == "g":
+            random_integer = random.gauss(self.distribution_type[1],self.distribution_type[2])
+        if self.distribution_type[0] =="u":
+            random_integer = random.randint(self.distribution_type[1],self.distribution_type[2])
+
+
         #print("coefficient_scalar is")
         for arc2 in self.out_arcs.union(self.in_arcs):
             arc2.coefficient_scalar = random_integer
@@ -130,7 +142,6 @@ class Transition:
             for arc in self.out_arcs.union(self.in_arcs): 
                 arc.fire()
         return firing_allowed and firing_not_inhibited and firing_not_inhibited2# Return if fired
-
 
 class PetriNet:
     """Creates many equal copies of the specified Petri net for each run. 
@@ -168,7 +179,7 @@ class PetriNet:
 
         self.petri_net_model.add_place(initial_tokens, place_id, label)
 
-    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids =[], catal_arc_weights=[]):
+    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids =[], catal_arc_weights=[], distribution_type=["u", 0, 1]):
         """Add a transition to the Petri net.
             Args:
                 input_places (list): collection of places with arcs going into a transition
@@ -179,7 +190,7 @@ class PetriNet:
         if self.locked:
             raise RuntimeError('Error: do not change PetriNet after it has run.')
 
-        self.petri_net_model.add_transition(transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights)
+        self.petri_net_model.add_transition(transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights, distribution_type)
 
     def run(self, number_of_steps, print_stats = False):
         """Runs multiple copies of the Petri net declared using this instance. 
@@ -285,7 +296,7 @@ class PetriNetModel:
             catal_arc_weights = [arc.arc_weight for arc in t.catal_arcs]
 
             pn_copy.add_transition(    t.transition_id, t.label, input_place_ids, input_arc_weights, 
-                                    output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights)
+                                    output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights, t.distribution_type)
 
         return pn_copy
 
@@ -311,7 +322,7 @@ class PetriNetModel:
             self.places[place_id] = place
 
 
-    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids=[], catal_arc_weights=[]):
+    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids=[], catal_arc_weights=[], distribution_type=[]):
         """Add a transition to the Petri net. Prints warning if a transition with the same id already exists. 
             Args:
                 transition_id (str):
@@ -349,7 +360,7 @@ class PetriNetModel:
                                     [OutArc(place, weight) for (place, weight) in zip(output_places, output_arc_weights)],
                                     [InhibArc(place, weight) for (place, weight) in zip(inhib_places, inhib_arc_weights)],
                                     [CatalArc(place, weight) for (place, weight) in zip(catal_places, catal_arc_weights)],
-                                    transition_id, label)
+                                    transition_id, label, distribution_type)
             self.transitions[transition_id] = transition
 
 
@@ -634,7 +645,8 @@ if __name__ == "__main__":
                    output_place_ids         =  ['p_chol_LE'],
                    output_arc_weights =  [1],
                    inhib_place_ids= ['p_chol_ER'],
-                   inhib_arc_weights= [1]) #not sure what to use for this 
+                   inhib_arc_weights= [1],
+                   distribution_type=["g",5,1]) #not sure what to use for this 
     
     pn.add_transition(transition_id = 't_chol_trans_LE_ER',
                    label      =     "Chol transport LE-ER",
