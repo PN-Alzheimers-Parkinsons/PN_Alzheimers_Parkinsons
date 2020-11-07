@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from blockdiag import parser, builder, drawer
 # Examples: http://blockdiag.com/en/blockdiag/examples.html#simple-diagram
 
+
 MAX_LABEL_CHARACTERS = 50
 
 def check_label_length(label, limit = MAX_LABEL_CHARACTERS):
