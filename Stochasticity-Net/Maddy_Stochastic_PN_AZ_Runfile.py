@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Nov  6 15:42:54 2020
 
-@author: brand
-"""
 import os
 import sys
 
