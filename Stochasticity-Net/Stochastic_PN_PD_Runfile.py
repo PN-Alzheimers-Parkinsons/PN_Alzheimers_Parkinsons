@@ -10,9 +10,13 @@ import sys
 cwd = os.getcwd() # Get current working directory
 root_folder = os.sep + "PN_Alzheimers_Parkinsons"
 # Move to 'utils' from current directory position
-sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep + "Stochasticity-Net" + os.sep)
+sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep + "Stochasticity-Net" + os.sep + "ADutils" + os.sep)
 
 from Stochastic_PN_Architecture import *
+
+from parameters import *
+from rate_functions import *
+from initial_tokens import *
 
 def main():
     
@@ -25,33 +29,35 @@ def main():
 #         # Add places for each chemical species
 
    #AB pathology
-    pn.add_place(initial_tokens=0, place_id="p_asec", label="alpha secretase")
-    pn.add_place(0, place_id="p_APP_PM", label="APP at plasma membrane")
-    pn.add_place(100, place_id="p_APP_endo", label="endocytosed APP")
-    pn.add_place(0, place_id="p_sAPPa", label="soluble sAPP alpha")
-    pn.add_place(0, place_id="p_CTF83", label="CTF83")
-    pn.add_place(0, place_id="p_bsec", label="beta secretase")
-    pn.add_place(0, place_id="p_sAPPb", label="soluble sAPP beta")
-    pn.add_place(0, place_id="p_CTF99", label="CTF99")
-    pn.add_place(0, place_id="p_AB", label="Amyloid beta peptide")
-    pn.add_place(0, place_id="p_AICD", label="AICD")
-    pn.add_place(0, place_id="p_gsec", label="gamma secretase")
+    pn.add_place(it_p_asec, place_id="p_asec", label="alpha secretase")
+    pn.add_place(it_p_APP_pm, place_id="p_APP_PM", label="APP at plasma membrane")
+    pn.add_place(it_p_APP_endo, place_id="p_APP_endo", label="endocytosed APP")
+    pn.add_place(it_p_sAPPa, place_id="p_sAPPa", label="soluble sAPP alpha")
+    pn.add_place(it_p_CTF83, place_id="p_CTF83", label="CTF83")
+    pn.add_place(it_p_bsec, place_id="p_bsec", label="beta secretase")
+    pn.add_place(it_p_sAPPb, place_id="p_sAPPb", label="soluble sAPP beta")
+    pn.add_place(it_p_CTF99, place_id="p_CTF99", label="CTF99")
+    pn.add_place(it_p_Ab, place_id="p_AB", label="Amyloid beta peptide")
+    pn.add_place(it_p_AICD, place_id="p_AICD", label="AICD")
+    pn.add_place(it_p_gsec, place_id="p_gsec", label="gamma secretase")
 
-   
+    
     #AB pathology transitions
     pn.add_transition(transition_id = 't_asec_exp',
                    label                = "alpha secretase expression",
                    input_place_ids       = [],
                    input_arc_weights  = [], 
                    output_place_ids       = ['p_asec'],
-                   output_arc_weights = [1])
+                   output_arc_weights = [1],
+                   distribution_type = ["u", 0, 100000])
    
     pn.add_transition(transition_id = 't_asec_deg',
                    label      =     "alpha secretase degradation",
                    input_place_ids         =  ['p_asec'],
                    input_arc_weights  =  [1],
                    output_place_ids         =  [],
-                   output_arc_weights =  [])
+                   output_arc_weights =  [],
+                   distribution_type = ["u", 0, 10000])
    
     pn.add_transition(transition_id = 't_APP_asec_cleav',
                    label      =     "APP cleavage by alpha secretase",
@@ -200,7 +206,7 @@ def main():
     # pn.add_place(1, place_id="p_chol_PM", label="Cholesterol (plasma membrane)") 
     #  # Oxysterols
     # pn.add_place(1, place_id="p_24OHchol_extra", label="24-hydroxycholesterol (extracellular)")
-    # pn.add_place(1, place_id="p_24OHchol_intra", label="24-hydroxycholesterol (intracellular)")
+      # pn.add_place(1, place_id="p_24OHchol_intra", label="24-hydroxycholesterol (intracellular)")
     # pn.add_place(1, place_id="p_27OHchol_extra", label="27-hydroxycholesterol (extracellular)")
     # pn.add_place(1, place_id="p_27OHchol_intra", label="27-hydroxycholesterol (intracellular)")
     # pn.add_place(1, place_id="p_7HOCA", label="7-HOCA")
