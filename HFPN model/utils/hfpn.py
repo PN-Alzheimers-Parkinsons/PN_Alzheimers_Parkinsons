@@ -89,7 +89,7 @@ class ProductionSpeed: # The new output arc
 		self.input_places = input_places
 		self.production_function = production_function
 
-	def get_input_place_tokens(self):
+	def get_input_place_tokens(secalculate_firing_tokenslf):
 		input_place_tokens_dictionary = {}
 		for ip in self.input_places:
 			input_place_tokens_dictionary[ip.place_id] = ip.tokens 

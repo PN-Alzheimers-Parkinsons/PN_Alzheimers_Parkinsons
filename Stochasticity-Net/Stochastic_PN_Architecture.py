@@ -37,7 +37,7 @@ class Place:
         # p_1 == p_2 -> true iff p_1.id == p_2.id
 
 class BaseArc:
-    def __init__(self, place, arc_weight):
+    def __init__(self, place, arc_weight, rate_function):
         """Base class for making an arc in the Petri net.
 
         Args: 
@@ -48,12 +48,22 @@ class BaseArc:
         self.place = place
         self.arc_weight = arc_weight
         self.coefficient_scalar = 1
+        self.rate_function = rate_function
 
 
 class InArc(BaseArc):  
     """An arc going from a place P to a transition T."""
     def __str__(self):
         return f"InArc from {self.place}"
+    
+    def get_input_place_tokens(self):
+        input_place_tokens_dictionary = {}
+        for p in self.place:
+            input_place_tokens_dictionary[p.place_id] = p.tokens 
+        return input_place_tokens_dictionary
+    
+    def calculate_firing_tokens(self, time_step):
+        self.firing_tokens = self.rate_function(self.get_input_place_tokens()) * time_step
 
     def fire(self):
         """Remove tokens from the input place."""
@@ -71,6 +81,15 @@ class OutArc(BaseArc):
 
     def __str__(self):
         return f"OutArc to {self.place}"
+    
+    def get_input_place_tokens(self):
+        input_place_tokens_dictionary = {}
+        for p in self.place:
+            input_place_tokens_dictionary[p.place_id] = p.tokens 
+        return input_place_tokens_dictionary
+    
+    def calculate_firing_tokens(self, time_step):
+        self.firing_tokens = self.rate_function(self.get_input_place_tokens()) * time_step
 
 class InhibArc(BaseArc):  
     """An inhibitory arc going from a place P to a transition T."""
@@ -92,7 +111,7 @@ class CatalArc(BaseArc):
     
     
 class Transition:
-    def __init__(self, in_arcs, out_arcs, inhib_arcs, catal_arcs, transition_id, label, distribution_type):#which distribution to pick # added distribution type
+    def __init__(self, in_arcs, out_arcs, inhib_arcs, catal_arcs, rate_functions, transition_id, label, distribution_type):#which distribution to pick # added distribution type
         """Put a transition T in the Petri net.
         
             Args:
@@ -105,9 +124,18 @@ class Transition:
         self.out_arcs = set(out_arcs)
         self.inhib_arcs = set(inhib_arcs)
         self.catal_arcs = set(catal_arcs)
+        self.rate_functions = set(rate_functions)
         self.transition_id = transition_id
         self.label = label
         self.distribution_type = distribution_type
+        
+    def get_input_place_tokens(self):
+        input_place_tokens_dictionary = {}
+        for rs in self.rate_functions:
+            input_place_tokens_dictionary[rs.place.place_id] = rs.place.tokens 
+        return input_place_tokens_dictionary
+        
+        
     def stochastic_distribution(self, distribution_type): #[g,3,1]
         #if distribution_type is gaussian, mean and standard deviation
         #random integer, uniform distribution
@@ -117,20 +145,28 @@ class Transition:
     def __str__(self):
         return f"Transition {self.label}"
         
-    def fire(self):
+    def fire(self, time_step):
         """Fire!"""  
+        
+        for rs in self.rate_functions:
+            rs.calculate_firing_tokens(time_step)
+            
+        #store tokens 
+            
+        token_transfers = [s.firing_tokens for s in self.rate_functions if s.firing_tokens != 0] 
+        if len(token_transfers) == 0: 
+                token_transfers.append(0)      
+            
         #poisson and bernoulli try, gene transcribed maybe bernoulli
-        #have the function in here? [g,2,1] # 10% standard deviation try, also try 20% SD, how does it differ for HFPN
+        
         if self.distribution_type[0] == "g":
             random_integer = random.gauss(self.distribution_type[1],self.distribution_type[2])
         if self.distribution_type[0] =="u":
             random_integer = random.randint(self.distribution_type[1],self.distribution_type[2])
             
-        #random_integer = random.randint(0,5) #delete this line
-        #print("coefficient_scalar is")
         for arc2 in self.out_arcs.union(self.in_arcs):
-            #print(self.out_arcs.union(self.in_arcs))
             arc2.coefficient_scalar = random_integer
+            
         # Check if transition can occur by inspecting whether each place has enough tokens
         firing_allowed = all(in_arc.allowed_firing() for in_arc in self.in_arcs)
         firing_not_inhibited = all(inhib_arc.allowed_firing() for inhib_arc in self.inhib_arcs)
@@ -142,6 +178,7 @@ class Transition:
                 arc.fire()
         return firing_allowed and firing_not_inhibited and firing_not_inhibited2# Return if fired
 
+# MADDY - how do we make it so that the second element of distribution type is the number of tokens transferred? 
 
 class PetriNet:
     """Creates many equal copies of the specified Petri net for each run. 
@@ -154,13 +191,14 @@ class PetriNet:
     The initial conditions of the net is sotred in petri_net. This 
     original version of the net is not used for run operation. 
     """
-    def __init__(self, number_of_runs):
+    def __init__(self, time_step = 0.001, number_of_runs):
         """Initializes an empty PetriNet 
 
             Args:
                 number_of_runs (int): number of copies of the PetriNet to be run
         """
-        self.locked = False     # initialized in state where editing allowed
+        self.locked = False# initialized in state where editing allowed
+        self.time_step = time_step 
         self.number_of_runs = number_of_runs
         self.petri_net_model = PetriNetModel()
         self.petri_net_copies = [] # for different runs

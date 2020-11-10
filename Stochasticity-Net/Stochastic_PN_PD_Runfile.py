@@ -56,8 +56,7 @@ def main():
                    input_place_ids         =  ['p_asec'],
                    input_arc_weights  =  [1],
                    output_place_ids         =  [],
-                   output_arc_weights =  [],
-                   distribution_type = ["u", 0, 10000])
+                   output_arc_weights =  [])
    
     pn.add_transition(transition_id = 't_APP_asec_cleav',
                    label      =     "APP cleavage by alpha secretase",
