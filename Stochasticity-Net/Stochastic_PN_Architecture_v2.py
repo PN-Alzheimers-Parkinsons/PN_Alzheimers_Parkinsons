@@ -24,6 +24,7 @@ class Place:
         self.place_id = place_id
         self.label = label                # Label of the place
         self.tokens = initial_tokens
+    
 
     def __str__(self):
         return f"{self.label} has {self.tokens} tokens" 
@@ -48,6 +49,7 @@ class BaseArc:
         self.place = place
         self.arc_weight = arc_weight
         self.coefficient_scalar = 1
+        
 
 
 class InArc(BaseArc):  
@@ -68,6 +70,7 @@ class OutArc(BaseArc):
     def fire(self):
         """Add tokens to the output place."""
         self.place.tokens += self.arc_weight*self.coefficient_scalar
+        
 
     def __str__(self):
         return f"OutArc to {self.place}"
@@ -110,24 +113,30 @@ class Transition:
         self.distribution_type = distribution_type
     def stochastic_distribution(self, distribution_type): #[g,3,1]
         #if distribution_type is gaussian, mean and standard deviation
-        #random integer, uniform distribution
-        
+        #random integer, uniform distribution    
         pass
 
     def __str__(self):
         return f"Transition {self.label}"
         
-    def fire(self):
+    def fire(self, pn): 
         """Fire!"""  
         #poisson and bernoulli try, gene transcribed maybe bernoulli
-        #have the function in here? [g,2,1] # 10% standard deviation try, also try 20% SD, how does it differ for HFPN
-        if self.distribution_type[0] == "g":
+
+        if self.distribution_type[0] == "grf":
+            random_integer = random.gauss(self.distribution_type[1],self.distribution_type[1]*4) #self.distribution_type[1]]*0.1 for the standard deviation gives a very smooth curve
+            print(random_integer)
+            #print(pn.a)
+            self.distribution_type[1] = self.distribution_type[3](pn.a) #
+            #print(self.distribution_type[3](pn.a))
+            
+        #gaussian
+        if self.distribution_type[0] =="g":
             random_integer = random.gauss(self.distribution_type[1],self.distribution_type[2])
+        #uniform
         if self.distribution_type[0] =="u":
             random_integer = random.randint(self.distribution_type[1],self.distribution_type[2])
-            
-        #random_integer = random.randint(0,5) #delete this line
-        #print("coefficient_scalar is")
+
         for arc2 in self.out_arcs.union(self.in_arcs):
             #print(self.out_arcs.union(self.in_arcs))
             arc2.coefficient_scalar = random_integer
@@ -179,7 +188,7 @@ class PetriNet:
 
         self.petri_net_model.add_place(initial_tokens, place_id, label)
 
-    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids =[], catal_arc_weights=[], distribution_type=["u",0,5]):#sets the default, if distribution type is empty
+    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids =[], catal_arc_weights=[], distribution_type=["g",5,1]):#sets the default, if distribution type is empty
         """Add a transition to the Petri net.
             Args:
                 input_places (list): collection of places with arcs going into a transition
@@ -218,6 +227,7 @@ class PetriNet:
             #     -> dimension 1: place (in order self.petri_net_model.places)
             
             runstep_tokens = [pn.run_one_step() for pn in self.petri_net_copies] 
+            #print(runstep_tokens)
             self.timeseries_mean[step] = np.mean(runstep_tokens, axis = 0) # averaging across the different copies for each place
             #print(self.timeseries_mean[step])#debugging1
             self.timeseries_std[step] = np.std(runstep_tokens, axis = 0) 
@@ -269,6 +279,7 @@ class PetriNetModel:
         self.places = {} # dictionary of [place_id : Place instance]
         self.transitions = {} # dictionary of [transition_id : Transition instance]
         self.successful_firings = []
+        self.a={}
 
     @staticmethod
     def make_copy_of(petri_net_model):
@@ -282,6 +293,7 @@ class PetriNetModel:
         for place in petri_net_model.places.values(): #so if there are 10 places, this will be called 10 times.
             #print(petri_net_model.places.values) #debugging1
             pn_copy.add_place(place.tokens, place.place_id, place.label) #why is this called place.tokens instead of place.initial_tokens, This is because, add_place uses the class Place which has the attribute tokens
+        #pn_copy.a={place.place_id:place.tokens for place in pn_copy.places.values()} #BSL
 
         # Copy over all transitions (referencing the newly created places)
         for t in petri_net_model.transitions.values():
@@ -299,12 +311,11 @@ class PetriNetModel:
             output_arc_weights = [arc.arc_weight for arc in t.out_arcs]
             inhib_arc_weights = [arc.arc_weight for arc in t.inhib_arcs]
             catal_arc_weights = [arc.arc_weight for arc in t.catal_arcs]
-
+            
             pn_copy.add_transition(    t.transition_id, t.label, input_place_ids, input_arc_weights, 
                                     output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights, t.distribution_type)
             #print(pn_copy) #debugging1 #if there are 10 transitions, 1 copy, will print 10 times. If there are 10 transitions, 2 copies, will print 20 times with 2 different ids.
             #print(id(pn_copy)) debugging 1
-
         return pn_copy
 
 
@@ -326,7 +337,11 @@ class PetriNetModel:
             print(f"Warning: Place {place_id} already exists.")
         else:
             place = Place(initial_tokens, place_id, label) #so object place is assigned the Place Class (this class found at very top).
-            self.places[place_id] = place #so the object that will run this function, self, will
+            self.places[place_id] = place 
+            self.a[place_id] = initial_tokens 
+           # a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
+            #self.a.update({place.place_id:place.tokens}) 
+            #print(self.places)
             #print(self.places[place_id]) #brandon, its printing __str__
 
 
@@ -382,8 +397,12 @@ class PetriNetModel:
                 A list of the current number of tokens for each place.
         """
         t = random.choice(list(self.transitions.values()))
-        successful_firing = t.fire()
+        successful_firing = t.fire(self)
         self.successful_firings.append(successful_firing)
+        
+        #populating the a dictionary
+        for place in self.places.values():
+            self.a[place.place_id]=place.tokens
 
         return [place.tokens for place in self.places.values()]
     
@@ -459,7 +478,6 @@ class PetriNetDiagram:
         draw = drawer.DiagramDraw('PNG', diagram, filename=file_name + '.png')
         draw.draw()
         draw.save()
-#debugging3
 
 
 

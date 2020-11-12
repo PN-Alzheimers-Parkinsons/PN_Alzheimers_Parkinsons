@@ -39,7 +39,6 @@ r_t_RTN3_dys_lyso = lambda a : ER_multiplier * a["p_RTN3_HMW_auto"] * k_t_RTN3_l
 # Abeta Pathology 
 r_t_asec_exp = lambda a : Abeta_multiplier * k_t_asec_exp * (mchol_t_asec_exp * a['p_24OHchol_intra'] + nchol_t_asec_exp) 
 r_t_asec_degr = lambda a : Abeta_multiplier * k_t_asec_degr * a['p_asec'] 
-
 r_t_APP_exp = lambda a : Abeta_multiplier * k_t_APP_exp * (1 + dis_t_APP_exp * a['p_ApoE']) #* min(max((m_t_APP_exp * a['p_ROS_mito'] + n_t_APP_exp),1),1.5)
 r_t_APP_endocyto = lambda a : Abeta_multiplier * a['p_APP_pm'] * (k_t_APP_endocyto + a['p_ApoE'] * dis_t_APP_endocyto)
 r_t_APP_endo_event = lambda a :Abeta_multiplier *  k_t_APP_endo_event * a['p_APP_endo']
