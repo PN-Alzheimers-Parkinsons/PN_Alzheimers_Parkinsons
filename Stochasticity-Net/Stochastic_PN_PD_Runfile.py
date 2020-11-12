@@ -30,108 +30,110 @@ def main():
 
    #AB pathology
     pn.add_place(it_p_asec, place_id="p_asec", label="alpha secretase")
-    pn.add_place(it_p_APP_pm, place_id="p_APP_PM", label="APP at plasma membrane")
-    pn.add_place(it_p_APP_endo, place_id="p_APP_endo", label="endocytosed APP")
-    pn.add_place(it_p_sAPPa, place_id="p_sAPPa", label="soluble sAPP alpha")
-    pn.add_place(it_p_CTF83, place_id="p_CTF83", label="CTF83")
-    pn.add_place(it_p_bsec, place_id="p_bsec", label="beta secretase")
-    pn.add_place(it_p_sAPPb, place_id="p_sAPPb", label="soluble sAPP beta")
-    pn.add_place(it_p_CTF99, place_id="p_CTF99", label="CTF99")
-    pn.add_place(it_p_Ab, place_id="p_AB", label="Amyloid beta peptide")
-    pn.add_place(it_p_AICD, place_id="p_AICD", label="AICD")
-    pn.add_place(it_p_gsec, place_id="p_gsec", label="gamma secretase")
+    # pn.add_place(it_p_APP_pm, place_id="p_APP_PM", label="APP at plasma membrane")
+    # pn.add_place(it_p_APP_endo, place_id="p_APP_endo", label="endocytosed APP")
+    # pn.add_place(it_p_sAPPa, place_id="p_sAPPa", label="soluble sAPP alpha")
+    # pn.add_place(it_p_CTF83, place_id="p_CTF83", label="CTF83")
+    # pn.add_place(it_p_bsec, place_id="p_bsec", label="beta secretase")
+    # pn.add_place(it_p_sAPPb, place_id="p_sAPPb", label="soluble sAPP beta")
+    # pn.add_place(it_p_CTF99, place_id="p_CTF99", label="CTF99")
+    # pn.add_place(it_p_Ab, place_id="p_AB", label="Amyloid beta peptide")
+    # pn.add_place(it_p_AICD, place_id="p_AICD", label="AICD")
+    # pn.add_place(it_p_gsec, place_id="p_gsec", label="gamma secretase")
 
     
     #AB pathology transitions
-    pn.add_transition(transition_id = 't_asec_exp',
-                   label                = "alpha secretase expression",
-                   input_place_ids       = [],
-                   input_arc_weights  = [], 
-                   output_place_ids       = ['p_asec'],
-                   output_arc_weights = [1],
-                   distribution_type = ["u", 0, 100000])
+    # pn.add_transition(transition_id = 't_asec_exp',
+    #                label                = "alpha secretase expression",
+    #                input_place_ids       = [],
+    #                input_arc_weights  = [], 
+    #                output_place_ids       = ['p_asec'],
+    #                output_arc_weights = [1],
+    #                rate_function = r_t_chol_LE_upreg,
+    #                distribution_type = ["u", 0, 100000])
    
     pn.add_transition(transition_id = 't_asec_deg',
                    label      =     "alpha secretase degradation",
                    input_place_ids         =  ['p_asec'],
                    input_arc_weights  =  [1],
                    output_place_ids         =  [],
-                   output_arc_weights =  [])
+                   output_arc_weights =  [],
+                   distribution_type = ["grf", 10, 1, r_t_asec_degr])
    
-    pn.add_transition(transition_id = 't_APP_asec_cleav',
-                   label      =     "APP cleavage by alpha secretase",
-                   input_place_ids         =  ['p_APP_PM'],
-                   input_arc_weights  =  [1],
-                   output_place_ids         =  ['p_sAPPa', 'p_CTF83'],
-                   output_arc_weights =  [1, 1],
-                   catal_place_ids = ["p_asec"],
-                   catal_arc_weights = [1],
-                   distribution_type=["g",4,1])
+    # pn.add_transition(transition_id = 't_APP_asec_cleav',
+    #                label      =     "APP cleavage by alpha secretase",
+    #                input_place_ids         =  ['p_APP_PM'],
+    #                input_arc_weights  =  [1],
+    #                output_place_ids         =  ['p_sAPPa', 'p_CTF83'],
+    #                output_arc_weights =  [1, 1],
+    #                catal_place_ids = ["p_asec"],
+    #                catal_arc_weights = [1],
+    #                distribution_type=["g",4,1])
     
 
     #changed catal_arc_weight to 1 so that there is catalysis occurring brandon #also changing the catal_arc_weight doesnt change very much, oh wait, might need to add a new argument called catal_arc_weight, which will change the threshold of catalysis. Right now, the threshold of catalysis is determined by the ARC WEIGHT instead of the catal ARC WEIGHT
            
-    pn.add_transition(transition_id = 't_APP_endo',
-                   label      =     "APP endocytosis",
-                   input_place_ids         =  ['p_APP_PM'],
-                   input_arc_weights  =  [1],
-                   output_place_ids         =  ['p_APP_endo'],
-                   output_arc_weights =  [1])
+    # pn.add_transition(transition_id = 't_APP_endo',
+    #                label      =     "APP endocytosis",
+    #                input_place_ids         =  ['p_APP_PM'],
+    #                input_arc_weights  =  [1],
+    #                output_place_ids         =  ['p_APP_endo'],
+    #                output_arc_weights =  [1])
                
-    pn.add_transition(transition_id = 't_APP_endo_bsec_cleav',
-                   label      =     "APP cleavage by beta secretase",
-                   input_place_ids         =  ['p_APP_endo'],
-                   input_arc_weights  =  [1],
-                   output_place_ids         =  ['p_sAPPb', 'p_CTF99'],
-                   output_arc_weights =  [1, 1],
-                   catal_place_ids = ['p_bsec'],
-                   catal_arc_weights= [1],
-                   distribution_type = ["u",0,10])#here
+    # pn.add_transition(transition_id = 't_APP_endo_bsec_cleav',
+    #                label      =     "APP cleavage by beta secretase",
+    #                input_place_ids         =  ['p_APP_endo'],
+    #                input_arc_weights  =  [1],
+    #                output_place_ids         =  ['p_sAPPb', 'p_CTF99'],
+    #                output_arc_weights =  [1, 1],
+    #                catal_place_ids = ['p_bsec'],
+    #                catal_arc_weights= [1],
+    #                distribution_type = ["u",0,10])#here
    
    
-    pn.add_transition(transition_id = 't_bsec_exp',
-                   label      =     "beta secretase expression",
-                   input_place_ids         =  [],
-                   input_arc_weights  =  [],
-                   output_place_ids         =  ['p_bsec'],
-                   output_arc_weights =  [1])
+    # pn.add_transition(transition_id = 't_bsec_exp',
+    #                label      =     "beta secretase expression",
+    #                input_place_ids         =  [],
+    #                input_arc_weights  =  [],
+    #                output_place_ids         =  ['p_bsec'],
+    #                output_arc_weights =  [1])
        
-    pn.add_transition(transition_id = 't_bsec_deg',
-                   label      =     "beta secretase degradation",
-                   input_place_ids         =  ['p_bsec'],
-                   input_arc_weights  =  [1],
-                   output_place_ids         =  [],
-                   output_arc_weights =  [])
+    # pn.add_transition(transition_id = 't_bsec_deg',
+    #                label      =     "beta secretase degradation",
+    #                input_place_ids         =  ['p_bsec'],
+    #                input_arc_weights  =  [1],
+    #                output_place_ids         =  [],
+    #                output_arc_weights =  [])
        
-    pn.add_transition(transition_id = 't_CTF99_gsec_cleav',
-                   label      =     "CTF99 cleavage by gamma secretase",
-                   input_place_ids         =  ['p_CTF99'],
-                   input_arc_weights  =  [1],
-                   output_place_ids         =  ['p_AB', 'p_AICD'],
-                   output_arc_weights =  [1, 1],
-                   catal_place_ids = ["p_gsec"],
-                   catal_arc_weights = [1])
+    # pn.add_transition(transition_id = 't_CTF99_gsec_cleav',
+    #                label      =     "CTF99 cleavage by gamma secretase",
+    #                input_place_ids         =  ['p_CTF99'],
+    #                input_arc_weights  =  [1],
+    #                output_place_ids         =  ['p_AB', 'p_AICD'],
+    #                output_arc_weights =  [1, 1],
+    #                catal_place_ids = ["p_gsec"],
+    #                catal_arc_weights = [1])
        
-    pn.add_transition(transition_id = 't_gsec_exp',
-                   label      =     "gamma secretase expression",
-                   input_place_ids         =  [],
-                   input_arc_weights  =  [],
-                   output_place_ids         =  ['p_gsec'],
-                   output_arc_weights =  [1])
+    # pn.add_transition(transition_id = 't_gsec_exp',
+    #                label      =     "gamma secretase expression",
+    #                input_place_ids         =  [],
+    #                input_arc_weights  =  [],
+    #                output_place_ids         =  ['p_gsec'],
+    #                output_arc_weights =  [1])
        
-    pn.add_transition(transition_id = 't_gsec_deg',
-                   label      =     "gamma secretase degradation",
-                   input_place_ids         =  ['p_gsec'],
-                   input_arc_weights  =  [1],
-                   output_place_ids         =  [],
-                   output_arc_weights =  [])
+    # pn.add_transition(transition_id = 't_gsec_deg',
+    #                label      =     "gamma secretase degradation",
+    #                input_place_ids         =  ['p_gsec'],
+    #                input_arc_weights  =  [1],
+    #                output_place_ids         =  [],
+    #                output_arc_weights =  [])
        
-    pn.add_transition(transition_id = 't_bsec_deg',
-                   label      =     "beta secretase degradation",
-                   input_place_ids         =  ['p_bsec'],
-                   input_arc_weights  =  [1],
-                   output_place_ids         =  [],
-                   output_arc_weights =  [])
+    # pn.add_transition(transition_id = 't_bsec_deg',
+    #                label      =     "beta secretase degradation",
+    #                input_place_ids         =  ['p_bsec'],
+    #                input_arc_weights  =  [1],
+    #                output_place_ids         =  [],
+    #                output_arc_weights =  [])
     
     
     # #Tau pathology
@@ -307,11 +309,11 @@ def main():
       
        
        # Run the network X times
-    pn.run(100, print_stats=False)
+    pn.run(2000, print_stats=False)
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ['p_CTF99', 'p_sAPPb', 'p_APP_endo'] 
+    list_for_plot = ['p_asec'] 
     
     pn.plot_time_evolution(list_for_plot)
 
