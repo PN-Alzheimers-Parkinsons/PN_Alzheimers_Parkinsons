@@ -31,7 +31,7 @@ def main():
 #         # Add places for each chemical species
 
    #AB pathology
-    pn.add_place(200, place_id="p_asec", label="alpha secretase")
+    pn.add_place(it_p_asec, place_id="p_asec", label="alpha secretase")
     # pn.add_place(it_p_APP_pm, place_id="p_APP_PM", label="APP at plasma membrane")
     # pn.add_place(it_p_APP_endo, place_id="p_APP_endo", label="endocytosed APP")
     # pn.add_place(it_p_sAPPa, place_id="p_sAPPa", label="soluble sAPP alpha")
@@ -59,7 +59,8 @@ def main():
                    input_arc_weights  =  [1],
                    output_place_ids         =  [],
                    output_arc_weights =  [],
-                   distribution_type = ["grf", 10, 1, r_t_asec_degr])
+                   distribution_type = ["grf", 4, r_t_asec_degr]) #0.1 means 10%, 1 means 100% Standard deviation
+    #relatieve standard deviation (10%, distribution and standard) #add michaeles menten
    
     # pn.add_transition(transition_id = 't_APP_asec_cleav',
     #                label      =     "APP cleavage by alpha secretase",

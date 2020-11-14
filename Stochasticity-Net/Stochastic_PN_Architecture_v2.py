@@ -124,10 +124,12 @@ class Transition:
         #poisson and bernoulli try, gene transcribed maybe bernoulli
 
         if self.distribution_type[0] == "grf":
-            random_integer = random.gauss(self.distribution_type[1],self.distribution_type[1]*4) #self.distribution_type[1]]*0.1 for the standard deviation gives a very smooth curve
-            print(random_integer)
+            gaussian_mean = self.distribution_type[2](pn.a)
+            random_integer = random.gauss(gaussian_mean,gaussian_mean*self.distribution_type[1]) #self.distribution_type[1]]*0.1 for the standard deviation gives a very smooth curve
+            #print(gaussian_mean*self.distribution_type[1], "standard deviation")
+            #print(random_integer, "coefficient scalar")
             #print(pn.a)
-            self.distribution_type[1] = self.distribution_type[3](pn.a) #
+ #
             #print(self.distribution_type[3](pn.a))
             
         #gaussian

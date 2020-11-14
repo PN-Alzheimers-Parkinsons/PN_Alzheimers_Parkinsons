@@ -42,7 +42,7 @@ r_t_asec_exp = lambda a : Abeta_multiplier * k_t_asec_exp * (mchol_t_asec_exp  +
 #  normally has * a['p_24OHchol_intra'] after mchol_t_asec_exp
 
 
-r_t_asec_degr = lambda a : Abeta_multiplier * k_t_asec_degr * a['p_asec'] 
+r_t_asec_degr = lambda a : Abeta_multiplier * k_t_asec_degr * a['p_asec']
 
 r_t_APP_exp = lambda a : Abeta_multiplier * k_t_APP_exp * (1 + dis_t_APP_exp * a['p_ApoE']) #* min(max((m_t_APP_exp * a['p_ROS_mito'] + n_t_APP_exp),1),1.5)
 r_t_APP_endocyto = lambda a : Abeta_multiplier * a['p_APP_pm'] * (k_t_APP_endocyto + a['p_ApoE'] * dis_t_APP_endocyto)
