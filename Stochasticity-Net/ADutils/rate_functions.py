@@ -3,6 +3,9 @@
 from parameters import *
 from initial_tokens import *
 
+function = lambda f, g : lambda a : f(a) * g(a)
+
+
 # Cholesterol homeostasis
 r_t_LDLR_endocyto = lambda a : chol_multiplier * (vmax_t_LDLR_endocyto * min([1, max([0.3,(m_t_LDLR_endocyto * (a["p_chol_ER"]/it_p_chol_ER) + n_t_LDLR_endocyto)])]) * a["p_ApoEchol_extra"]/(Km_t_LDLR_endocyto + a["p_ApoEchol_extra"]))
 
@@ -65,13 +68,15 @@ speed_function_APP_asec_cleav = lambda a : kcat_t_APP_asec_cleav * a['p_APP_pm']
 
 speed_function_APP_bsec_cleav = lambda a : kcat_t_APP_bsec_cleav * a['p_APP_endo'] / (Km_t_APP_bsec_cleav + a['p_APP_endo'])
 
-# Scaled Rate Functions
+speed_function_CTF99_gsec_cleav = lambda a : kcat_t_CTF99_gsec_cleav * a['p_CTF99'] / (Km_t_CTF99_gsec_cleav + a['p_CTF99'])
 
-function = lambda f, g : lambda a : f(a) * g(a)
+# Scaled Rate Functions
 
 r_t_APP_asec_cleav = function(speed_function_APP_asec_cleav, vmax_scaling_t_APP_asec_cleav)
 
 r_t_APP_bsec_cleav = function(speed_function_APP_bsec_cleav, vmax_scaling_t_APP_bsec_cleav)
+
+r_t_CTF99_gsec_cleav = function(speed_function_CTF99_gsec_cleav, vmax_scaling_t_CTF99_gsec_cleav)
 
 
 # Tau Pathology
@@ -79,8 +84,21 @@ r_t_actv_GSK3b = lambda a : tau_multiplier * k_t_actv_GSK3b * a['p_GSK3b_inact']
 r_t_inactv_GSK3b = lambda a : tau_multiplier * k_t_inactv_GSK3b * a['p_GSK3b_act']
 r_t_GSK3b_exp_deg = lambda a : tau_multiplier * (k_t_p_GSK3b_exp - k_t_p_GSK3b_deg * a['p_GSK3b_inact'])
 
+
 vmax_scaling_t_phos_tau = lambda a : tau_multiplier * a['p_GSK3b_act']*(a['p_GSK3b_act']/it_p_GSK3b_act)**2.547 #(1*a['p_cas']+1) * (0.2*a['p_GSK3b_act']+1))
 vmax_scaling_t_dephos_tauP = lambda a : tau_multiplier
+
+
+# Speed functions
+
+
+speed_function_phos_tau = lambda a : kcat_t_phos_tau * a['p_tau'] / (Km_t_phos_tau + a['p_tau'])
+speed_function_dephos_tauP = lambda a : vmax_t_dephos_tauP * a['p_tauP'] / (Km_t_dephos_tauP + a['p_tauP'])
+
+# Scaled Rate Functions
+
+r_t_phos_tau = function(speed_function_phos_tau, vmax_scaling_t_phos_tau)
+r_t_dephos_tau = function(speed_function_dephos_tauP, vmax_scaling_t_dephos_tauP)
 
 
 # Calcium Homeostasis
