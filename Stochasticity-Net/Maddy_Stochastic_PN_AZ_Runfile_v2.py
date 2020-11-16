@@ -46,7 +46,6 @@ def main():
     
     pn.add_place(it_p_age, place_id="p_age", label="age risk factor")
     pn.add_place(it_p_ApoE, place_id="p_ApoE", label="ApoE risk factor")
-    pn.add_place(it_p_RTN3_axon, place_id="p_RTN3_axon", label="RTN3 (axon)")
     
     #Tau Pathology places
     
@@ -71,7 +70,21 @@ def main():
     pn.add_place(it_p_27OHchol_intra, place_id="p_27OHchol_intra", label="27-hydroxycholesterol (intracellular)")
     pn.add_place(it_p_7HOCA, place_id="p_7HOCA", label="7-HOCA")
     pn.add_place(it_p_preg, place_id="p_preg", label="Pregnenolon")
+    
+    #ER retraction and collapse places
+    pn.add_place(it_p_RTN3_axon, place_id="p_RTN3_axon", label="Monomeric RTN3 (axonal)")
+    pn.add_place(it_p_RTN3_PN, place_id="p_RTN3_PN", label="Monomeric RTN3 (perinuclear)")
 
+    # HMW RTN3 (cycling between different cellular compartments)
+    pn.add_place(it_p_RTN3_HMW_cyto, place_id="p_RTN3_HMW_cyto", label="HMW RTN3 (cytosol)")
+    pn.add_place(it_p_RTN3_HMW_auto, place_id="p_RTN3_HMW_auto", label="HMW RTN3 (autophagosome)")
+    pn.add_place(it_p_RTN3_HMW_lyso, place_id="p_RTN3_HMW_lyso", label="HMW RTN3 (degraded in lysosome)")
+    pn.add_place(it_p_RTN3_HMW_dys1, place_id="p_RTN3_HMW_dys1", label="HMW RTN3 (type I/III dystrophic neurites)")
+    pn.add_place(it_p_RTN3_HMW_dys2, place_id="p_RTN3_HMW_dys2", label="HMW RTN3 (type II dystrophic neurites)")
+
+    # Energy metabolism: ATP consumption
+    pn.add_place(it_p_ATP, place_id="p_ATP", label="ATP")
+    pn.add_place(it_p_ADP, place_id="p_ADP", label="ADP")
     
     # AB pathology transitions
     pn.add_transition(transition_id = 't_asec_exp',
@@ -324,6 +337,71 @@ def main():
                     output_arc_weights =  [],
                     distribution_type = ["grf", 0.1, r_t_chol_trans_PM_ECM])                                                  
       
+    #ER retraction and collapse transitions 
+    
+    pn.add_transition(transition_id = 't_RTN3_exp',
+                        label = 'Expression rate of RTN3',
+                        input_place_ids = [],
+                        input_arc_weights = [],
+                        output_place_ids = ['p_RTN3_PN'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_RTN3_exp])
+    
+    pn.add_transition(transition_id = 't_LE_retro',
+                        label = 'retrograde transport of LEs & ER',
+                        input_place_ids = ['p_ATP','p_chol_LE','p_RTN3_axon', 'p_tau'],
+                        input_arc_weights = [ATPcons_t_LE_trans, 0, 1, 0],                  
+                        output_place_ids = ['p_ADP', 'p_RTN3_PN'],
+                        output_arc_weights = [ATPcons_t_LE_trans, 1],
+                        distribution_type = ["grf", 0.1, r_t_LE_retro])
+
+    pn.add_transition(transition_id = 't_LE_antero',
+                        label = 'anterograde transport of LEs & ER',
+                        input_place_ids = ['p_ATP','p_RTN3_PN', 'p_tau'], 
+                        input_arc_weights = [ATPcons_t_LE_trans, 1, 0],
+                        output_place_ids = ['p_ADP','p_RTN3_axon'],
+                        output_arc_weights = [ATPcons_t_LE_trans, 1],
+                        distribution_type = ["grf", 0.1, r_t_LE_antero]) 
+
+    pn.add_transition(transition_id = 't_RTN3_aggregation',
+                        label = 'aggregation of monomeric RTN3 into HMW RTN3',
+                        input_place_ids = ['p_RTN3_axon', 'p_RTN3_PN', 'p_Ab'], 
+                        input_arc_weights = [1, 1, 0],
+                        output_place_ids = ['p_RTN3_HMW_cyto'],
+                        output_arc_weights = [1],
+                        distribution_type=["grf", 0.1, r_t_RTN3_aggregation]) 
+
+    pn.add_transition(transition_id = 't_RTN3_auto',
+                        label = 'functional autophagy of HMW RTN3',
+                        input_place_ids = ['p_RTN3_HMW_cyto', 'p_RTN3_axon'], 
+                        input_arc_weights = [1, 0],
+                        output_place_ids = ['p_RTN3_HMW_auto'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_RTN3_auto]) 
+
+    pn.add_transition(transition_id = 't_RTN3_lyso',
+                        label = 'functional delivery of HMW RTN3 to the lysosome',
+                        input_place_ids = ['p_RTN3_HMW_auto', 'p_tau'], 
+                        input_arc_weights = [1, 0],
+                        output_place_ids = ['p_RTN3_HMW_lyso'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_RTN3_lyso]) 
+
+    pn.add_transition(transition_id = 't_RTN3_dys_auto',
+                        label = 'dysfunctional autophagy of HMW RTN3',
+                        input_place_ids = ['p_RTN3_HMW_cyto', 'p_RTN3_axon'], 
+                        input_arc_weights = [1, 0],
+                        output_place_ids = ['p_RTN3_HMW_dys1'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_RTN3_dys_auto])
+
+    pn.add_transition(transition_id = 't_RTN3_dys_lyso',
+                        label = 'dysfunctional delivery of HMW RTN3 to the lysosome',
+                        input_place_ids = ['p_RTN3_HMW_auto', 'p_RTN3_HMW_dys1', 'p_tau'], 
+                        input_arc_weights = [1, 0, 0],
+                        output_place_ids = ['p_RTN3_HMW_dys2'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_RTN3_dys_lyso])
        
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
@@ -333,7 +411,7 @@ def main():
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ['p_chol_ER', 'p_chol_PM'] 
+    list_for_plot = ['p_RTN3_HMW_dys1', 'p_RTN3_HMW_dys2'] 
     
     pn.plot_time_evolution(list_for_plot)
 
