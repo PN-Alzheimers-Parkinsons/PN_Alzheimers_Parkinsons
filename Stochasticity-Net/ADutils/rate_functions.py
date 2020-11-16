@@ -25,6 +25,23 @@ vmax_scaling_t_CYP11A1_metab = lambda a : chol_multiplier
 vmax_scaling_t_CYP7B1_metab = lambda a : chol_multiplier
 vmax_scaling_t_CYP46A1_metab = lambda a : chol_multiplier
 
+#Speed Functions
+
+speed_function_CYP27A1_metab = lambda a : vmax_t_CYP27A1_metab * a['p_chol_mito'] / (Km_t_CYP27A1_metab + a['p_chol_mito'])
+
+speed_function_CYP11A1_metab = lambda a : vmax_t_CYP11A1_metab * a['p_chol_mito'] / (Km_t_CYP11A1_metab + a['p_chol_mito'])
+
+speed_function_CYP7B1_metab = lambda a : vmax_t_CYP7B1_metab * a['p_27OHchol_intra'] / (Km_t_CYP7B1_metab + a['p_27OHchol_intra'])
+
+speed_function_CYP46A1_metab = lambda a : vmax_t_CYP46A1_metab * a['p_chol_ER'] / (Km_t_CYP46A1_metab + a['p_chol_ER'])
+
+#Scaled rate functions
+
+r_t_CYP27A1_metab = function(speed_function_CYP27A1_metab, vmax_scaling_t_CYP27A1_metab)
+r_t_CYP11A1_metab = function(speed_function_CYP11A1_metab, vmax_scaling_t_CYP11A1_metab)
+r_t_CYP7B1_metab = function(speed_function_CYP7B1_metab, vmax_scaling_t_CYP7B1_metab)
+r_t_CYP46A1_metab = function(speed_function_CYP46A1_metab, vmax_scaling_t_CYP46A1_metab)
+
 
 # ER Retraction & Collapse
 r_t_LE_retro = lambda a : ER_multiplier * beta_t_LE_retro * vmax_t_LE_retro * a['p_ATP'] / (Km_t_LE_retro + a['p_ATP']) * max((mchol_t_LE_retro * a['p_chol_LE'] + nchol_t_LE_retro), 1) / dist_t_LE_trans * a['p_RTN3_axon'] * a['p_tau']/it_p_tau
