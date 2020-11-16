@@ -80,6 +80,8 @@ def main():
                     input_arc_weights  = [], 
                     output_place_ids       = ['p_asec'],
                     output_arc_weights = [1],
+                    catal_place_ids = ['p_24OHchol_intra'],
+                    catal_arc_weights = [1],
                     distribution_type = ["grf", 0.1, r_t_asec_exp])
    
     pn.add_transition(transition_id = 't_asec_deg',
@@ -118,8 +120,8 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_sAPPb', 'p_CTF99'],
                     output_arc_weights =  [1, 1],
-                    catal_place_ids = ['p_bsec'],
-                    catal_arc_weights= [1],
+                    catal_place_ids = ['p_bsec', 'p_chol_PM'],
+                    catal_arc_weights= [1, 1],
                     distribution_type = ["grf", 0.1, r_t_APP_bsec_cleav])
    
    
@@ -129,6 +131,8 @@ def main():
                     input_arc_weights  =  [],
                     output_place_ids         =  ['p_bsec'],
                     output_arc_weights =  [1],
+                    catal_place_ids = ['p_27OHchol_intra'],
+                    catal_arc_weights = [1],
                     distribution_type = ["grf", 0.1, r_t_bsec_exp])
        
     pn.add_transition(transition_id = 't_bsec_deg',
