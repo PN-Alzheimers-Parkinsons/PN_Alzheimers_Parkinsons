@@ -32,26 +32,48 @@ def main():
 
    #AB pathology
     pn.add_place(it_p_asec, place_id="p_asec", label="alpha secretase")
-    # pn.add_place(it_p_APP_pm, place_id="p_APP_PM", label="APP at plasma membrane")
-    # pn.add_place(it_p_APP_endo, place_id="p_APP_endo", label="endocytosed APP")
-    # pn.add_place(it_p_sAPPa, place_id="p_sAPPa", label="soluble sAPP alpha")
-    # pn.add_place(it_p_CTF83, place_id="p_CTF83", label="CTF83")
-    # pn.add_place(it_p_bsec, place_id="p_bsec", label="beta secretase")
-    # pn.add_place(it_p_sAPPb, place_id="p_sAPPb", label="soluble sAPP beta")
-    # pn.add_place(it_p_CTF99, place_id="p_CTF99", label="CTF99")
-    # pn.add_place(it_p_Ab, place_id="p_AB", label="Amyloid beta peptide")
-    # pn.add_place(it_p_AICD, place_id="p_AICD", label="AICD")
-    # pn.add_place(it_p_gsec, place_id="p_gsec", label="gamma secretase")
+    pn.add_place(it_p_APP_pm, place_id="p_APP_pm", label="APP at plasma membrane")
+    pn.add_place(it_p_APP_endo, place_id="p_APP_endo", label="endocytosed APP")
+    pn.add_place(it_p_sAPPa, place_id="p_sAPPa", label="soluble sAPP alpha")
+    pn.add_place(it_p_CTF83, place_id="p_CTF83", label="CTF83")
+    pn.add_place(it_p_bsec, place_id="p_bsec", label="beta secretase")
+    pn.add_place(it_p_sAPPb, place_id="p_sAPPb", label="soluble sAPP beta")
+    pn.add_place(it_p_CTF99, place_id="p_CTF99", label="CTF99")
+    pn.add_place(it_p_Ab, place_id="p_AB", label="Amyloid beta peptide")
+    pn.add_place(it_p_AICD, place_id="p_AICD", label="AICD")
+    pn.add_place(it_p_gsec, place_id="p_gsec", label="gamma secretase")
+    
+    
+    pn.add_place(it_p_age, place_id="p_age", label="age risk factor")
+    pn.add_place(it_p_ApoE, place_id="p_ApoE", label="ApoE risk factor")
+    pn.add_place(it_p_RTN3_axon, place_id="p_RTN3_axon", label="RTN3 (axon)")
+  
+    
+    #Cholesterol homeostasis 
+    # Cholesterol-ApoE
+    pn.add_place(it_p_ApoEchol_extra, place_id="p_ApoEchol_extra", label="ApoE-cholesterol complex (extracellular)")
+    #Cholesterol in different organelles
+    pn.add_place(it_p_chol_LE, place_id="p_chol_LE", label="Cholesterol (late endosome)")
+    pn.add_place(it_p_chol_mito, place_id="p_chol_mito", label="Cholesterol (mitochondria)")
+    pn.add_place(it_p_chol_ER, place_id="p_chol_ER", label="Cholesterol (ER)")
+    pn.add_place(it_p_chol_PM, place_id="p_chol_PM", label="Cholesterol (plasma membrane)") 
+      # Oxysterols
+    pn.add_place(it_p_24OHchol_extra, place_id="p_24OHchol_extra", label="24-hydroxycholesterol (extracellular)")
+    pn.add_place(it_p_24OHchol_intra, place_id="p_24OHchol_intra", label="24-hydroxycholesterol (intracellular)")
+    pn.add_place(it_p_27OHchol_extra, place_id="p_27OHchol_extra", label="27-hydroxycholesterol (extracellular)")
+    pn.add_place(it_p_27OHchol_intra, place_id="p_27OHchol_intra", label="27-hydroxycholesterol (intracellular)")
+    pn.add_place(it_p_7HOCA, place_id="p_7HOCA", label="7-HOCA")
+    pn.add_place(it_p_preg, place_id="p_preg", label="Pregnenolon")
 
     
-    #AB pathology transitions
-    # pn.add_transition(transition_id = 't_asec_exp',
-    #                 label                = "alpha secretase expression",
-    #                 input_place_ids       = [],
-    #                 input_arc_weights  = [], 
-    #                 output_place_ids       = ['p_asec'],
-    #                 output_arc_weights = [1],
-    #                 distribution_type = ["g", 0, 1])
+    # AB pathology transitions
+    pn.add_transition(transition_id = 't_asec_exp',
+                    label                = "alpha secretase expression",
+                    input_place_ids       = [],
+                    input_arc_weights  = [], 
+                    output_place_ids       = ['p_asec'],
+                    output_arc_weights = [1],
+                    distribution_type = ["grf", 0.1, r_t_asec_exp])
    
     pn.add_transition(transition_id = 't_asec_deg',
                    label      =     "alpha secretase degradation",
@@ -59,45 +81,48 @@ def main():
                    input_arc_weights  =  [1],
                    output_place_ids         =  [],
                    output_arc_weights =  [],
-                   distribution_type = ["grf", 4, r_t_asec_degr]) #0.1 means 10%, 1 means 100% Standard deviation
+                   distribution_type = ["grf", 0.1, r_t_asec_degr]) #0.1 means 10%, 1 means 100% Standard deviation
     #relatieve standard deviation (10%, distribution and standard) #add michaeles menten
    
-    # pn.add_transition(transition_id = 't_APP_asec_cleav',
-    #                label      =     "APP cleavage by alpha secretase",
-    #                input_place_ids         =  ['p_APP_PM'],
-    #                input_arc_weights  =  [1],
-    #                output_place_ids         =  ['p_sAPPa', 'p_CTF83'],
-    #                output_arc_weights =  [1, 1],
-    #                catal_place_ids = ["p_asec"],
-    #                catal_arc_weights = [1],
-    #                distribution_type=["g",4,1,vmax_scaling_t_APP_asec_cleav]) #middle value = rate
+    pn.add_transition(transition_id = 't_APP_asec_cleav',
+                    label      =     "APP cleavage by alpha secretase",
+                    input_place_ids         =  ['p_APP_pm'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_sAPPa', 'p_CTF83'],
+                    output_arc_weights =  [1, 1],
+                    catal_place_ids = ["p_asec"],
+                    catal_arc_weights = [1],
+                    distribution_type=["grf", 0.1, r_t_APP_asec_cleav]) #middle value = rate
     
 
     #changed catal_arc_weight to 1 so that there is catalysis occurring brandon #also changing the catal_arc_weight doesnt change very much, oh wait, might need to add a new argument called catal_arc_weight, which will change the threshold of catalysis. Right now, the threshold of catalysis is determined by the ARC WEIGHT instead of the catal ARC WEIGHT
            
-    # pn.add_transition(transition_id = 't_APP_endo',
-    #                label      =     "APP endocytosis",
-    #                input_place_ids         =  ['p_APP_PM'],
-    #                input_arc_weights  =  [1],
-    #                output_place_ids         =  ['p_APP_endo'],
-    #                output_arc_weights =  [1])
+    pn.add_transition(transition_id = 't_APP_endo',
+                    label      =     "APP endocytosis",
+                    input_place_ids         =  ['p_APP_pm'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_APP_endo'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", 0.1, r_t_APP_endocyto])
                
-    # pn.add_transition(transition_id = 't_APP_endo_bsec_cleav',
-    #                label      =     "APP cleavage by beta secretase",
-    #                input_place_ids         =  ['p_APP_endo'],
-    #                input_arc_weights  =  [1],
-    #                output_place_ids         =  ['p_sAPPb', 'p_CTF99'],
-    #                output_arc_weights =  [1, 1],
-    #                catal_place_ids = ['p_bsec'],
-    #                catal_arc_weights= [1])#here
+    pn.add_transition(transition_id = 't_APP_bsec_cleav',
+                    label      =     "APP cleavage by beta secretase",
+                    input_place_ids         =  ['p_APP_endo'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_sAPPb', 'p_CTF99'],
+                    output_arc_weights =  [1, 1],
+                    catal_place_ids = ['p_bsec'],
+                    catal_arc_weights= [1],
+                    distribution_type = ["grf", 0.1, r_t_APP_bsec_cleav])
    
    
-    # pn.add_transition(transition_id = 't_bsec_exp',
-    #                label      =     "beta secretase expression",
-    #                input_place_ids         =  [],
-    #                input_arc_weights  =  [],
-    #                output_place_ids         =  ['p_bsec'],
-    #                output_arc_weights =  [1])
+    pn.add_transition(transition_id = 't_bsec_exp',
+                    label      =     "beta secretase expression",
+                    input_place_ids         =  [],
+                    input_arc_weights  =  [],
+                    output_place_ids         =  ['p_bsec'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", 0.1, r_t_bsec_exp])
        
     # pn.add_transition(transition_id = 't_bsec_deg',
     #                label      =     "beta secretase degradation",
@@ -198,21 +223,7 @@ def main():
     #                output_arc_weights =  [1])
             
     
-    # #Cholesterol homeostasis 
-    # # Cholesterol-ApoE
-    # pn.add_place(10, place_id="p_ApoEchol_extra", label="ApoE-cholesterol complex (extracellular)")
-    # #Cholesterol in different organelles
-    # pn.add_place(10, place_id="p_chol_LE", label="Cholesterol (late endosome)")
-    # pn.add_place(1, place_id="p_chol_mito", label="Cholesterol (mitochondria)")
-    # pn.add_place(1, place_id="p_chol_ER", label="Cholesterol (ER)")
-    # pn.add_place(1, place_id="p_chol_PM", label="Cholesterol (plasma membrane)") 
-    #  # Oxysterols
-    # pn.add_place(1, place_id="p_24OHchol_extra", label="24-hydroxycholesterol (extracellular)")
-      # pn.add_place(1, place_id="p_24OHchol_intra", label="24-hydroxycholesterol (intracellular)")
-    # pn.add_place(1, place_id="p_27OHchol_extra", label="27-hydroxycholesterol (extracellular)")
-    # pn.add_place(1, place_id="p_27OHchol_intra", label="27-hydroxycholesterol (intracellular)")
-    # pn.add_place(1, place_id="p_7HOCA", label="7-HOCA")
-    # pn.add_place(1, place_id="p_preg", label="Pregnenolon")
+
     
     # #Transitions
     # pn.add_transition(transition_id = 't_LDLR_endocyto',
