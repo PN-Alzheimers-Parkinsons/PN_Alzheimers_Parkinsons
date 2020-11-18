@@ -5,8 +5,8 @@ from matplotlib import rcParams
 import os
 import sys
 cwd = os.getcwd()
-root_folder = os.sep + "team-project"
-sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep + "utils" + os.sep)
+root_folder = os.sep + "PN_Alzheimers_Parkinsons"
+sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep + "HFPN model" + os.sep + "utils" + os.sep)
 from hfpn import HFPN 
 
 cwd = os.getcwd()

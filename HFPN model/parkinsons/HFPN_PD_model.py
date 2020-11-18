@@ -2,18 +2,18 @@ import os
 import sys
 
 cwd = os.getcwd() # Get current working directory
-root_folder = os.sep + "team-project"
+root_folder = os.sep + "PN_Alzheimers_Parkinsons"
 # Move to 'utils' from current directory position
-sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep + "utils" + os.sep)
+sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep + "HFPN model" + os.sep + "utils" + os.sep)
 
 # Import HFPN class to work with hybrid functional Petri nets
 from hfpn import HFPN
 
 # Import initial token, firing conditions and rate functions
-from initial_tokens import *
-from rate_functions import *
-from firing_conditions import *
-from inputs import *
+from PD_HFPN_initial_tokens import *
+from PD_HFPN_rate_functions import *
+from PD_HFPN_firing_conditions import *
+from PD_HFPN_inputs import *
 from visualisation import Analysis
 
 def main():

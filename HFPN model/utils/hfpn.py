@@ -412,13 +412,12 @@ class HFPN:
                 consumption_coefficients (list): list of numbers relating the consumption speed of the input places
                 output_place_ids (list): list with place_id for each output place
                 production_coefficients (list): list of numbers relating the production speed of the output places
-                vmax_scaling_function: lambda function spefifying how promoters/inhibitors affect vmax
+                vmax_scaling_function: lambda function specifying how promoters/inhibitors affect vmax
         """
 
         speed_function = lambda a : vmax * a[substrate_id] / (Km + a[substrate_id])
 
-        function = lambda f, g : lambda a : f(a) * g(a) # compound the two funtions
-        scaled_speed_function = function(speed_function, vmax_scaling_function)
+
 
         self.add_transition_with_speed_function(
             transition_id = transition_id,
