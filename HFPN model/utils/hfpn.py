@@ -416,7 +416,8 @@ class HFPN:
         """
 
         speed_function = lambda a : vmax * a[substrate_id] / (Km + a[substrate_id])
-
+        function = lambda f, g : lambda a : f(a) * g(a) # compound the two funtions
+        scaled_speed_function = function(speed_function, vmax_scaling_function)
 
 
         self.add_transition_with_speed_function(
