@@ -82,9 +82,26 @@ def main():
     pn.add_place(it_p_RTN3_HMW_dys1, place_id="p_RTN3_HMW_dys1", label="HMW RTN3 (type I/III dystrophic neurites)")
     pn.add_place(it_p_RTN3_HMW_dys2, place_id="p_RTN3_HMW_dys2", label="HMW RTN3 (type II dystrophic neurites)")
 
-    # Energy metabolism: ATP consumption
+    
+    # Energy metabolism places
+    pn.add_place(it_p_cas3, place_id="p_cas3", label="Active caspase 3")
     pn.add_place(it_p_ATP, place_id="p_ATP", label="ATP")
     pn.add_place(it_p_ADP, place_id="p_ADP", label="ADP")
+    pn.add_place(it_p_reduc_mito, place_id="p_reduc_mito", label="Reducing agents (mitochondria)")
+    pn.add_place(it_p_ROS_mito, place_id="p_ROS_mito", label="ROS (mitochondria)")
+    pn.add_place(it_p_H2O_mito, place_id="p_H2O_mito", label="H2O (mitochondria)")
+
+    # Calcium homeostasis places
+    pn.add_place(it_p_Ca_cyto, place_id="p_Ca_cyto", label="Calcium (cytosol)")
+    pn.add_place(it_p_Ca_mito, place_id="p_Ca_mito", label="Calcium (mitochondria)")
+    pn.add_place(it_p_Ca_ER, place_id="p_Ca_ER", label="Calcium (ER)")
+
+    # Discrete on/of-switches calcium pacemaking
+    pn.add_place(1, place_id="p_Ca_extra", label="on1 - Calcium (extracellular)")
+    pn.add_place(0, place_id="p_on2", label="on2")
+    pn.add_place(0, place_id="p_on3", label="on3")
+    pn.add_place(0, place_id="p_on4", label="on4")
+
     
     # AB pathology transitions
     pn.add_transition(transition_id = 't_asec_exp',
@@ -402,16 +419,190 @@ def main():
                         output_place_ids = ['p_RTN3_HMW_dys2'],
                         output_arc_weights = [1],
                         distribution_type = ["grf", 0.1, r_t_RTN3_dys_lyso])
+    
+    # Energy metablism transitions
+    pn.add_transition(transition_id = 't_krebs', 
+                label = 'Krebs cycle', 
+                input_place_ids = ['p_ADP', 'p_Ca_mito', "p_Ab"],
+                input_arc_weights = [1, 0, 0],
+                output_place_ids = ['p_reduc_mito', 'p_ATP'], 
+                output_arc_weights = [4, 1],
+                distribution_type=["grf", 0.1, r_t_krebs])
+    
+    pn.add_transition(transition_id = 't_ATP_hydro_mito', 
+                label = 'ATP hydrolysis by cellular processes', 
+                input_place_ids = ['p_ATP'],
+                input_arc_weights = [1],
+                output_place_ids = ['p_ADP'], 
+                output_arc_weights = [1],
+                distribution_type = ["grf", 0.1, r_t_ATP_hydro_mito])   
+    
+    pn.add_transition(transition_id = 't_ETC', 
+                label = 'Electron transport chain', 
+                input_place_ids = ['p_reduc_mito', 'p_ADP', 'p_Ca_mito', 'p_ROS_mito', 'p_chol_mito', "p_Ab"],
+                input_arc_weights = [22/3.96, 440, 0, 0, 0, 0],
+                output_place_ids = ['p_ATP', 'p_ROS_mito'], 
+                output_arc_weights = [440, 0.06],
+                distribution_type = ["grf", 0.1, r_t_ETC])
+    
+    pn.add_transition(transition_id = 't_ROS_metab', 
+                label = 'Neutralization of ROS', 
+                input_place_ids = ['p_ROS_mito', 'p_chol_mito'],
+                input_arc_weights = [1, 0],
+                output_place_ids = ['p_H2O_mito'], 
+                output_arc_weights = [1],
+                distribution_type = ["grf", 0.1, r_t_ROS_metab])    
+
+    # Output transitions: Cas3 for apoptosis
+    pn.add_transition(transition_id = 't_mito_dysfunc',
+                        label = 'Mitochondrial complex 1 dysfunction',
+                        input_place_ids = ['p_ROS_mito','p_Ab'],
+                        input_arc_weights = [1, 0], 
+                        output_place_ids = ['p_cas3'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_mito_dysfunc])
+    # Cas3 inactivation
+    pn.add_transition(transition_id = 't_cas3_inact',
+                        label = 'Caspase 3 inactivation',
+                        input_place_ids = ['p_cas3'],
+                        input_arc_weights = [1], 
+                        output_place_ids = [],         
+                        output_arc_weights = [],
+                        distribution_type = ["grf", 0.1, r_t_cas3_inact])
+    
+    pn.add_transition(transition_id = 't_ROS_gener_Ab',
+                        label = 'ROS generation by Abeta',
+                        input_place_ids = ['p_Ab'],
+                        input_arc_weights = [0], 
+                        output_place_ids = ["p_ROS_mito"],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_ROS_gener_Ab])
+    
+    
+    
+    #Calcium homeostasis transitions 
+    pn.add_transition(transition_id = 't_Ca_imp',
+                        label = 'VGCC/NMDA import channels',
+                        input_place_ids = ['p_Ca_extra'],
+                        input_arc_weights = [0],  
+                        output_place_ids = ['p_Ca_cyto'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_Ca_imp]) 
+
+    pn.add_transition(transition_id = 't_mCU',
+                        label = 'Ca import into mitochondria via mCU',
+                        input_place_ids = ['p_Ca_cyto', 'p_Ca_mito'],
+                        input_arc_weights = [1,0], 
+                        output_place_ids = ['p_Ca_mito'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_mCU]) 
+
+    pn.add_transition(transition_id = 't_MAM',
+                        label = 'Ca transport from ER to mitochondria',
+                        input_place_ids = ['p_Ca_ER', 'p_Ca_mito'],
+                        input_arc_weights = [1,0], 
+                        output_place_ids = ['p_Ca_mito'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_MAM]) 
+
+    pn.add_transition(transition_id = 't_RyR_IP3R',
+                        label = 'Ca export from ER',
+                        input_place_ids = ['p_Ca_extra', 'p_Ca_ER'],
+                        input_arc_weights = [0,1], 
+                        output_place_ids = ['p_Ca_cyto'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_RyR_IP3R]) 
+
+    pn.add_transition(transition_id = 't_SERCA',
+                        label = 'Ca import to ER',
+                        input_place_ids = ['p_Ca_cyto','p_ATP'],
+                        input_arc_weights = [1,0.5], 
+                        output_place_ids = ['p_Ca_ER','p_ADP'],         
+                        output_arc_weights = [1,0.5],
+                        distribution_type = ["grf", 0.1, r_t_SERCA]) 
+
+    # pn.add_transition(transition_id = 't_NCX_PMCA',
+    #                     label = 'Ca efflux to extracellular space',
+    #                     input_place_ids = ['p_Ca_cyto','p_on3'],
+    #                     firing_condition = lambda a: a['p_on3']==1,
+    #                     reaction_speed_function = r_t_NCX_PMCA,
+    #                     consumption_coefficients = [1,0], 
+    #                     output_place_ids = [],         
+    #                     production_coefficients = [])
+    
+    pn.add_transition(transition_id = 't_mNCLX',
+                        label = 'Ca export from mitochondria via mNCLX',
+                        input_place_ids = ['p_Ca_mito'],
+                        input_arc_weights = [1], 
+                        output_place_ids = ['p_Ca_cyto'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0.1, r_t_mNCLX]) 
+
+    # # Discrete on/of-switches calcium pacemaking
+    # hfpn.add_transition_with_speed_function(
+    #                     transition_id = 't_A',
+    #                     label = 'A',
+    #                     input_place_ids = ['p_on4'],
+    #                     firing_condition = lambda a: a['p_on4']==1,
+    #                     reaction_speed_function = lambda a: 1,
+    #                     consumption_coefficients = [1], 
+    #                     output_place_ids = ['p_Ca_extra'],         
+    #                     production_coefficients = [1],
+    #                     delay=0.5) 
+    
+    # hfpn.add_transition_with_speed_function(
+    #                     transition_id = 't_B',
+    #                     label = 'B',
+    #                     input_place_ids = ['p_Ca_extra'],
+    #                     firing_condition = lambda a: a['p_Ca_extra']==1,
+    #                     reaction_speed_function = lambda a: 1,
+    #                     consumption_coefficients = [1], 
+    #                     output_place_ids = ['p_on2'],         
+    #                     production_coefficients = [1],
+    #                     delay=0.5) 
+    
+    # hfpn.add_transition_with_speed_function(
+    #                     transition_id = 't_C',
+    #                     label = 'C',
+    #                     input_place_ids = ['p_on2'],
+    #                     firing_condition = lambda a: a['p_on2']==1,
+    #                     reaction_speed_function = lambda a: 1,
+    #                     consumption_coefficients = [1], 
+    #                     output_place_ids = ['p_on3'],         
+    #                     production_coefficients = [1],
+    #                     delay=0) 
+
+    # hfpn.add_transition_with_speed_function(
+    #                     transition_id = 't_D',
+    #                     label = 'D',
+    #                     input_place_ids = ['p_on3'],
+    #                     firing_condition = lambda a: a['p_on3']==1,
+    #                     reaction_speed_function = lambda a: 1,
+    #                     consumption_coefficients = [1], 
+    #                     output_place_ids = ['p_on4'],         
+    #                     production_coefficients = [1],
+    #                     delay=0.5)
+
+    # # Link to energy metabolism in that it needs ATP replenishment
+    # hfpn.add_transition_with_mass_action(
+    #                     transition_id = 't_NaK_ATPase',
+    #                     label = 'NaK ATPase',
+    #                     rate_constant =  k_t_NaK_ATPase,
+    #                     input_place_ids = ['p_ATP', 'p_on3'],
+    #                     firing_condition = lambda a: a['p_on3']==1,
+    #                     consumption_coefficients = [1,0], 
+    #                     output_place_ids = ['p_ADP'],         
+    #                     production_coefficients = [1])
        
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(2000, print_stats=False)
+    pn.run(1000, print_stats=False)
     
     #BSL: A good looking curve is, 2000 run steps, standard deviation of fixed 1 token, 200 starting tokens for asec. 10% of the mean gives a very smooth curve.
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ['p_RTN3_HMW_dys1', 'p_RTN3_HMW_dys2'] 
+    list_for_plot = ['p_asec'] 
     
     pn.plot_time_evolution(list_for_plot)
 
