@@ -1,6 +1,6 @@
-from parameters import *
-from initial_tokens import *
-from inputs import *
+from PD_HFPN_parameters import *
+from PD_HFPN_initial_tokens import *
+from PD_HFPN_inputs import *
 
 # Cholesterol homeostasis rates 
 # rate_constant * a['p_H2']**2 * a['p_O2']**1

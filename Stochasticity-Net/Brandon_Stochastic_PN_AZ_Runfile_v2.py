@@ -26,7 +26,7 @@ def main():
 
     
         # Initialize an empty Petri net
-    pn = PetriNet(number_of_runs=1) # so when you assign PetriNet class to pn, you also assign PetriNetModel class to the object petri_net_model since they are linked that way. This occurs because pn goes via "self" and what actually happens, is that you get pn.petri_net_model as an attribute?(right word?s)
+    pn = PetriNet(number_of_runs=10) # so when you assign PetriNet class to pn, you also assign PetriNetModel class to the object petri_net_model since they are linked that way. This occurs because pn goes via "self" and what actually happens, is that you get pn.petri_net_model as an attribute?(right word?s)
     
 #         # Add places for each chemical species
 
@@ -149,7 +149,7 @@ def main():
                    input_place_ids         =  ['p_ApoEchol_EE'],
                    input_arc_weights  =  [1],
                    output_place_ids         =  ['p_chol_LE'],
-                   output_arc_weights =  [1], #was 354
+                   output_arc_weights =  [354], #was 354
                    distribution_type = ["grf",0.1,r_t_ApoEchol_cleav]) #
     # Transport Cholesterol from LE to ER
     pn.add_transition(transition_id = 't_chol_trans_LE_ER',
@@ -441,7 +441,7 @@ def main():
                     input_arc_weights  =  [1,0],   
                     output_place_ids         = ['p_ADP'], 
                     output_arc_weights =  [1], 
-                    distribution_type = ["g",10,3])    
+                    distribution_type = ["grf",0.1,rate_t_NAK_ATPase])    
     
     # # Energy metabolism
     pn.add_transition(transition_id = 't_ATP_hydro_mito',
@@ -507,7 +507,7 @@ def main():
                     input_arc_weights  =  [1, 0],     
                     output_place_ids         = ['p_tauP'],
                     output_arc_weights =  [1],
-                    distribution_type = ["g",0.1,10])     
+                    distribution_type = ["grf",0.1,proper_rate_t_phos_tau])     
 #problem
     pn.add_transition(transition_id = 't_dephos_tauP',
                     label      =     "Dephosphorylation of tau protein",
@@ -515,7 +515,7 @@ def main():
                     input_arc_weights  =  [1, 0],     
                     output_place_ids         = ['p_tau'],
                     output_arc_weights =  [1],
-                    distribution_type = ["g",10,3]) 
+                    distribution_type = ["grf",0.1,proper_rate_t_dephos_tauP]) 
     
     pn.add_transition(transition_id = 't_RTN3_exp',
                     label      =     "Expression rate of RTN3",
@@ -584,13 +584,13 @@ def main():
        
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(2000, print_stats=False)
+    pn.run(20000, print_stats=False)
     
     #BSL: A good looking curve is, 2000 run steps, standard deviation of fixed 1 token, 200 starting tokens for asec. 10% of the mean gives a very smooth curve.
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ["p_27OHchol_extra"] 
+    list_for_plot = ["p_chol_ER"] 
     
     pn.plot_time_evolution(list_for_plot)
 
