@@ -280,7 +280,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_chol_PM'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf", 0.1, r_t_chol_trans_LE_mito])
+                    distribution_type = ["grf", 0.1, r_t_chol_trans_LE_PM])
     
     pn.add_transition(transition_id = 't_chol_trans_PM_ER',
                     label      =     "Chol transport PM-ER",
