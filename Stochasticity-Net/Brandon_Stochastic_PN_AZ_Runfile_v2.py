@@ -24,42 +24,11 @@ def main():
     
         #only runs this chunk of code if running the file directly, not as an import
 
-    
         # Initialize an empty Petri net
-    pn = PetriNet(number_of_runs=10) # so when you assign PetriNet class to pn, you also assign PetriNetModel class to the object petri_net_model since they are linked that way. This occurs because pn goes via "self" and what actually happens, is that you get pn.petri_net_model as an attribute?(right word?s)
+    pn = PetriNet(number_of_runs=5) # so when you assign PetriNet class to pn, you also assign PetriNetModel class to the object petri_net_model since they are linked that way. This occurs because pn goes via "self" and what actually happens, is that you get pn.petri_net_model as an attribute?(right word?s)
     
 #         # Add places for each chemical species
-
-   #AB pathology
-   # pn.add_place(it_p_asec, place_id="p_asec", label="alpha secretase")
-    # pn.add_place(it_p_APP_pm, place_id="p_APP_PM", label="APP at plasma membrane")
-    # pn.add_place(it_p_APP_endo, place_id="p_APP_endo", label="endocytosed APP")
-    # pn.add_place(it_p_sAPPa, place_id="p_sAPPa", label="soluble sAPP alpha")
-    # pn.add_place(it_p_CTF83, place_id="p_CTF83", label="CTF83")
-    # pn.add_place(it_p_bsec, place_id="p_bsec", label="beta secretase")
-    # pn.add_place(it_p_sAPPb, place_id="p_sAPPb", label="soluble sAPP beta")
-    # pn.add_place(it_p_CTF99, place_id="p_CTF99", label="CTF99")
-    # pn.add_place(it_p_Ab, place_id="p_AB", label="Amyloid beta peptide")
-    # pn.add_place(it_p_AICD, place_id="p_AICD", label="AICD")
-    # pn.add_place(it_p_gsec, place_id="p_gsec", label="gamma secretase")
-
-    
-    #AB pathology transitions
-    # pn.add_transition(transition_id = 't_asec_exp',
-    #                 label                = "alpha secretase expression",
-    #                 input_place_ids       = [],
-    #                 input_arc_weights  = [], 
-    #                 output_place_ids       = ['p_asec'],
-    #                 output_arc_weights = [1],
-    #                 distribution_type = ["g", 0, 1])
-   
-    # pn.add_transition(transition_id = 't_asec_deg',
-    #                label      =     "alpha secretase degradation",
-    #                input_place_ids         =  ['p_asec'],
-    #                input_arc_weights  =  [1],
-    #                output_place_ids         =  [],
-    #                output_arc_weights =  [],
-    #                distribution_type = ["grf", 4, r_t_asec_degr]) #0.1 means 10%, 1 means 100% Standard deviation
+ #0.1 means 10%, 1 means 100% Standard deviation
     #relatieve standard deviation (10%, distribution and standard) #add michaeles menten
    
     # Cholesterol homeostasis
@@ -397,7 +366,7 @@ def main():
                     output_arc_weights =   [1], 
                     distribution_type = ["grf",0.1,r_t_mNCLX])
     
-    # # Discrete on/of-switches calcium pacemaking
+    # Discrete on/of-switches calcium pacemaking
     
     pn.add_transition(transition_id = 't_A',
                     label      =     "A",
@@ -590,14 +559,14 @@ def main():
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ["p_chol_ER"] 
+    list_for_plot = ["p_chol_PM"] 
     
     pn.plot_time_evolution(list_for_plot)
 
 
     # Generate block diagram of the Petri net
 
-    #pn.generate_diagram("/Users/brand/Documents/Github/PN_Alzheimers_Parkinsons/blockdiags/AD")
+    pn.generate_diagram("/Users/brand/Documents/Github/PN_Alzheimers_Parkinsons/blockdiags/BrandonPD")
 
 if __name__ == "__main__":
     main()
