@@ -93,18 +93,32 @@ class CatalArc(BaseArc):
         """Only fires if tokens are present"""
         return self.place.tokens >= self.arc_weight*self.coefficient_scalar
     
-class SwitchArc(BaseArc):
+class SwitchOnArc(BaseArc):
     """Calcium switch arc"""
     def __str__(self):
-        return f"CatalArc from {self.place}"
+        return f"SwitchOnArc from {self.place}"
+    
+    def fire(self):
+        self.place.tokens += self.arc_weight
     
     def allowed_firing(self):
         """Only fires if tokens = 1"""
         return self.place.tokens == 1 
     
+class SwitchOffArc(BaseArc):
+    """Calcium switch arc"""
+    def __str__(self):
+        return f"SwitchOffArc from {self.place}"
+    
+    def fire(self):
+        self.place.tokens -= self.arc_weight
+    
+    def allowed_firing(self):
+        """Only fires if tokens = 1"""
+        return self.place.tokens == 1     
     
 class Transition:
-    def __init__(self, in_arcs, out_arcs, inhib_arcs, catal_arcs, switch_arcs, transition_id, label, distribution_type):#which distribution to pick # added distribution type
+    def __init__(self, in_arcs, out_arcs, inhib_arcs, catal_arcs, switchon_arcs, switchoff_arcs, transition_id, label, distribution_type):#which distribution to pick # added distribution type
         """Put a transition T in the Petri net.
         
             Args:
@@ -117,7 +131,8 @@ class Transition:
         self.out_arcs = set(out_arcs)
         self.inhib_arcs = set(inhib_arcs)
         self.catal_arcs = set(catal_arcs)
-        self.switch_arcs = set(switch_arcs)
+        self.switchon_arcs = set(switchon_arcs)
+        self.switchoff_arcs = set(switchoff_arcs)
         self.transition_id = transition_id
         self.label = label
         self.distribution_type = distribution_type
@@ -157,14 +172,15 @@ class Transition:
         firing_allowed = all(in_arc.allowed_firing() for in_arc in self.in_arcs)
         firing_not_inhibited = all(inhib_arc.allowed_firing() for inhib_arc in self.inhib_arcs)
         firing_not_inhibited2 = all(catal_arc.allowed_firing() for catal_arc in self.catal_arcs)
-        firing_not_inhibited3 = all(switch_arc.allowed_firing() for switch_arc in self.switch_arcs)
+        firing_not_inhibited3 = all(switchon_arc.allowed_firing() for switchon_arc in self.switchon_arcs)
+        firing_not_inhibited4 = all(switchoff_arc.allowed_firing() for switchoff_arc in self.switchoff_arcs)
 
         if firing_allowed and firing_not_inhibited and firing_not_inhibited2 and firing_not_inhibited3:
 
             # Do "firing" for all input and output arcs associated with a transition
-            for arc in self.out_arcs.union(self.in_arcs): 
+            for arc in self.out_arcs.union(self.in_arcs, self.switchon_arcs, self.switchoff_arcs): 
                 arc.fire()
-        return firing_allowed and firing_not_inhibited and firing_not_inhibited2 and firing_not_inhibited3# Return if fired
+        return firing_allowed and firing_not_inhibited and firing_not_inhibited2 and firing_not_inhibited3 and firing_not_inhibited4# Return if fired
 
 
 class PetriNet:
@@ -203,20 +219,21 @@ class PetriNet:
 
         self.petri_net_model.add_place(initial_tokens, place_id, label)
 
-    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids =[], catal_arc_weights=[], switch_place_ids = [], switch_arc_weights = [], distribution_type=["g",5,1]):#sets the default, if distribution type is empty
+    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids =[], catal_arc_weights=[], switchon_place_ids = [], switchon_arc_weights = [], switchoff_place_ids = [], switchoff_arc_weights = [], distribution_type=["g",5,1]):#sets the default, if distribution type is empty
         """Add a transition to the Petri net.
             Args:
                 input_places (list): collection of places with arcs going into a transition
                 output_places (list): collection of places with arcs going out of a transition
                 inhib_places (list): collection of places with arcs inhibiting a transition
                 catal_places (list): collection of places with arcs catalysing a transition
-                switch_places (list): collection of places with arcs involved in the calcium switch
+                switchon_places (list): collection of places with arcs involved in the calcium switch
+                switchoff_places (list): collection of places with arcs involved in the calcium switch
 
         """
         if self.locked:
             raise RuntimeError('Error: do not change PetriNet after it has run.')
 
-        self.petri_net_model.add_transition(transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights, switch_place_ids, switch_arc_weights, distribution_type)
+        self.petri_net_model.add_transition(transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights, switchon_place_ids, switchon_arc_weights, switchoff_place_ids, switchoff_arc_weights, distribution_type)
 
     def run(self, number_of_steps, print_stats = False):
         """Runs multiple copies of the Petri net declared using this instance. 
@@ -321,7 +338,9 @@ class PetriNetModel:
             inhib_place_ids = [arc.place.place_id for arc in t.inhib_arcs]
             #print(str(inhib_place_ids))#brandon
             catal_place_ids = [arc.place.place_id for arc in t.catal_arcs]
-            switch_place_ids = [arc.place.place_id for arc in t.switch_arcs]
+            switchon_place_ids = [arc.place.place_id for arc in t.switchon_arcs]
+            switchoff_place_ids = [arc.place.place_id for arc in t.switchoff_arcs]
+            
             #print(str(catal_place_ids)) #brandon
 
 
@@ -329,10 +348,11 @@ class PetriNetModel:
             output_arc_weights = [arc.arc_weight for arc in t.out_arcs]
             inhib_arc_weights = [arc.arc_weight for arc in t.inhib_arcs]
             catal_arc_weights = [arc.arc_weight for arc in t.catal_arcs]
-            switch_arc_weights = [arc.arc_weight for arc in t.switch_arcs]
+            switchon_arc_weights = [arc.arc_weight for arc in t.switchon_arcs]
+            switchoff_arc_weights = [arc.arc_weight for arc in t.switchoff_arcs]
             
             pn_copy.add_transition(    t.transition_id, t.label, input_place_ids, input_arc_weights, 
-                                    output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights, switch_place_ids, switch_arc_weights, t.distribution_type)
+                                    output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights, switchon_place_ids, switchon_arc_weights, switchoff_place_ids, switchoff_arc_weights, t.distribution_type)
             #print(pn_copy) #debugging1 #if there are 10 transitions, 1 copy, will print 10 times. If there are 10 transitions, 2 copies, will print 20 times with 2 different ids.
             #print(id(pn_copy)) debugging 1
         return pn_copy
@@ -364,7 +384,7 @@ class PetriNetModel:
             #print(self.places[place_id]) #brandon, its printing __str__
 
 
-    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids=[], catal_arc_weights=[], switch_place_ids =[], switch_arc_weights =[], distribution_type=[]):#brandonadd
+    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids=[], catal_arc_weights=[], switchon_place_ids =[], switchon_arc_weights =[], switchoff_place_ids = [], switchoff_arc_weights = [], distribution_type=[]):#brandonadd
 
         """Add a transition to the Petri net. Prints warning if a transition with the same id already exists. 
             Args:
@@ -386,9 +406,11 @@ class PetriNetModel:
             raise ValueError(f"Unequal numbers of inhib places and inhib arc weights in transition {label}")
         if len(catal_place_ids) != len(catal_arc_weights):
             raise ValueError(f"Unequal numbers of catal places and catal arc weights in transition {label}")
-        if len(switch_place_ids) != len(switch_arc_weights):
+        if len(switchon_place_ids) != len(switchon_arc_weights):
             raise ValueError(f"Unequal numbers of switch places and switch arc weights in transition {label}")
-
+        if len(switchoff_place_ids) != len(switchoff_arc_weights):
+            raise ValueError(f"Unequal numbers of switch off places and switch off arc weights in transition {label}")
+            
         check_label_length(label)
         if ' ' in transition_id:
             raise ValueError(f"Transition_id should not contain any spaces {transition_id}. Did you reverse transition_id and label?")
@@ -403,13 +425,15 @@ class PetriNetModel:
             output_places = [self.places[place_id] for place_id in output_place_ids]
             inhib_places = [self.places[place_id] for place_id in inhib_place_ids]
             catal_places = [self.places[place_id] for place_id in catal_place_ids]
-            switch_places = [self.places[place_id] for place_id in switch_place_ids]
+            switchon_places = [self.places[place_id] for place_id in switchon_place_ids]
+            switchoff_places = [self.places[place_id] for place_id in switchoff_place_ids]
 
             transition = Transition([InArc(place, weight) for (place, weight) in zip(input_places, input_arc_weights)],
                                     [OutArc(place, weight) for (place, weight) in zip(output_places, output_arc_weights)],
                                     [InhibArc(place, weight) for (place, weight) in zip(inhib_places, inhib_arc_weights)],
                                     [CatalArc(place, weight) for (place, weight) in zip(catal_places, catal_arc_weights)],
-                                    [SwitchArc(place, weight) for (place, weight) in zip(switch_places, catal_arc_weights)],
+                                    [SwitchOnArc(place, weight) for (place, weight) in zip(switchon_places, catal_arc_weights)],
+                                    [SwitchOffArc(place, weight) for (place, weight) in zip(switchoff_places, catal_arc_weights)],
                                     transition_id, label, distribution_type)
             self.transitions[transition_id] = transition
             #print(self.transitions[transition_id])
@@ -461,9 +485,10 @@ class PetriNetDiagram:
              #connect catal arc brandon. I want to connect place to transition
               for catal_arc in transition.catal_arcs:
                   strings.append(f'{transition_id} -> {catal_arc.place.place_id} [label = "{catal_arc.arc_weight}", fontsize = 11, color=pink];')
-              for switch_arc in transition.switch_arcs:
-                  strings.append(f'{transition_id} -> {switch_arc.place.place_id} [label = "{switch_arc.arc_weight}", fontsize = 11, color=pink];')                 
-            
+              for switchon_arc in transition.switchon_arcs:
+                  strings.append(f'{transition_id} -> {switchon_arc.place.place_id} [label = "{switchon_arc.arc_weight}", fontsize = 11, color=pink];')                 
+              for switchoff_arc in transition.switchoff_arcs:
+                  strings.append(f'{transition_id} -> {switchoff_arc.place.place_id} [label = "{switchoff_arc.arc_weight}", fontsize = 11, color=pink];')              
                  
                  
 

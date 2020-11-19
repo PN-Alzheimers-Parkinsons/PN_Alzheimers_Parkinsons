@@ -539,17 +539,15 @@ def main():
                         output_arc_weights = [1],
                         distribution_type = ["grf", 0.1, r_t_mNCLX]) 
 
-    # # Discrete on/of-switches calcium pacemaking
-    # hfpn.add_transition_with_speed_function(
-    #                     transition_id = 't_A',
-    #                     label = 'A',
-    #                     input_place_ids = ['p_on4'],
-    #                     firing_condition = lambda a: a['p_on4']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_Ca_extra'],         
-    #                     production_coefficients = [1],
-    #                     delay=0.5) 
+    # Discrete on/of-switches calcium pacemaking
+    pn.add_transition(transition_id = 't_A',
+                        label = 'A',
+                        input_place_ids = ['p_on4'],
+                        firing_condition = lambda a: a['p_on4']==1,
+                        reaction_speed_function = lambda a: 1,
+                        consumption_coefficients = [1], 
+                        output_place_ids = ['p_Ca_extra'],         
+                        production_coefficients = [1]) 
     
     # hfpn.add_transition_with_speed_function(
     #                     transition_id = 't_B',
