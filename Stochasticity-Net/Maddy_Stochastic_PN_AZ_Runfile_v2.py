@@ -521,14 +521,15 @@ def main():
                         output_arc_weights = [1,0.5],
                         distribution_type = ["grf", 0.1, r_t_SERCA]) 
 
-    # pn.add_transition(transition_id = 't_NCX_PMCA',
-    #                     label = 'Ca efflux to extracellular space',
-    #                     input_place_ids = ['p_Ca_cyto','p_on3'],
-    #                     firing_condition = lambda a: a['p_on3']==1,
-    #                     reaction_speed_function = r_t_NCX_PMCA,
-    #                     consumption_coefficients = [1,0], 
-    #                     output_place_ids = [],         
-    #                     production_coefficients = [])
+    pn.add_transition(transition_id = 't_NCX_PMCA',
+                        label = 'Ca efflux to extracellular space',
+                        input_place_ids = ['p_Ca_cyto'],
+                        input_arc_weights = [1],
+                        output_place_ids = [],         
+                        output_arc_weights = [],
+                        switch_place_ids = ['p_on3'],
+                        switch_arc_weights = [0],
+                        distribution_type = ["grf", 0.1, r_t_NCX_PMCA])
     
     pn.add_transition(transition_id = 't_mNCLX',
                         label = 'Ca export from mitochondria via mNCLX',
