@@ -446,6 +446,7 @@ class PetriNetModel:
                 A list of the current number of tokens for each place.
         """
         t = random.choice(list(self.transitions.values()))
+        #print(t)
         successful_firing = t.fire(self)
         self.successful_firings.append(successful_firing)
         
