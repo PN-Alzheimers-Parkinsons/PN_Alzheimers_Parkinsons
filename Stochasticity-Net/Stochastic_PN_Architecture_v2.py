@@ -151,7 +151,9 @@ class Transition:
 
         if self.distribution_type[0] == "grf":
             gaussian_mean = self.distribution_type[2](pn.a)
+            gaussian_mean = gaussian_mean*0.001
             random_integer = random.gauss(gaussian_mean,gaussian_mean*self.distribution_type[1]) #self.distribution_type[1]]*0.1 for the standard deviation gives a very smooth curve
+            #print(gaussian_mean) #brandoggy
             #print(gaussian_mean*self.distribution_type[1], "standard deviation")
             #print(random_integer, "coefficient scalar")
             #print(pn.a)
@@ -164,6 +166,9 @@ class Transition:
         #uniform
         if self.distribution_type[0] =="u":
             random_integer = random.randint(self.distribution_type[1],self.distribution_type[2])
+        
+        if self.distribution_type[0] =="calcium":
+            random_integer = 1
 
         for arc2 in self.out_arcs.union(self.in_arcs):
             #print(self.out_arcs.union(self.in_arcs))
@@ -175,7 +180,7 @@ class Transition:
         firing_not_inhibited3 = all(switchon_arc.allowed_firing() for switchon_arc in self.switchon_arcs)
         firing_not_inhibited4 = all(switchoff_arc.allowed_firing() for switchoff_arc in self.switchoff_arcs)
 
-        if firing_allowed and firing_not_inhibited and firing_not_inhibited2 and firing_not_inhibited3:
+        if firing_allowed and firing_not_inhibited and firing_not_inhibited2 and firing_not_inhibited3 and firing_not_inhibited4: #brandon added
 
             # Do "firing" for all input and output arcs associated with a transition
             for arc in self.out_arcs.union(self.in_arcs, self.switchon_arcs, self.switchoff_arcs): 
@@ -445,10 +450,18 @@ class PetriNetModel:
             Returns: 
                 A list of the current number of tokens for each place.
         """
-        t = random.choice(list(self.transitions.values()))
-        #print(t)
-        successful_firing = t.fire(self)
-        self.successful_firings.append(successful_firing)
+        #NEW ORDERING METHOD
+        ordered_transitions = list(self.transitions.values())
+        random_order_transitions = random.sample(ordered_transitions, len(ordered_transitions))
+       
+        for t in random_order_transitions:
+            successful_firing = t.fire(self)
+            self.successful_firings.append(successful_firing)
+            #print(t) brandoggy
+        #OLD ORDERING METHOD 
+        # t = random.choice(list(self.transitions.values()))
+        # successful_firing = t.fire(self)
+        # self.successful_firings.append(successful_firing)
         
         #populating the a dictionary
         for place in self.places.values():

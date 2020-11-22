@@ -66,6 +66,7 @@ class ConsumptionSpeed: # The new input arc
 
     def calculate_firing_tokens(self, time_step):
         self.firing_tokens = self.consumption_function(self.get_input_place_tokens()) * time_step
+       # print(self.firing_tokens) brandon_debugging
 
     def perform_firing(self):
         self.consumption_place.tokens -= self.firing_tokens
@@ -489,6 +490,7 @@ class HFPN:
         
         for t in random_order_transitions:
             t.fire(self.time_step)
+
 
             
         # Store tokens weights for each place at specific time step 

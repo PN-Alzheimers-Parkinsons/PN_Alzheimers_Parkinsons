@@ -23,7 +23,7 @@ from visualisation import Analysis
 
 analysis = {}
 analysis['healthy100000'] = Analysis.load_from_file('healthy100000')
-analysis['LRRK2_mut_100000'] = Analysis.load_from_file('LRRK2_mut_100000')
+# analysis['LRRK2_mut_100000'] = Analysis.load_from_file('LRRK2_mut_100000')
 # analysis['DJ1'] = Analysis.load_from_file('pd_DJ1_ds_smallertimestep')
 # analysis['lrrk2'] = Analysis.load_from_file('pd_lrrk2_ds_smallertimestep')
 # analysis['vps35'] = Analysis.load_from_file('pd_vps35_ds_smallertimestep')
@@ -157,11 +157,11 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 
 
 create_plot(analysis, 
-            input_place_list = ['p_ATP'], 
+            input_place_list = ['p_cas3'], 
             place_labels = [""], 
-            mutation_list = ['healthy100000', 'LRRK2_mut_100000'], 
-            mutation_labels = ['healthy100000', 'LRRK2_mut_100000'],
-            plot_title = 'PD - p_ATP')
+            mutation_list = ['healthy100000'], 
+            mutation_labels = ['healthy100000'],
+            plot_title = 'PD - p_cas3')
 
 
 # ## Lewy body formation
