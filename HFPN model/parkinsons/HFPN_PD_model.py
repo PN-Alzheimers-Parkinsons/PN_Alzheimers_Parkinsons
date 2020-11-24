@@ -26,7 +26,7 @@ def main():
    #  pn.add_place(it_p_chol_PM, "p_chol_PM","Chol - perinuclear region", continuous = True)
    #  pn.add_place(it_p_chol_LE, "p_chol_LE", "Chol - late endosome", continuous = True)
    #  pn.add_place(it_p_chol_ER, "p_chol_ER", "Chol - ER", continuous = True)
-   #  pn.add_place(it_p_chol_mito, "p_chol_mito", "Chol - mitochondria", continuous = True)
+    pn.add_place(it_p_chol_mito, "p_chol_mito", "Chol - mitochondria", continuous = True)
    #  pn.add_place(it_p_27OHchol_extra, "p_27OHchol_extra","27-OH chol - extracellular", continuous = True)
    #  pn.add_place(it_p_27OHchol_intra, "p_27OHchol_intra","27-OH chol - intracellular", continuous = True)
    #  pn.add_place(it_p_ApoEchol_extra, "p_ApoEchol_extra","ApoE - extracellular", continuous = True)
@@ -44,10 +44,10 @@ def main():
 
    #  # Energy metabolism
     pn.add_place(it_p_ROS_mito, "p_ROS_mito", "ROS - mitochondria", continuous = True)
-   #  pn.add_place(it_p_H2O_mito, "p_H2O_mito", "H2O - mitochondria", continuous = True)
+    pn.add_place(it_p_H2O_mito, "p_H2O_mito", "H2O - mitochondria", continuous = True)
    #  pn.add_place(it_p_reduc_mito, "p_reduc_mito", "Reducing agents - mitochondria", continuous = True)
     pn.add_place(it_p_cas3, "p_cas3","caspase 3 - mitochondria", continuous = True)
-   #  pn.add_place(it_p_DJ1, "p_DJ1","DJ1 mutant", continuous = True)
+    pn.add_place(it_p_DJ1, "p_DJ1","DJ1 mutant", continuous = True)
     
    #  # Calcium homeostasis
    #  pn.add_place(it_p_Ca_cyto, "p_Ca_cyto", "Ca - cytosole", continuous = True)
@@ -58,17 +58,17 @@ def main():
 
    #  # Discrete on/of-switches calcium pacemaking
 
-   #  pn.add_place(1, "p_Ca_extra", "on1 - Ca - extracellular", continuous = False)
-   #  pn.add_place(0, "p_on2","on2", continuous = False)
-   #  pn.add_place(0, "p_on3","on3", continuous = False)
-   #  pn.add_place(0, "p_on4","on4", continuous = False)
+    pn.add_place(1, "p_Ca_extra", "on1 - Ca - extracellular", continuous = False)
+    pn.add_place(0, "p_on2","on2", continuous = False)
+    pn.add_place(0, "p_on3","on3", continuous = False)
+    pn.add_place(0, "p_on4","on4", continuous = False)
     
    #  # Lewy bodies
    #  pn.add_place(it_p_SNCA_act, "p_SNCA_act","SNCA - active", continuous = True)
    #  pn.add_place(it_p_VPS35, "p_VPS35", "VPS35", continuous = True)
    #  pn.add_place(it_p_SNCA_inact, "p_SNCA_inact", "SNCA - inactive", continuous = True)
    #  pn.add_place(it_p_SNCA_olig, "p_SNCA_olig", "SNCA - Oligomerised", continuous = True)
-   #  pn.add_place(it_p_LB, "p_LB", "Lewy body", continuous = True)
+    pn.add_place(it_p_LB, "p_LB", "Lewy body", continuous = True)
    #  pn.add_place(it_p_Fe2, "p_Fe2", "Fe2 iron pool", continuous = True)
     
    #  # Late endosome pathology 
@@ -366,46 +366,46 @@ def main():
 
     # # Discrete on/off-switches calcium pacemaking
 
-    # pn.add_transition_with_speed_function(
-    #                     transition_id = 't_A',
-    #                     label = 'A',
-    #                     input_place_ids = ['p_on4'],
-    #                     firing_condition = lambda a: a['p_on4']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_Ca_extra'],         
-    #                     production_coefficients = [1],
-    #                     delay=0.5) 
-    # pn.add_transition_with_speed_function(
-    #                     transition_id = 't_B',
-    #                     label = 'B',
-    #                     input_place_ids = ['p_Ca_extra'],
-    #                     firing_condition = lambda a: a['p_Ca_extra']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_on2'],         
-    #                     production_coefficients = [1],
-    #                     delay=0.5) 
-    # pn.add_transition_with_speed_function(
-    #                     transition_id = 't_C',
-    #                     label = 'C',
-    #                     input_place_ids = ['p_on2'],
-    #                     firing_condition = lambda a: a['p_on2']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_on3'],         
-    #                     production_coefficients = [1],
-    #                     delay=0) 
-    # pn.add_transition_with_speed_function(
-    #                     transition_id = 't_D',
-    #                     label = 'D',
-    #                     input_place_ids = ['p_on3'],
-    #                     firing_condition = lambda a: a['p_on3']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_on4'],         
-    #                     production_coefficients = [1],
-    #                     delay=0.5)
+    pn.add_transition_with_speed_function(
+                        transition_id = 't_A',
+                        label = 'A',
+                        input_place_ids = ['p_on4'],
+                        firing_condition = lambda a: a['p_on4']==1,
+                        reaction_speed_function = lambda a: 1,
+                        consumption_coefficients = [1], 
+                        output_place_ids = ['p_Ca_extra'],         
+                        production_coefficients = [1],
+                        delay=0.5) 
+    pn.add_transition_with_speed_function(
+                        transition_id = 't_B',
+                        label = 'B',
+                        input_place_ids = ['p_Ca_extra'],
+                        firing_condition = lambda a: a['p_Ca_extra']==1,
+                        reaction_speed_function = lambda a: 1,
+                        consumption_coefficients = [1], 
+                        output_place_ids = ['p_on2'],         
+                        production_coefficients = [1],
+                        delay=0.5) 
+    pn.add_transition_with_speed_function(
+                        transition_id = 't_C',
+                        label = 'C',
+                        input_place_ids = ['p_on2'],
+                        firing_condition = lambda a: a['p_on2']==1,
+                        reaction_speed_function = lambda a: 1,
+                        consumption_coefficients = [1], 
+                        output_place_ids = ['p_on3'],         
+                        production_coefficients = [1],
+                        delay=0) 
+    pn.add_transition_with_speed_function(
+                        transition_id = 't_D',
+                        label = 'D',
+                        input_place_ids = ['p_on3'],
+                        firing_condition = lambda a: a['p_on3']==1,
+                        reaction_speed_function = lambda a: 1,
+                        consumption_coefficients = [1], 
+                        output_place_ids = ['p_on4'],         
+                        production_coefficients = [1],
+                        delay=0.5)
     
     # # Link to energy metabolism in that it needs ATP replenishment
     # pn.add_transition_with_mass_action(
@@ -501,24 +501,24 @@ def main():
 
 
     # # # Output transitions: Cas3 for apoptosis
-    pn.add_transition_with_speed_function(
-                        transition_id = 't_mito_dysfunc',
-                        label = 'Mitochondrial complex 1 dysfunction',
-                        input_place_ids = ['p_ROS_mito'],
-                        firing_condition = fc_t_mito_dysfunc,
-                        reaction_speed_function = r_t_mito_dysfunc,
-                        consumption_coefficients = [1], 
-                        output_place_ids = ['p_cas3'],         
-                        production_coefficients = [1])
-    pn.add_transition_with_speed_function(
-                        transition_id = 't_cas3_inact',
-                        label = 'Caspase 3 degredation',
-                        input_place_ids = ['p_cas3'],
-                        firing_condition = fc_t_cas3_inact,
-                        reaction_speed_function = r_t_cas3_inact,
-                        consumption_coefficients = [1], # Need to review this
-                        output_place_ids = [],         
-                        production_coefficients = [])
+    # pn.add_transition_with_speed_function(
+    #                     transition_id = 't_mito_dysfunc',
+    #                     label = 'Mitochondrial complex 1 dysfunction',
+    #                     input_place_ids = ['p_ROS_mito'],
+    #                     firing_condition = fc_t_mito_dysfunc,
+    #                     reaction_speed_function = r_t_mito_dysfunc,
+    #                     consumption_coefficients = [1], 
+    #                     output_place_ids = ['p_cas3'],         
+    #                     production_coefficients = [1])
+    # pn.add_transition_with_speed_function(
+    #                     transition_id = 't_cas3_inact',
+    #                     label = 'Caspase 3 degredation',
+    #                     input_place_ids = ['p_cas3'],
+    #                     firing_condition = fc_t_cas3_inact,
+    #                     reaction_speed_function = r_t_cas3_inact,
+    #                     consumption_coefficients = [1], # Need to review this
+    #                     output_place_ids = [],         
+    #                     production_coefficients = [])
     
     # # Late endosome pathology
     # pn.add_transition_with_michaelis_menten(transition_id = 't_phos_tau',

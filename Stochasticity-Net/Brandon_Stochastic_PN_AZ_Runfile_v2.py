@@ -13,10 +13,10 @@ root_folder = os.sep + "PN_Alzheimers_Parkinsons"
 sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep + "Stochasticity-Net" + os.sep + "PDutils" + os.sep)
 
 from Stochastic_PN_Architecture_v2 import *
-
-from parameters import *
-from brandon_rate_functions import *
-from initial_tokens import *
+from Brandon_PD_SN_parameters import *
+from Brandon_PD_SN_rate_functions import *
+from Brandon_PD_SN_initial_tokens import *
+from Brandon_PD_SN_firing_conditions import *
 
 
 
@@ -36,7 +36,7 @@ def main():
    #  pn.add_place(it_p_chol_PM, place_id="p_chol_PM",label="Chol - perinuclear region")
    #  pn.add_place(it_p_chol_LE, place_id="p_chol_LE",label="Chol - late endosome")
    #  pn.add_place(it_p_chol_ER, place_id="p_chol_ER",label="Chol - ER")
-   #  pn.add_place(it_p_chol_mito, place_id="p_chol_mito",label="Chol - mitochondria")
+    # pn.add_place(it_p_chol_mito, place_id="p_chol_mito",label="Chol - mitochondria")
    #  pn.add_place(it_p_27OHchol_extra, place_id="p_27OHchol_extra",label="27-OH chol - extracellular")
    #  pn.add_place(it_p_27OHchol_intra, place_id="p_27OHchol_intra",label="27-OH chol - intracellular")
    #  pn.add_place(it_p_ApoEchol_extra, place_id="p_ApoEchol_extra",label="ApoE - extracellular")
@@ -59,14 +59,14 @@ def main():
    #  pn.add_place(it_p_VPS35, "p_VPS35", "VPS35")
    #  pn.add_place(it_p_SNCA_inact, "p_SNCA_inact", "SNCA - inactive")
    #  pn.add_place(it_p_SNCA_olig, "p_SNCA_olig", "SNCA - Oligomerised")
-   #  pn.add_place(it_p_LB, "p_LB", "Lewy body")
+    # pn.add_place(it_p_LB, "p_LB", "Lewy body")
    #  pn.add_place(it_p_Fe2, "p_Fe2", "Fe2 iron pool")
    #  # Energy metabolism
-    pn.add_place(it_p_ROS_mito, "p_ROS_mito", "ROS - mitochondria")
-   #  pn.add_place(it_p_H2O_mito, "p_H2O_mito", "H2O - mitochondria")
+    # pn.add_place(it_p_ROS_mito, "p_ROS_mito", "ROS - mitochondria")
+    # pn.add_place(it_p_H2O_mito, "p_H2O_mito", "H2O - mitochondria")
    #  pn.add_place(it_p_reduc_mito, "p_reduc_mito", "Reducing agents - mitochondria")
-    pn.add_place(it_p_cas3, "p_cas3","caspase 3 - mitochondria")
-   #  pn.add_place(it_p_DJ1, "p_DJ1","DJ1 mutant")    
+    # pn.add_place(it_p_cas3, "p_cas3","caspase 3 - mitochondria")
+    # pn.add_place(it_p_DJ1, "p_DJ1","DJ1 mutant")    
     
    # # Drug places 
    #  pn.add_place(it_p_NPT200, place_id="p_NPT200", label = "Drug NPT200")
@@ -82,10 +82,10 @@ def main():
     
    #  # Discrete on/of-switches calcium pacemaking
 
-   #  pn.add_place(1, "p_Ca_extra", "on1 - Ca - extracellular")
-   #  pn.add_place(0, "p_on2","on2")
-   #  pn.add_place(0, "p_on3","on3")
-   #  pn.add_place(0, "p_on4","on4")    
+    pn.add_place(500, "p_Ca_extra", "on1 - Ca - extracellular")
+    pn.add_place(0, "p_on2","on2")
+    pn.add_place(0, "p_on3","on3")
+    pn.add_place(0, "p_on4","on4")    
     
    #  # HMW RTN3 (cycling between different cellular compartments)
    #  pn.add_place(it_p_RTN3_HMW_cyto, place_id="p_RTN3_HMW_cyto", label="HMW RTN3 (cytosol)")
@@ -369,37 +369,37 @@ def main():
     
 #     # Discrete on/of-switches calcium pacemaking
     
-#     pn.add_transition(transition_id = 't_A',
-#                     label      =     "A",
-#                     input_place_ids         =  ['p_on4'],
-#                     input_arc_weights  =  [1],  
-#                     output_place_ids         = ['p_Ca_extra'], 
-#                     output_arc_weights =  [1], 
-#                     distribution_type = ["grf",0.1,rate_t_A]) #in HFPN, there is a delay of 0.5 s, maybe we need to be careful of this?
+    pn.add_transition(transition_id = 't_A',
+                    label      =     "A",
+                    input_place_ids         =  ['p_on4'],
+                    input_arc_weights  =  [500],  
+                    output_place_ids         = ['p_Ca_extra'], 
+                    output_arc_weights =  [500], 
+                    distribution_type = ["calcium",0.1,rate_t_A, fc_t_A]) #in HFPN, there is a delay of 0.5 s, maybe we need to be careful of this?
 
-#     pn.add_transition(transition_id = 't_B',
-#                     label      =     "B",
-#                     input_place_ids         =  ['p_Ca_extra'],
-#                     input_arc_weights  =  [1],  
-#                     output_place_ids         = ['p_on2'], 
-#                     output_arc_weights =  [1], 
-#                     distribution_type = ["grf",0.1,rate_t_B])#in HFPN, there is a delay of 0.5 s, maybe we need to be careful of this?
+    pn.add_transition(transition_id = 't_B',
+                    label      =     "B",
+                    input_place_ids         =  ['p_Ca_extra'],
+                    input_arc_weights  =  [1],  
+                    output_place_ids         = ['p_on2'], 
+                    output_arc_weights =  [1], 
+                    distribution_type = ["calcium",0.1,rate_t_B, fc_t_B])#in HFPN, there is a delay of 0.5 s, maybe we need to be careful of this?
     
-#     pn.add_transition(transition_id = 't_C',
-#                     label      =     "C",
-#                     input_place_ids         =  ['p_on2'],
-#                     input_arc_weights  =  [1],  
-#                     output_place_ids         = ['p_on3'], 
-#                     output_arc_weights =  [1], 
-#                     distribution_type = ["grf",0.1,rate_t_C])
+    pn.add_transition(transition_id = 't_C',
+                    label      =     "C",
+                    input_place_ids         =  ['p_on2'],
+                    input_arc_weights  =  [500],  
+                    output_place_ids         = ['p_on3'], 
+                    output_arc_weights =  [500], 
+                    distribution_type = ["calcium",0.1,rate_t_C, fc_t_C])
 
-#     pn.add_transition(transition_id = 't_D',
-#                     label      =     "D",
-#                     input_place_ids         =  ['p_on3'],
-#                     input_arc_weights  =  [1],  
-#                     output_place_ids         = ['p_on4'], 
-#                     output_arc_weights =  [1], 
-#                     distribution_type = ["grf",0.1,rate_t_D])
+    pn.add_transition(transition_id = 't_D',
+                    label      =     "D",
+                    input_place_ids         =  ['p_on3'],
+                    input_arc_weights  =  [1],  
+                    output_place_ids         = ['p_on4'], 
+                    output_arc_weights =  [1], 
+                    distribution_type = ["calcium",0.1,rate_t_D, fc_t_D])
 
 
     
@@ -423,13 +423,13 @@ def main():
 #                     distribution_type = ["grf",0.1,r_t_ATP_hydro_mito])       
     
     
-#     pn.add_transition(transition_id = 't_ROS_metab',
-#                     label      =     "ROS neutralisation",
-#                     input_place_ids         =  ['p_ROS_mito','p_chol_mito','p_LB','p_DJ1'],
-#                     input_arc_weights  =  [1,0,0,0],    
-#                     output_place_ids         = ['p_H2O_mito'], 
-#                     output_arc_weights =  [1], 
-#                     distribution_type = ["grf",0.1,r_t_ROS_metab])   
+    # pn.add_transition(transition_id = 't_ROS_metab',
+    #                 label      =     "ROS neutralisation",
+    #                 input_place_ids         =  ['p_ROS_mito','p_chol_mito','p_LB','p_DJ1'],
+    #                 input_arc_weights  =  [1,0,0,0],    
+    #                 output_place_ids         = ['p_H2O_mito'], 
+    #                 output_arc_weights =  [1], 
+    #                 distribution_type = ["grf",0.1,r_t_ROS_metab])   
 
 
 #     # # #Link of krebs to calcium homeostasis
@@ -453,21 +453,21 @@ def main():
 #                     distribution_type = ["grf",0.1,r_t_ETC])  
 #     # # # Output transitions: Cas3 for apoptosis
 
-    pn.add_transition(transition_id = 't_mito_dysfunc',
-                    label      =     "Mitochondrial complex 1 dysfunction",
-                    input_place_ids         =  ['p_ROS_mito'],
-                    input_arc_weights  =  [1],     
-                    output_place_ids         = ['p_cas3'], 
-                    output_arc_weights =  [1], 
-                    distribution_type = ["grf",0.1,r_t_mito_dysfunc]) 
+    # pn.add_transition(transition_id = 't_mito_dysfunc',
+    #                 label      =     "Mitochondrial complex 1 dysfunction",
+    #                 input_place_ids         =  ['p_ROS_mito'],
+    #                 input_arc_weights  =  [1],     
+    #                 output_place_ids         = ['p_cas3'], 
+    #                 output_arc_weights =  [1], 
+    #                 distribution_type = ["grf",1,r_t_mito_dysfunc]) 
     
-    pn.add_transition(transition_id = 't_cas3_inact',
-                    label      =     "Caspase 3 degredation",
-                    input_place_ids         =  ['p_cas3'],
-                    input_arc_weights  =  [1],     
-                    output_place_ids         = [], 
-                    output_arc_weights =  [], 
-                    distribution_type = ["grf",0.1,r_t_cas3_inact]) 
+    # pn.add_transition(transition_id = 't_cas3_inact',
+    #                 label      =     "Caspase 3 degredation",
+    #                 input_place_ids         =  ['p_cas3'],
+    #                 input_arc_weights  =  [1],     
+    #                 output_place_ids         = [], 
+    #                 output_arc_weights =  [], 
+    #                 distribution_type = ["grf",1,r_t_cas3_inact,fc_t_cas3_inact]) 
 
     
 #     # # Late endosome pathology #problem
@@ -554,13 +554,13 @@ def main():
        
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(100000, print_stats=False)
+    pn.run(10000, print_stats=False)
     
     #BSL: A good looking curve is, 2000 run steps, standard deviation of fixed 1 token, 200 starting tokens for asec. 10% of the mean gives a very smooth curve.
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ["p_cas3"] 
+    list_for_plot = ["p_on4"] 
     
     pn.plot_time_evolution(list_for_plot)
 

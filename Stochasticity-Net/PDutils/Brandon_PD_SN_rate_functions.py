@@ -1,6 +1,6 @@
-from parameters import *
-from initial_tokens import *
-from inputs import *
+from Brandon_PD_SN_parameters import *
+from Brandon_PD_SN_initial_tokens import *
+from Brandon_PD_SN_inputs import *
 
 # Cholesterol homeostasis rates 
 # rate_constant * a['p_H2']**2 * a['p_O2']**1
@@ -58,7 +58,7 @@ r_t_ETC = lambda a : (1-0.2*(a['p_LRRK2_mut']>0)) * k_t_ETC * a['p_ADP'] * a['p_
 r_t_krebs = lambda a : k_t_krebs * a['p_ADP'] * a['p_Ca_mito']
 r_t_ATP_hydro_mito = lambda a : k_t_ATP_hydro_mito * a['p_ATP']
 r_t_ROS_metab = lambda a : ((k_t_ROS_metab * a['p_ROS_mito'] / a['p_chol_mito'])*(a['p_LB']<LB_threshold) +(k_t_ROS_metab_LB * a['p_ROS_mito'] / a['p_chol_mito'])*(a['p_LB']>=LB_threshold))*(1-k_t_ROS_metab_DJ1*(a['p_DJ1']>0))
-r_t_mito_dysfunc = lambda a : k_t_mito_dysfunc * a['p_ROS_mito']
+#r_t_mito_dysfunc = lambda a : k_t_mito_dysfunc * a['p_ROS_mito'] #probably old rate equation
 #Brandon: There is a duplicated rate equation for some reason? maybe this is supposed to be named something different? #r_t_cas3_inact = lambda a : k_t_mito_dysfunc * a['p_ROS_mito'] / cas3_homeostasis
 #r_t_mito_dysfunc = lambda a : c_t_mito_dysfunc + k_t_mito_dysfunc * a["p_ROS_mito"] * (m_t_mito_dysfunc * a["p_ROS_mito"] + n_t_mito_dysfunc) #from AD
 r_t_mito_dysfunc = lambda a : k_t_mito_dysfunc * (m_t_mito_dysfunc * a["p_ROS_mito"] + n_t_mito_dysfunc) 
