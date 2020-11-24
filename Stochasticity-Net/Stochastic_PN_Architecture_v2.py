@@ -240,7 +240,7 @@ class PetriNet:
             runstep_tokens = [pn.run_one_step() for pn in self.petri_net_copies] 
             #print(runstep_tokens)
             self.timeseries_mean[step] = np.mean(runstep_tokens, axis = 0) # averaging across the different copies for each place
-            #print(self.timeseries_mean[step])#debugging1
+            print(self.timeseries_mean[step])#debugging1
             self.timeseries_std[step] = np.std(runstep_tokens, axis = 0) 
 
         if print_stats:
