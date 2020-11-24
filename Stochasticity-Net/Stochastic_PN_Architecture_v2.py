@@ -93,7 +93,6 @@ class CatalArc(BaseArc):
         """Only fires if tokens are present"""
         return self.place.tokens >= self.arc_weight*self.coefficient_scalar
     
-    
 class Transition:
     def __init__(self, in_arcs, out_arcs, inhib_arcs, catal_arcs, transition_id, label, distribution_type):#which distribution to pick # added distribution type
         """Put a transition T in the Petri net.
@@ -200,20 +199,21 @@ class PetriNet:
         self.petri_net_model.add_place(initial_tokens, place_id, label)
 
     def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids =[], catal_arc_weights=[],  distribution_type=["g",5,1]):#sets the default, if distribution type is empty
+
         """Add a transition to the Petri net.
             Args:
                 input_places (list): collection of places with arcs going into a transition
                 output_places (list): collection of places with arcs going out of a transition
                 inhib_places (list): collection of places with arcs inhibiting a transition
                 catal_places (list): collection of places with arcs catalysing a transition
-                switchon_places (list): collection of places with arcs involved in the calcium switch
-                switchoff_places (list): collection of places with arcs involved in the calcium switch
+          
 
         """
         if self.locked:
             raise RuntimeError('Error: do not change PetriNet after it has run.')
 
         self.petri_net_model.add_transition(transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights, distribution_type)
+
 
     def run(self, number_of_steps, print_stats = False):
         """Runs multiple copies of the Petri net declared using this instance. 
@@ -243,7 +243,7 @@ class PetriNet:
             runstep_tokens = [pn.run_one_step() for pn in self.petri_net_copies] 
             #print(runstep_tokens)
             self.timeseries_mean[step] = np.mean(runstep_tokens, axis = 0) # averaging across the different copies for each place
-            #print(self.timeseries_mean[step])#debugging1
+            print(self.timeseries_mean[step])#debugging1
             self.timeseries_std[step] = np.std(runstep_tokens, axis = 0) 
 
         if print_stats:
@@ -370,7 +370,6 @@ class PetriNetModel:
                 output_places (list): collection of places with arcs going out of a transition
                 inhib_places (list): collection of places with arcs inhibiting a transition
                 catal_places (list): collection of places with arcs catalysing a transition
-                switch_places (list): collection of places with arcs involved in the calcium switch
 
         """
 
@@ -382,6 +381,7 @@ class PetriNetModel:
             raise ValueError(f"Unequal numbers of inhib places and inhib arc weights in transition {label}")
         if len(catal_place_ids) != len(catal_arc_weights):
             raise ValueError(f"Unequal numbers of catal places and catal arc weights in transition {label}")
+            
         check_label_length(label)
         if ' ' in transition_id:
             raise ValueError(f"Transition_id should not contain any spaces {transition_id}. Did you reverse transition_id and label?")
