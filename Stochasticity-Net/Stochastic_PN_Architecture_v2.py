@@ -159,7 +159,7 @@ class Transition:
             # Do "firing" for all input and output arcs associated with a transition
             for arc in self.out_arcs.union(self.in_arcs): 
                 arc.fire()
-        return firing_allowed and firing_not_inhibited and firing_not_inhibited2# Return if fired
+        return firing_allowed and firing_not_inhibited and firing_not_inhibited2 and transition_specific_firing_condition# Return if fired
 
 
 class PetriNet:
@@ -243,8 +243,11 @@ class PetriNet:
             runstep_tokens = [pn.run_one_step() for pn in self.petri_net_copies] 
             #print(runstep_tokens)
             self.timeseries_mean[step] = np.mean(runstep_tokens, axis = 0) # averaging across the different copies for each place
-            print(self.timeseries_mean[step])#debugging1
+            #print(self.timeseries_mean[step])#brandoggy
             self.timeseries_std[step] = np.std(runstep_tokens, axis = 0) 
+            #print(self.timeseries_std[0:10])
+        
+        #return self.a
 
         if print_stats:
             print('Order of places:\n', )
@@ -412,13 +415,25 @@ class PetriNetModel:
             Returns: 
                 A list of the current number of tokens for each place.
         """
-        #NEW ORDERING METHOD
+        #NEWER ORDERING METHOD
         ordered_transitions = list(self.transitions.values())
         random_order_transitions = random.sample(ordered_transitions, len(ordered_transitions))
        
         for t in random_order_transitions:
-            successful_firing = t.fire(self)
-            self.successful_firings.append(successful_firing)
+            t.fire(self)
+            for place in self.places.values():
+                self.a[place.place_id]=place.tokens
+           
+            #print(t)
+            
+        
+        #NEW ORDERING METHOD
+        # ordered_transitions = list(self.transitions.values())
+        # random_order_transitions = random.sample(ordered_transitions, len(ordered_transitions))
+       
+        # for t in random_order_transitions:
+        #     successful_firing = t.fire(self)
+        #     self.successful_firings.append(successful_firing)
             
         #OLD ORDERING METHOD 
         # t = random.choice(list(self.transitions.values()))
@@ -426,8 +441,9 @@ class PetriNetModel:
         # self.successful_firings.append(successful_firing)
         
         #populating the a dictionary
-        for place in self.places.values():
-            self.a[place.place_id]=place.tokens
+        #for place in self.places.values():
+            #self.a[place.place_id]=place.tokens
+            #print(place.tokens, "dictionary population")
 
         return [place.tokens for place in self.places.values()]
     

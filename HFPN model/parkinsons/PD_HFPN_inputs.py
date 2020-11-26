@@ -16,8 +16,8 @@ mp_ApoEchol=1 #1 or 2
 
 # Number of runs and timesteps
 number_runs = 1
-number_time_steps = 10000
+number_time_steps = 100000
 time_step_size = 0.001
 
 # Output file name
-run_save_name = 'yo'
+run_save_name = 'two100000'

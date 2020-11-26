@@ -13,6 +13,11 @@ fc_t_chol_trans_ER_mito = lambda a : a["p_chol_ER"] > 0
 fc_t_27OHchol_endocyto = lambda a : a["p_27OHchol_extra"] > 1
 fc_t_24OHchol_exocyto = lambda a : a["p_24OHchol_intra"] > 0
 fc_t_chol_trans_PM_ECM = lambda a : a["p_chol_PM"] > 0
+#CYP Enzymes
+fc_t_CYP27A1_metab = lambda a: a['p_chol_mito'] > 0
+fc_t_CYP11A1_metab = lambda a: a['p_chol_mito']>0
+fc_t_CYP7B1_metab = lambda a: a['p_27OHchol_intra']>0
+fc_t_CYP46A1_metab = lambda a: a['p_chol_ER']>0
 #PD specific
 fc_t_SNCA_bind_ApoEchol_extra = lambda a : a['p_ApoEchol_extra']>0 and a['p_SNCA_act']>4.34*1e8
 fc_t_SNCAApoEchol_endocyto = lambda a : a['p_SNCAApoEchol_extra']>0
