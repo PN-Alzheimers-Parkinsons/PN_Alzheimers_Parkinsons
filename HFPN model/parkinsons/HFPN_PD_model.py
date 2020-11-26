@@ -23,100 +23,100 @@ def main():
     ## Define places
 
    #  # Cholesterol homeostasis
-   #  pn.add_place(it_p_chol_PM, "p_chol_PM","Chol - perinuclear region", continuous = True)
-   #  pn.add_place(it_p_chol_LE, "p_chol_LE", "Chol - late endosome", continuous = True)
-   #  pn.add_place(it_p_chol_ER, "p_chol_ER", "Chol - ER", continuous = True)
-    pn.add_place(it_p_chol_mito, "p_chol_mito", "Chol - mitochondria", continuous = True)
-   #  pn.add_place(it_p_27OHchol_extra, "p_27OHchol_extra","27-OH chol - extracellular", continuous = True)
-   #  pn.add_place(it_p_27OHchol_intra, "p_27OHchol_intra","27-OH chol - intracellular", continuous = True)
-   #  pn.add_place(it_p_ApoEchol_extra, "p_ApoEchol_extra","ApoE - extracellular", continuous = True)
-   #  pn.add_place(it_p_ApoEchol_EE, "p_ApoEchol_EE","ApoE - Early endosome", continuous = True)
-   #  pn.add_place(it_p_7HOCA, "p_7HOCA","7-HOCA", continuous = True)
-   #  pn.add_place(it_p_preg,place_id="p_preg", label="Pregnenolon", continuous=True)
-   #  pn.add_place(it_p_24OHchol_extra,place_id="p_24OHchol_extra", label="24OHchol extra", continuous=True)
-   #  pn.add_place(it_p_24OHchol_intra,place_id="p_24OHchol_intra", label="24OHchol intra", continuous=True)
+    # pn.add_place(it_p_chol_PM, "p_chol_PM","Chol - perinuclear region", continuous = True)
+    pn.add_place(it_p_chol_LE, "p_chol_LE", "Chol - late endosome", continuous = True)
+    pn.add_place(it_p_chol_ER, "p_chol_ER", "Chol - ER", continuous = True)
+    # pn.add_place(it_p_chol_mito, "p_chol_mito", "Chol - mitochondria", continuous = True)
+    # pn.add_place(it_p_27OHchol_extra, "p_27OHchol_extra","27-OH chol - extracellular", continuous = True)
+    # pn.add_place(it_p_27OHchol_intra, "p_27OHchol_intra","27-OH chol - intracellular", continuous = True)
+    pn.add_place(it_p_ApoEchol_extra, "p_ApoEchol_extra","ApoE - extracellular", continuous = True)
+    pn.add_place(it_p_ApoEchol_EE, "p_ApoEchol_EE","ApoE - Early endosome", continuous = True)
+    # pn.add_place(it_p_7HOCA, "p_7HOCA","7-HOCA", continuous = True)
+    # pn.add_place(it_p_preg,place_id="p_preg", label="Pregnenolon", continuous=True)
+    # pn.add_place(it_p_24OHchol_extra,place_id="p_24OHchol_extra", label="24OHchol extra", continuous=True)
+    # pn.add_place(it_p_24OHchol_intra,place_id="p_24OHchol_intra", label="24OHchol intra", continuous=True)
 
    #  # PD specific places in cholesterol homeostasis
-   #  pn.add_place(it_p_GBA1, "p_GBA1","GBA1", continuous = False)
-   #  pn.add_place(it_p_SNCA_act_extra, "p_SNCA_act_extra","a-synuclein - extracellular", continuous = True)
-   #  pn.add_place(it_p_SNCAApoEchol_extra, "p_SNCAApoEchol_extra","a-synuclein-ApoE complex - extracellular", continuous = True)
-   #  pn.add_place(it_p_SNCAApoEchol_intra, "p_SNCAApoEchol_intra","a-synuclein-ApoE complex - intracellular", continuous = True)
+    # pn.add_place(it_p_GBA1, "p_GBA1","GBA1", continuous = False)
+    # pn.add_place(it_p_SNCA_act_extra, "p_SNCA_act_extra","a-synuclein - extracellular", continuous = True)
+    # pn.add_place(it_p_SNCAApoEchol_extra, "p_SNCAApoEchol_extra","a-synuclein-ApoE complex - extracellular", continuous = True)
+    # pn.add_place(it_p_SNCAApoEchol_intra, "p_SNCAApoEchol_intra","a-synuclein-ApoE complex - intracellular", continuous = True)
 
    #  # Energy metabolism
-    pn.add_place(it_p_ROS_mito, "p_ROS_mito", "ROS - mitochondria", continuous = True)
-    pn.add_place(it_p_H2O_mito, "p_H2O_mito", "H2O - mitochondria", continuous = True)
-   #  pn.add_place(it_p_reduc_mito, "p_reduc_mito", "Reducing agents - mitochondria", continuous = True)
-    pn.add_place(it_p_cas3, "p_cas3","caspase 3 - mitochondria", continuous = True)
-    pn.add_place(it_p_DJ1, "p_DJ1","DJ1 mutant", continuous = True)
+    # pn.add_place(it_p_ROS_mito, "p_ROS_mito", "ROS - mitochondria", continuous = True)
+    # pn.add_place(it_p_H2O_mito, "p_H2O_mito", "H2O - mitochondria", continuous = True)
+    # pn.add_place(it_p_reduc_mito, "p_reduc_mito", "Reducing agents - mitochondria", continuous = True)
+    # pn.add_place(it_p_cas3, "p_cas3","caspase 3 - mitochondria", continuous = True)
+    # pn.add_place(it_p_DJ1, "p_DJ1","DJ1 mutant", continuous = True)
     
    #  # Calcium homeostasis
-   #  pn.add_place(it_p_Ca_cyto, "p_Ca_cyto", "Ca - cytosole", continuous = True)
-   #  pn.add_place(it_p_Ca_mito, "p_Ca_mito","Ca - mitochondria", continuous = True)
-   #  pn.add_place(it_p_Ca_ER, "p_Ca_ER", "Ca - ER", continuous = True)
-   #  pn.add_place(it_p_ADP, "p_ADP","ADP - Calcium ER import", continuous = True)
-   #  pn.add_place(it_p_ATP, "p_ATP","ATP - Calcium ER import", continuous = True)
+    # pn.add_place(it_p_Ca_cyto, "p_Ca_cyto", "Ca - cytosole", continuous = True)
+    # pn.add_place(it_p_Ca_mito, "p_Ca_mito","Ca - mitochondria", continuous = True)
+    # pn.add_place(it_p_Ca_ER, "p_Ca_ER", "Ca - ER", continuous = True)
+    # pn.add_place(it_p_ADP, "p_ADP","ADP - Calcium ER import", continuous = True)
+    # pn.add_place(it_p_ATP, "p_ATP","ATP - Calcium ER import", continuous = True)
 
    #  # Discrete on/of-switches calcium pacemaking
 
-    pn.add_place(1, "p_Ca_extra", "on1 - Ca - extracellular", continuous = False)
-    pn.add_place(0, "p_on2","on2", continuous = False)
-    pn.add_place(0, "p_on3","on3", continuous = False)
-    pn.add_place(0, "p_on4","on4", continuous = False)
+    # pn.add_place(1, "p_Ca_extra", "on1 - Ca - extracellular", continuous = False)
+    # pn.add_place(0, "p_on2","on2", continuous = False)
+    # pn.add_place(0, "p_on3","on3", continuous = False)
+    # pn.add_place(0, "p_on4","on4", continuous = False)
     
    #  # Lewy bodies
-   #  pn.add_place(it_p_SNCA_act, "p_SNCA_act","SNCA - active", continuous = True)
-   #  pn.add_place(it_p_VPS35, "p_VPS35", "VPS35", continuous = True)
-   #  pn.add_place(it_p_SNCA_inact, "p_SNCA_inact", "SNCA - inactive", continuous = True)
-   #  pn.add_place(it_p_SNCA_olig, "p_SNCA_olig", "SNCA - Oligomerised", continuous = True)
+    # pn.add_place(it_p_SNCA_act, "p_SNCA_act","SNCA - active", continuous = True)
+    # pn.add_place(it_p_VPS35, "p_VPS35", "VPS35", continuous = True)
+    # pn.add_place(it_p_SNCA_inact, "p_SNCA_inact", "SNCA - inactive", continuous = True)
+    # pn.add_place(it_p_SNCA_olig, "p_SNCA_olig", "SNCA - Oligomerised", continuous = True)
     pn.add_place(it_p_LB, "p_LB", "Lewy body", continuous = True)
-   #  pn.add_place(it_p_Fe2, "p_Fe2", "Fe2 iron pool", continuous = True)
+    # pn.add_place(it_p_Fe2, "p_Fe2", "Fe2 iron pool", continuous = True)
     
    #  # Late endosome pathology 
-   #  pn.add_place(it_p_LRRK2_mut, "p_LRRK2_mut","LRRK2 - mutated", continuous = True)
+    # pn.add_place(it_p_LRRK2_mut, "p_LRRK2_mut","LRRK2 - mutated", continuous = True)
    #  # Monomeric RTN3 (cycling between axonal and perinuclear regions)
-   #  pn.add_place(it_p_RTN3_axon, place_id="p_RTN3_axon", label="monomeric RTN3 (axonal)", continuous=True)
-   #  pn.add_place(it_p_RTN3_PN, place_id="p_RTN3_PN", label="monomeric RTN3 (perinuclear)", continuous=True)
+    # pn.add_place(it_p_RTN3_axon, place_id="p_RTN3_axon", label="monomeric RTN3 (axonal)", continuous=True)
+    # pn.add_place(it_p_RTN3_PN, place_id="p_RTN3_PN", label="monomeric RTN3 (perinuclear)", continuous=True)
 
    #  # HMW RTN3 (cycling between different cellular compartments)
-   #  pn.add_place(it_p_RTN3_HMW_cyto, place_id="p_RTN3_HMW_cyto", label="HMW RTN3 (cytosol)", continuous=True)
-   #  pn.add_place(it_p_RTN3_HMW_auto, place_id="p_RTN3_HMW_auto", label="HMW RTN3 (autophagosome)", continuous=True)
-   #  pn.add_place(it_p_RTN3_HMW_lyso, place_id="p_RTN3_HMW_lyso", label="HMW RTN3 (degraded in lysosome)", continuous=True)
-   #  pn.add_place(it_p_RTN3_HMW_dys1, place_id="p_RTN3_HMW_dys1", label="HMW RTN3 (type I/III dystrophic neurites)", continuous=True)
-   #  pn.add_place(it_p_RTN3_HMW_dys2, place_id="p_RTN3_HMW_dys2", label="HMW RTN3 (type II dystrophic neurites)", continuous=True)
+    # pn.add_place(it_p_RTN3_HMW_cyto, place_id="p_RTN3_HMW_cyto", label="HMW RTN3 (cytosol)", continuous=True)
+    # pn.add_place(it_p_RTN3_HMW_auto, place_id="p_RTN3_HMW_auto", label="HMW RTN3 (autophagosome)", continuous=True)
+    # pn.add_place(it_p_RTN3_HMW_lyso, place_id="p_RTN3_HMW_lyso", label="HMW RTN3 (degraded in lysosome)", continuous=True)
+    # pn.add_place(it_p_RTN3_HMW_dys1, place_id="p_RTN3_HMW_dys1", label="HMW RTN3 (type I/III dystrophic neurites)", continuous=True)
+    # pn.add_place(it_p_RTN3_HMW_dys2, place_id="p_RTN3_HMW_dys2", label="HMW RTN3 (type II dystrophic neurites)", continuous=True)
 
    #  # Two places that are NOT part of this subpathway, but are temporarily added for establishing proper connections
    #  # They will be removed upon merging of subpathways
-   #  pn.add_place(it_p_tau, place_id="p_tau", label = "Unphosphorylated tau", continuous = True)
-   #  pn.add_place(it_p_tauP, place_id="p_tauP", label = "Phosphorylated tau", continuous = True)
+    # pn.add_place(it_p_tau, place_id="p_tau", label = "Unphosphorylated tau", continuous = True)
+    # pn.add_place(it_p_tauP, place_id="p_tauP", label = "Phosphorylated tau", continuous = True)
     
    # # Drug places 
-   #  pn.add_place(it_p_NPT200, place_id="p_NPT200", label = "Drug NPT200", continuous = True)
-   #  pn.add_place(it_p_DNL151, place_id="p_DNL151", label = "Drug DNL151", continuous = True)
-   #  pn.add_place(it_p_LAMP2A, place_id="p_LAMP2A", label = "Drug LAMP2A", continuous = True)
+    # pn.add_place(it_p_NPT200, place_id="p_NPT200", label = "Drug NPT200", continuous = True)
+    # pn.add_place(it_p_DNL151, place_id="p_DNL151", label = "Drug DNL151", continuous = True)
+    # pn.add_place(it_p_LAMP2A, place_id="p_LAMP2A", label = "Drug LAMP2A", continuous = True)
     
     ## Define transitions
     
     # Cholesterol Endocytosis
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_LDLR_endocyto",
-    #                 label 						 = "LDLR endocyto",
-    #                 input_place_ids				 = ["p_ApoEchol_extra", "p_chol_ER","p_LB"],
-    #                 firing_condition			 = fc_t_LDLR_endocyto,
-    #                 reaction_speed_function		 = r_t_LDLR_endocyto, 
-    #                 consumption_coefficients	 = [0,0,0],
-    #                 output_place_ids			 = ["p_ApoEchol_EE"],
-    #                 production_coefficients		 = [1])
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_LDLR_endocyto",
+                    label 						 = "LDLR endocyto",
+                    input_place_ids				 = ["p_ApoEchol_extra", "p_chol_ER","p_LB"],
+                    firing_condition			 = fc_t_LDLR_endocyto,
+                    reaction_speed_function		 = r_t_LDLR_endocyto, 
+                    consumption_coefficients	 = [0,0,0],
+                    output_place_ids			 = ["p_ApoEchol_EE"],
+                    production_coefficients		 = [1])
 
     # # Cleavage of cholesteryl esters
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_ApoEchol_cleav",
-    #                 label 						 = "ApoE-chol cleav",
-    #                 input_place_ids				 = ["p_ApoEchol_EE"],
-    #                 firing_condition			 = fc_t_ApoEchol_cleav,
-    #                 reaction_speed_function		 = r_t_ApoEchol_cleav, 
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_chol_LE"],
-    #                 production_coefficients		 = [354])
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_ApoEchol_cleav",
+                    label 						 = "ApoE-chol cleav",
+                    input_place_ids				 = ["p_ApoEchol_EE"],
+                    firing_condition			 = fc_t_ApoEchol_cleav,
+                    reaction_speed_function		 = r_t_ApoEchol_cleav, 
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_chol_LE"],
+                    production_coefficients		 = [354])
 
     # # Transport Cholesterol from LE to ER
     # pn.add_transition_with_speed_function(
@@ -366,46 +366,46 @@ def main():
 
     # # Discrete on/off-switches calcium pacemaking
 
-    pn.add_transition_with_speed_function(
-                        transition_id = 't_A',
-                        label = 'A',
-                        input_place_ids = ['p_on4'],
-                        firing_condition = lambda a: a['p_on4']==1,
-                        reaction_speed_function = lambda a: 1,
-                        consumption_coefficients = [1], 
-                        output_place_ids = ['p_Ca_extra'],         
-                        production_coefficients = [1],
-                        delay=0.5) 
-    pn.add_transition_with_speed_function(
-                        transition_id = 't_B',
-                        label = 'B',
-                        input_place_ids = ['p_Ca_extra'],
-                        firing_condition = lambda a: a['p_Ca_extra']==1,
-                        reaction_speed_function = lambda a: 1,
-                        consumption_coefficients = [1], 
-                        output_place_ids = ['p_on2'],         
-                        production_coefficients = [1],
-                        delay=0.5) 
-    pn.add_transition_with_speed_function(
-                        transition_id = 't_C',
-                        label = 'C',
-                        input_place_ids = ['p_on2'],
-                        firing_condition = lambda a: a['p_on2']==1,
-                        reaction_speed_function = lambda a: 1,
-                        consumption_coefficients = [1], 
-                        output_place_ids = ['p_on3'],         
-                        production_coefficients = [1],
-                        delay=0) 
-    pn.add_transition_with_speed_function(
-                        transition_id = 't_D',
-                        label = 'D',
-                        input_place_ids = ['p_on3'],
-                        firing_condition = lambda a: a['p_on3']==1,
-                        reaction_speed_function = lambda a: 1,
-                        consumption_coefficients = [1], 
-                        output_place_ids = ['p_on4'],         
-                        production_coefficients = [1],
-                        delay=0.5)
+    # pn.add_transition_with_speed_function(
+    #                     transition_id = 't_A',
+    #                     label = 'A',
+    #                     input_place_ids = ['p_on4'],
+    #                     firing_condition = lambda a: a['p_on4']==1,
+    #                     reaction_speed_function = lambda a: 1,
+    #                     consumption_coefficients = [1], 
+    #                     output_place_ids = ['p_Ca_extra'],         
+    #                     production_coefficients = [1],
+    #                     delay=0.5) 
+    # pn.add_transition_with_speed_function(
+    #                     transition_id = 't_B',
+    #                     label = 'B',
+    #                     input_place_ids = ['p_Ca_extra'],
+    #                     firing_condition = lambda a: a['p_Ca_extra']==1,
+    #                     reaction_speed_function = lambda a: 1,
+    #                     consumption_coefficients = [1], 
+    #                     output_place_ids = ['p_on2'],         
+    #                     production_coefficients = [1],
+    #                     delay=0.5) 
+    # pn.add_transition_with_speed_function(
+    #                     transition_id = 't_C',
+    #                     label = 'C',
+    #                     input_place_ids = ['p_on2'],
+    #                     firing_condition = lambda a: a['p_on2']==1,
+    #                     reaction_speed_function = lambda a: 1,
+    #                     consumption_coefficients = [1], 
+    #                     output_place_ids = ['p_on3'],         
+    #                     production_coefficients = [1],
+    #                     delay=0) 
+    # pn.add_transition_with_speed_function(
+    #                     transition_id = 't_D',
+    #                     label = 'D',
+    #                     input_place_ids = ['p_on3'],
+    #                     firing_condition = lambda a: a['p_on3']==1,
+    #                     reaction_speed_function = lambda a: 1,
+    #                     consumption_coefficients = [1], 
+    #                     output_place_ids = ['p_on4'],         
+    #                     production_coefficients = [1],
+    #                     delay=0.5)
     
     # # Link to energy metabolism in that it needs ATP replenishment
     # pn.add_transition_with_mass_action(
