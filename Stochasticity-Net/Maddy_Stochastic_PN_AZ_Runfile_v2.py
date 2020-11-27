@@ -17,6 +17,7 @@ from Stochastic_PN_Architecture_v2 import *
 from parameters import *
 from rate_functions import *
 from initial_tokens import *
+from firing_conditions import *
 
 
 
@@ -110,7 +111,7 @@ def main():
                     input_arc_weights  = [0], 
                     output_place_ids       = ['p_asec'],
                     output_arc_weights = [1],
-                    distribution_type = ["grf", SD, r_t_asec_exp])
+                    distribution_type = ["grf", SD, r_t_asec_exp, fc_t_asec_exp])
    
     pn.add_transition(transition_id = 't_asec_deg',
                     label      =     "alpha secretase degradation",
@@ -118,7 +119,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  [],
                     output_arc_weights =  [],
-                    distribution_type = ["grf", SD, r_t_asec_degr]) #0.1 means 10%, 1 means 100% Standard deviation
+                    distribution_type = ["grf", SD, r_t_asec_degr, fc_t_asec_degr]) #0.1 means 10%, 1 means 100% Standard deviation
     #relatieve standard deviation (10%, distribution and standard) #add michaeles menten
    
     pn.add_transition(transition_id = 't_APP_asec_cleav',
@@ -127,10 +128,10 @@ def main():
                     input_arc_weights  =  [1, 0, 0],
                     output_place_ids         =  ['p_sAPPa', 'p_CTF83'],
                     output_arc_weights =  [1, 1],
-                    distribution_type=["grf", SD, r_t_APP_asec_cleav]) #middle value = rate
+                    distribution_type=["grf", SD, r_t_APP_asec_cleav, fc_t_APP_asec_cleav]) #middle value = rate
     
 
-    # #changed catal_arc_weight to 1 so that there is catalysis occurring brandon #also changing the catal_arc_weight doesnt change very much, oh wait, might need to add a new argument called catal_arc_weight, which will change the threshold of catalysis. Right now, the threshold of catalysis is determined by the ARC WEIGHT instead of the catal ARC WEIGHT
+#     # #changed catal_arc_weight to 1 so that there is catalysis occurring brandon #also changing the catal_arc_weight doesnt change very much, oh wait, might need to add a new argument called catal_arc_weight, which will change the threshold of catalysis. Right now, the threshold of catalysis is determined by the ARC WEIGHT instead of the catal ARC WEIGHT
     
     pn.add_transition(transition_id				 = 't_APP_exp',
                     label						 = 'APP expression rate',
@@ -138,7 +139,7 @@ def main():
                     input_arc_weights	 = [0, 0], 
                     output_place_ids = ['p_APP_pm'],
                     output_arc_weights = [1],
-                    distribution_type = ["grf", SD, r_t_APP_exp]) 
+                    distribution_type = ["grf", SD, r_t_APP_exp, fc_t_APP_exp]) 
         
     pn.add_transition(transition_id				 = 't_APP_endo_event',
                     label						 = 'APP-utilizing cellular events',
@@ -146,7 +147,7 @@ def main():
                     input_arc_weights	 = [1], 
                     output_place_ids = [],
                     output_arc_weights = [],
-                    distribution_type = ["grf", SD, r_t_APP_endo_event])
+                    distribution_type = ["grf", SD, r_t_APP_endo_event, fc_t_APP_endo_event])
     
            
     pn.add_transition(transition_id = 't_APP_endo',
@@ -155,7 +156,7 @@ def main():
                     input_arc_weights  =  [1, 0],
                     output_place_ids         =  ['p_APP_endo'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf", SD, r_t_APP_endocyto])
+                    distribution_type = ["grf", SD, r_t_APP_endocyto, fc_t_APP_endocyto])
                
     pn.add_transition(transition_id = 't_APP_bsec_cleav',
                     label      =     "APP cleavage by beta secretase",
@@ -163,7 +164,7 @@ def main():
                     input_arc_weights  =  [1, 0, 0, 0],
                     output_place_ids         =  ['p_sAPPb', 'p_CTF99'],
                     output_arc_weights =  [1, 1],
-                    distribution_type = ["grf", SD, r_t_APP_bsec_cleav])
+                    distribution_type = ["grf", SD, r_t_APP_bsec_cleav, fc_t_APP_bsec_cleav])
    
    
     pn.add_transition(transition_id = 't_bsec_exp',
@@ -172,7 +173,7 @@ def main():
                     input_arc_weights  =  [0, 0, 0],
                     output_place_ids         =  ['p_bsec'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf", SD, r_t_bsec_exp])
+                    distribution_type = ["grf", SD, r_t_bsec_exp, fc_t_bsec_exp])
        
     pn.add_transition(transition_id = 't_bsec_deg',
                     label      =     "beta secretase degradation",
@@ -180,7 +181,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  [],
                     output_arc_weights =  [],
-                    distribution_type = ["grf", SD, r_t_bsec_degr])
+                    distribution_type = ["grf", SD, r_t_bsec_degr, fc_t_bsec_degr])
        
     pn.add_transition(transition_id = 't_CTF99_gsec_cleav',
                     label      =     "CTF99 cleavage by gamma secretase",
@@ -190,7 +191,7 @@ def main():
                     output_arc_weights =  [1, 1],
                     catal_place_ids = ["p_gsec"],
                     catal_arc_weights = [1],
-                    distribution_type = ["grf", SD, r_t_CTF99_gsec_cleav])
+                    distribution_type = ["grf", SD, r_t_CTF99_gsec_cleav, fc_CTF99_gsec_cleav])
        
     pn.add_transition(transition_id = 't_gsec_exp',
                     label      =     "gamma secretase expression",
@@ -198,7 +199,7 @@ def main():
                     input_arc_weights  =  [0],
                     output_place_ids         =  ['p_gsec'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf", SD, r_t_gsec_exp])
+                    distribution_type = ["grf", SD, r_t_gsec_exp, fc_t_gsec_exp])
        
     pn.add_transition(transition_id = 't_gsec_deg',
                     label      =     "gamma secretase degradation",
@@ -206,7 +207,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  [],
                     output_arc_weights =  [],
-                    distribution_type = ["grf", SD, r_t_gsec_degr])
+                    distribution_type = ["grf", SD, r_t_gsec_degr, fc_t_gsec_degr])
 
     pn.add_transition(transition_id				 = 't_Ab_degr',
                     label						 = 'Ab degradation',
@@ -214,7 +215,7 @@ def main():
                     input_arc_weights	 = [1], 
                     output_place_ids = [],
                     output_arc_weights = [],
-                    distribution_type = ["grf", SD, r_t_Ab_degr]) # TODO - fix ratio    
+                    distribution_type = ["grf", SD, r_t_Ab_degr, fc_t_Ab_degr]) # TODO - fix ratio    
 
     #Tau pathology
 
@@ -226,7 +227,7 @@ def main():
                     input_arc_weights  = [0], 
                     output_place_ids       = ['p_GSK3b_inact'],
                     output_arc_weights = [1],
-                    distribution_type = ["grf", SD, r_t_GSK3b_exp_deg])
+                    distribution_type = ["grf", SD, r_t_GSK3b_exp_deg, fc_t_GSK3b_exp_deg])
    
     pn.add_transition(transition_id = 't_actv_GSK3b',
                     label      =     "GSK3 beta activation",
@@ -234,7 +235,7 @@ def main():
                     input_arc_weights  =  [1, 0, 0],
                     output_place_ids         =  ['p_GSK3b_act'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf", SD, r_t_actv_GSK3b])
+                    distribution_type = ["grf", SD, r_t_actv_GSK3b, fc_t_actv_GSK3b])
                  
     pn.add_transition(transition_id = 't_inactv_GSK3b',
                     label      =     "GSK3 beta inactivation",
@@ -242,7 +243,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_GSK3b_inact'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf", SD, r_t_inactv_GSK3b])
+                    distribution_type = ["grf", SD, r_t_inactv_GSK3b, fc_t_inactv_GSK3b])
     
     pn.add_transition(transition_id = 't_phos_tau',
                     label      =     "Phosphorylation of tau",
@@ -250,7 +251,7 @@ def main():
                     input_arc_weights  =  [1, 0, 0],
                     output_place_ids         =  ['p_tauP'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf", SD, r_t_phos_tau])
+                    distribution_type = ["grf", SD, r_t_phos_tau, fc_t_phos_tau])
     
     pn.add_transition(transition_id = 't_dephos_tau',
                     label      =     "Dephosphorylation of tau",
@@ -258,7 +259,7 @@ def main():
                     input_arc_weights  =  [1, 0],
                     output_place_ids         =  ['p_tau'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf", SD, r_t_dephos_tau])
+                    distribution_type = ["grf", SD, r_t_dephos_tau, fc_t_dephos_tau])
             
     
     #Cholesterol homeostasis transitions
@@ -269,227 +270,236 @@ def main():
                     input_arc_weights  =  [0, 0],
                     output_place_ids         =  ['p_chol_LE'],
                     output_arc_weights =  [354],
-                    distribution_type = ["grf", SD, r_t_LDLR_endocyto]) 
+                    distribution_type = ["grf", SD, r_t_LDLR_endocyto, fc_t_LDLR_endocyto]) 
     
-    # pn.add_transition(transition_id = 't_chol_trans_LE_ER',
-    #                 label      =     "Chol transport LE-ER",
-    #                 input_place_ids         =  ['p_chol_LE'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_chol_ER'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0.1, r_t_chol_trans_LE_ER])
+    pn.add_transition(transition_id = 't_chol_trans_LE_ER',
+                    label      =     "Chol transport LE-ER",
+                    input_place_ids         =  ['p_chol_LE'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_chol_ER'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", SD, r_t_chol_trans_LE_ER, fc_t_chol_trans_LE_ER])
     
-    # pn.add_transition(transition_id = 't_chol_trans_LE_mito',
-    #                 label      =     "Chol transport LE-mito",
-    #                 input_place_ids         =  ['p_chol_LE'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_chol_mito'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0.1, r_t_chol_trans_LE_mito])
+    pn.add_transition(transition_id = 't_chol_trans_LE_mito',
+                    label      =     "Chol transport LE-mito",
+                    input_place_ids         =  ['p_chol_LE'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_chol_mito'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", SD, r_t_chol_trans_LE_mito, fc_t_chol_trans_LE_mito])
     
-    # pn.add_transition(transition_id = 't_chol_trans_LE_PM',
-    #                 label      =     "Chol transport LE-PM",
-    #                 input_place_ids         =  ['p_chol_LE'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_chol_PM'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0.1, r_t_chol_trans_LE_PM])
+    pn.add_transition(transition_id = 't_chol_trans_LE_PM',
+                    label      =     "Chol transport LE-PM",
+                    input_place_ids         =  ['p_chol_LE'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_chol_PM'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", SD, r_t_chol_trans_LE_PM, fc_t_chol_trans_LE_PM])
     
-    # pn.add_transition(transition_id = 't_chol_trans_PM_ER',
-    #                 label      =     "Chol transport PM-ER",
-    #                 input_place_ids         =  ['p_chol_PM'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_chol_ER'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0.1, r_t_chol_trans_PM_ER])
+    pn.add_transition(transition_id = 't_chol_trans_PM_ER',
+                    label      =     "Chol transport PM-ER",
+                    input_place_ids         =  ['p_chol_PM'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_chol_ER'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", SD, r_t_chol_trans_PM_ER, fc_t_chol_trans_PM_ER])
     
-    # pn.add_transition(transition_id = 't_chol_trans_ER_mito',
-    #                 label      =     "Chol transport ER-mito",
-    #                 input_place_ids         =  ['p_chol_ER'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_chol_mito'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0.1, r_t_chol_trans_ER_mito])
+# Transport Cholesterol from ER to PM
+    pn.add_transition(transition_id = "t_chol_trans_ER_PM",
+                    label			= "Chol transport ER-PM",
+                    input_place_ids				 = ["p_chol_ER"],
+                    input_arc_weights	 = [1],
+                    output_place_ids			 = ["p_chol_PM"],
+                    output_arc_weights		 = [1],
+                    distribution_type = ["grf", SD, r_t_chol_trans_ER_PM, fc_t_chol_trans_ER_PM])
     
-    # pn.add_transition(transition_id = 't_CYP27A1_metab',
-    #                 label      =     "Chol metab CYP27A1",
-    #                 input_place_ids         =  ['p_chol_mito'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_27OHchol_intra'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0.1, r_t_CYP27A1_metab])                                          
+    pn.add_transition(transition_id = 't_chol_trans_ER_mito',
+                    label      =     "Chol transport ER-mito",
+                    input_place_ids         =  ['p_chol_ER'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_chol_mito'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", SD, r_t_chol_trans_ER_mito, fc_t_chol_trans_ER_mito])
+    
+    pn.add_transition(transition_id = 't_CYP27A1_metab',
+                    label      =     "Chol metab CYP27A1",
+                    input_place_ids         =  ['p_chol_mito'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_27OHchol_intra'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", SD, r_t_CYP27A1_metab, fc_t_CYP27A1_metab])                                          
  
-    # pn.add_transition(transition_id = 't_CYP11A1_metab',
-    #                 label      =     "Chol metab CYP11A1",
-    #                 input_place_ids         =  ['p_chol_mito'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_preg'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0.1, r_t_CYP11A1_metab])  
+    pn.add_transition(transition_id = 't_CYP11A1_metab',
+                    label      =     "Chol metab CYP11A1",
+                    input_place_ids         =  ['p_chol_mito'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_preg'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", SD, r_t_CYP11A1_metab, fc_t_CYP11A1_metab])  
                                                 
-    # pn.add_transition(transition_id = 't_CYP7B1_metab',
-    #                 label      =     "27OHchol metab CYP7B1",
-    #                 input_place_ids         =  ['p_27OHchol_intra'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_7HOCA'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0.1, r_t_CYP7B1_metab])                                                  
+    pn.add_transition(transition_id = 't_CYP7B1_metab',
+                    label      =     "27OHchol metab CYP7B1",
+                    input_place_ids         =  ['p_27OHchol_intra'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_7HOCA'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", SD, r_t_CYP7B1_metab, fc_t_CYP7B1_metab])                                                  
     
-    # pn.add_transition(transition_id = 't_27OHchol_endocyto',
-    #                 label      =     "27OHchol endocyto",
-    #                 input_place_ids         =  ['p_27OHchol_extra'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_27OHchol_extra', 'p_27OHchol_intra'],
-    #                 output_arc_weights =  [1,1],
-    #                 distribution_type = ["grf", 0.1, r_t_27OHchol_endocyto])  
+    pn.add_transition(transition_id = 't_27OHchol_endocyto',
+                    label      =     "27OHchol endocyto",
+                    input_place_ids         =  ['p_27OHchol_extra'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_27OHchol_extra', 'p_27OHchol_intra'],
+                    output_arc_weights =  [1,1],
+                    distribution_type = ["grf", SD, r_t_27OHchol_endocyto, fc_t_27OHchol_endocyto])  
                                                 
-    # pn.add_transition(transition_id = 't_CYP46A1_metab',
-    #                 label      =     "Chol metab CYP46A1",
-    #                 input_place_ids         =  ['p_chol_ER'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_24OHchol_intra'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0.1, r_t_CYP46A1_metab])                                                  
+    pn.add_transition(transition_id = 't_CYP46A1_metab',
+                    label      =     "Chol metab CYP46A1",
+                    input_place_ids         =  ['p_chol_ER'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_24OHchol_intra'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", SD, r_t_CYP46A1_metab, fc_t_CYP46A1_metab])                                                  
      
-    # pn.add_transition(transition_id = 't_24OHchol_exocyto',
-    #                 label      =     "24OHchol exocyto",
-    #                 input_place_ids         =  ['p_24OHchol_intra'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_24OHchol_extra'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0.1, r_t_24OHchol_exocyto])                                                  
+    pn.add_transition(transition_id = 't_24OHchol_exocyto',
+                    label      =     "24OHchol exocyto",
+                    input_place_ids         =  ['p_24OHchol_intra'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_24OHchol_extra'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", SD, r_t_24OHchol_exocyto, fc_t_24OHchol_exocyto])                                                  
       
-    # pn.add_transition(transition_id = 't_chol_trans_PM_ECM',
-    #                 label      =     "Chol transport PM-ECM",
-    #                 input_place_ids         =  ['p_chol_PM', 'p_24OHchol_intra'],
-    #                 input_arc_weights  =  [1, 0],
-    #                 output_place_ids         =  [],
-    #                 output_arc_weights =  [],
-    #                 distribution_type = ["grf", 0.1, r_t_chol_trans_PM_ECM])                                                  
+    pn.add_transition(transition_id = 't_chol_trans_PM_ECM',
+                    label      =     "Chol transport PM-ECM",
+                    input_place_ids         =  ['p_chol_PM', 'p_24OHchol_intra'],
+                    input_arc_weights  =  [1, 0],
+                    output_place_ids         =  [],
+                    output_arc_weights =  [],
+                    distribution_type = ["grf", SD, r_t_chol_trans_PM_ECM, fc_t_chol_trans_PM_ECM])                                                  
       
-    # #ER retraction and collapse transitions 
+    #ER retraction and collapse transitions 
     
-    # pn.add_transition(transition_id = 't_RTN3_exp',
-    #                     label = 'Expression rate of RTN3',
-    #                     input_place_ids = [],
-    #                     input_arc_weights = [],
-    #                     output_place_ids = ['p_RTN3_PN'],
-    #                     output_arc_weights = [1],
-    #                     distribution_type = ["grf", 0.1, r_t_RTN3_exp])
+    pn.add_transition(transition_id = 't_RTN3_exp',
+                        label = 'Expression rate of RTN3',
+                        input_place_ids = [],
+                        input_arc_weights = [],
+                        output_place_ids = ['p_RTN3_PN'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_RTN3_exp, fc_t_RTN3_exp])
     
-    # pn.add_transition(transition_id = 't_LE_retro',
-    #                     label = 'retrograde transport of LEs & ER',
-    #                     input_place_ids = ['p_ATP','p_chol_LE','p_RTN3_axon', 'p_tau'],
-    #                     input_arc_weights = [ATPcons_t_LE_trans, 0, 1, 0],                  
-    #                     output_place_ids = ['p_ADP', 'p_RTN3_PN'],
-    #                     output_arc_weights = [ATPcons_t_LE_trans, 1],
-    #                     distribution_type = ["grf", 0.1, r_t_LE_retro])
+    pn.add_transition(transition_id = 't_LE_retro',
+                        label = 'retrograde transport of LEs & ER',
+                        input_place_ids = ['p_ATP','p_chol_LE','p_RTN3_axon', 'p_tau'],
+                        input_arc_weights = [ATPcons_t_LE_trans, 0, 1, 0],                  
+                        output_place_ids = ['p_ADP', 'p_RTN3_PN'],
+                        output_arc_weights = [ATPcons_t_LE_trans, 1],
+                        distribution_type = ["grf", SD, r_t_LE_retro, fc_t_LE_retro])
 
-    # pn.add_transition(transition_id = 't_LE_antero',
-    #                     label = 'anterograde transport of LEs & ER',
-    #                     input_place_ids = ['p_ATP','p_RTN3_PN', 'p_tau'], 
-    #                     input_arc_weights = [ATPcons_t_LE_trans, 1, 0],
-    #                     output_place_ids = ['p_ADP','p_RTN3_axon'],
-    #                     output_arc_weights = [ATPcons_t_LE_trans, 1],
-    #                     distribution_type = ["grf", 0.1, r_t_LE_antero]) 
+    pn.add_transition(transition_id = 't_LE_antero',
+                        label = 'anterograde transport of LEs & ER',
+                        input_place_ids = ['p_ATP','p_RTN3_PN', 'p_tau'], 
+                        input_arc_weights = [ATPcons_t_LE_trans, 1, 0],
+                        output_place_ids = ['p_ADP','p_RTN3_axon'],
+                        output_arc_weights = [ATPcons_t_LE_trans, 1],
+                        distribution_type = ["grf", SD, r_t_LE_antero, fc_t_LE_antero]) 
 
-    # pn.add_transition(transition_id = 't_RTN3_aggregation',
-    #                     label = 'aggregation of monomeric RTN3 into HMW RTN3',
-    #                     input_place_ids = ['p_RTN3_axon', 'p_RTN3_PN', 'p_Ab'], 
-    #                     input_arc_weights = [1, 1, 0],
-    #                     output_place_ids = ['p_RTN3_HMW_cyto'],
-    #                     output_arc_weights = [1],
-    #                     distribution_type=["grf", 0.1, r_t_RTN3_aggregation]) 
+    pn.add_transition(transition_id = 't_RTN3_aggregation',
+                        label = 'aggregation of monomeric RTN3 into HMW RTN3',
+                        input_place_ids = ['p_RTN3_axon', 'p_RTN3_PN', 'p_Ab'], 
+                        input_arc_weights = [1, 1, 0],
+                        output_place_ids = ['p_RTN3_HMW_cyto'],
+                        output_arc_weights = [1],
+                        distribution_type=["grf", SD, r_t_RTN3_aggregation, fc_t_RTN3_aggregation]) 
 
-    # pn.add_transition(transition_id = 't_RTN3_auto',
-    #                     label = 'functional autophagy of HMW RTN3',
-    #                     input_place_ids = ['p_RTN3_HMW_cyto', 'p_RTN3_axon'], 
-    #                     input_arc_weights = [1, 0],
-    #                     output_place_ids = ['p_RTN3_HMW_auto'],
-    #                     output_arc_weights = [1],
-    #                     distribution_type = ["grf", 0.1, r_t_RTN3_auto]) 
+    pn.add_transition(transition_id = 't_RTN3_auto',
+                        label = 'functional autophagy of HMW RTN3',
+                        input_place_ids = ['p_RTN3_HMW_cyto', 'p_RTN3_axon'], 
+                        input_arc_weights = [1, 0],
+                        output_place_ids = ['p_RTN3_HMW_auto'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_RTN3_auto, fc_t_RTN3_auto]) 
 
-    # pn.add_transition(transition_id = 't_RTN3_lyso',
-    #                     label = 'functional delivery of HMW RTN3 to the lysosome',
-    #                     input_place_ids = ['p_RTN3_HMW_auto', 'p_tau'], 
-    #                     input_arc_weights = [1, 0],
-    #                     output_place_ids = ['p_RTN3_HMW_lyso'],
-    #                     output_arc_weights = [1],
-    #                     distribution_type = ["grf", 0.1, r_t_RTN3_lyso]) 
+    pn.add_transition(transition_id = 't_RTN3_lyso',
+                        label = 'functional delivery of HMW RTN3 to the lysosome',
+                        input_place_ids = ['p_RTN3_HMW_auto', 'p_tau'], 
+                        input_arc_weights = [1, 0],
+                        output_place_ids = ['p_RTN3_HMW_lyso'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_RTN3_lyso, fc_t_RTN3_lyso]) 
 
-    # pn.add_transition(transition_id = 't_RTN3_dys_auto',
-    #                     label = 'dysfunctional autophagy of HMW RTN3',
-    #                     input_place_ids = ['p_RTN3_HMW_cyto', 'p_RTN3_axon'], 
-    #                     input_arc_weights = [1, 0],
-    #                     output_place_ids = ['p_RTN3_HMW_dys1'],
-    #                     output_arc_weights = [1],
-    #                     distribution_type = ["grf", 0.1, r_t_RTN3_dys_auto])
+    pn.add_transition(transition_id = 't_RTN3_dys_auto',
+                        label = 'dysfunctional autophagy of HMW RTN3',
+                        input_place_ids = ['p_RTN3_HMW_cyto', 'p_RTN3_axon'], 
+                        input_arc_weights = [1, 0],
+                        output_place_ids = ['p_RTN3_HMW_dys1'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_RTN3_dys_auto, fc_t_RTN3_dys_auto])
 
-    # pn.add_transition(transition_id = 't_RTN3_dys_lyso',
-    #                     label = 'dysfunctional delivery of HMW RTN3 to the lysosome',
-    #                     input_place_ids = ['p_RTN3_HMW_auto', 'p_RTN3_HMW_dys1', 'p_tau'], 
-    #                     input_arc_weights = [1, 0, 0],
-    #                     output_place_ids = ['p_RTN3_HMW_dys2'],
-    #                     output_arc_weights = [1],
-    #                     distribution_type = ["grf", 0.1, r_t_RTN3_dys_lyso])
+    pn.add_transition(transition_id = 't_RTN3_dys_lyso',
+                        label = 'dysfunctional delivery of HMW RTN3 to the lysosome',
+                        input_place_ids = ['p_RTN3_HMW_auto', 'p_RTN3_HMW_dys1', 'p_tau'], 
+                        input_arc_weights = [1, 0, 0],
+                        output_place_ids = ['p_RTN3_HMW_dys2'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_RTN3_dys_lyso, fc_t_RTN3_dys_lyso])
     
-    # # Energy metablism transitions
-    # pn.add_transition(transition_id = 't_krebs', 
-    #             label = 'Krebs cycle', 
-    #             input_place_ids = ['p_ADP', 'p_Ca_mito', "p_Ab"],
-    #             input_arc_weights = [1, 0, 0],
-    #             output_place_ids = ['p_reduc_mito', 'p_ATP'], 
-    #             output_arc_weights = [4, 1],
-    #             distribution_type=["grf", 0.1, r_t_krebs])
+    # Energy metablism transitions
+    pn.add_transition(transition_id = 't_krebs', 
+                label = 'Krebs cycle', 
+                input_place_ids = ['p_ADP', 'p_Ca_mito', "p_Ab"],
+                input_arc_weights = [1, 0, 0],
+                output_place_ids = ['p_reduc_mito', 'p_ATP'], 
+                output_arc_weights = [4, 1],
+                distribution_type=["grf", SD, r_t_krebs, fc_t_krebs])
     
-    # pn.add_transition(transition_id = 't_ATP_hydro_mito', 
-    #             label = 'ATP hydrolysis by cellular processes', 
-    #             input_place_ids = ['p_ATP'],
-    #             input_arc_weights = [1],
-    #             output_place_ids = ['p_ADP'], 
-    #             output_arc_weights = [1],
-    #             distribution_type = ["grf", 0.1, r_t_ATP_hydro_mito])   
+    pn.add_transition(transition_id = 't_ATP_hydro_mito', 
+                label = 'ATP hydrolysis by cellular processes', 
+                input_place_ids = ['p_ATP'],
+                input_arc_weights = [1],
+                output_place_ids = ['p_ADP'], 
+                output_arc_weights = [1],
+                distribution_type = ["grf", SD, r_t_ATP_hydro_mito, fc_t_ATP_hydro_mito])   
     
-    # pn.add_transition(transition_id = 't_ETC', 
-    #             label = 'Electron transport chain', 
-    #             input_place_ids = ['p_reduc_mito', 'p_ADP', 'p_Ca_mito', 'p_ROS_mito', 'p_chol_mito', "p_Ab"],
-    #             input_arc_weights = [22/3.96, 440, 0, 0, 0, 0],
-    #             output_place_ids = ['p_ATP', 'p_ROS_mito'], 
-    #             output_arc_weights = [440, 0.06],
-    #             distribution_type = ["grf", 0.1, r_t_ETC])
+    pn.add_transition(transition_id = 't_ETC', 
+                label = 'Electron transport chain', 
+                input_place_ids = ['p_reduc_mito', 'p_ADP', 'p_Ca_mito', 'p_ROS_mito', 'p_chol_mito', "p_Ab"],
+                input_arc_weights = [22/3.96, 440, 0, 0, 0, 0],
+                output_place_ids = ['p_ATP', 'p_ROS_mito'], 
+                output_arc_weights = [440, 0.06],
+                distribution_type = ["grf", SD, r_t_ETC, fc_t_ETC])
     
-    # pn.add_transition(transition_id = 't_ROS_metab', 
-    #             label = 'Neutralization of ROS', 
-    #             input_place_ids = ['p_ROS_mito', 'p_chol_mito'],
-    #             input_arc_weights = [1, 0],
-    #             output_place_ids = ['p_H2O_mito'], 
-    #             output_arc_weights = [1],
-    #             distribution_type = ["grf", 0.1, r_t_ROS_metab])    
+    pn.add_transition(transition_id = 't_ROS_metab', 
+                label = 'Neutralization of ROS', 
+                input_place_ids = ['p_ROS_mito', 'p_chol_mito'],
+                input_arc_weights = [1, 0],
+                output_place_ids = ['p_H2O_mito'], 
+                output_arc_weights = [1],
+                distribution_type = ["grf", SD, r_t_ROS_metab, fc_t_ROS_metab])    
 
-    # # Output transitions: Cas3 for apoptosis
-    # pn.add_transition(transition_id = 't_mito_dysfunc',
-    #                     label = 'Mitochondrial complex 1 dysfunction',
-    #                     input_place_ids = ['p_ROS_mito','p_Ab'],
-    #                     input_arc_weights = [1, 0], 
-    #                     output_place_ids = ['p_cas3'],         
-    #                     output_arc_weights = [1],
-    #                     distribution_type = ["grf", 0.1, r_t_mito_dysfunc])
-    # # Cas3 inactivation
-    # pn.add_transition(transition_id = 't_cas3_inact',
-    #                     label = 'Caspase 3 inactivation',
-    #                     input_place_ids = ['p_cas3'],
-    #                     input_arc_weights = [1], 
-    #                     output_place_ids = [],         
-    #                     output_arc_weights = [],
-    #                     distribution_type = ["grf", 0.1, r_t_cas3_inact])
+    # Output transitions: Cas3 for apoptosis
+    pn.add_transition(transition_id = 't_mito_dysfunc',
+                        label = 'Mitochondrial complex 1 dysfunction',
+                        input_place_ids = ['p_ROS_mito','p_Ab'],
+                        input_arc_weights = [1, 0], 
+                        output_place_ids = ['p_cas3'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_mito_dysfunc, fc_t_mito_dysfunc])
+    # Cas3 inactivation
+    pn.add_transition(transition_id = 't_cas3_inact',
+                        label = 'Caspase 3 inactivation',
+                        input_place_ids = ['p_cas3'],
+                        input_arc_weights = [1], 
+                        output_place_ids = [],         
+                        output_arc_weights = [],
+                        distribution_type = ["grf", SD, r_t_cas3_inact, fc_t_cas3_inact])
     
-    # pn.add_transition(transition_id = 't_ROS_gener_Ab',
-    #                     label = 'ROS generation by Abeta',
-    #                     input_place_ids = ['p_Ab'],
-    #                     input_arc_weights = [0], 
-    #                     output_place_ids = ["p_ROS_mito"],         
-    #                     output_arc_weights = [1],
-    #                     distribution_type = ["grf", 0.1, r_t_ROS_gener_Ab])
+    pn.add_transition(transition_id = 't_ROS_gener_Ab',
+                        label = 'ROS generation by Abeta',
+                        input_place_ids = ['p_Ab'],
+                        input_arc_weights = [0], 
+                        output_place_ids = ["p_ROS_mito"],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_ROS_gener_Ab, fc_t_ROS_gener_Ab])
     
     
     
@@ -614,7 +624,7 @@ def main():
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ['p_chol_LE'] 
+    list_for_plot = ['p_H2O_mito'] 
     
     pn.plot_time_evolution(list_for_plot)
 
