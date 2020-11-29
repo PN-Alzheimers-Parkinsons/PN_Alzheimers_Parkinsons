@@ -18,6 +18,7 @@ from parameters import *
 from rate_functions import *
 from initial_tokens import *
 from firing_conditions import *
+from Stochastic_Analysis import Analysis
 
 
 
@@ -626,11 +627,11 @@ def main():
     list_for_plot = ['p_Ca_cyto'] 
     
     pn.plot_time_evolution(list_for_plot)
-
-
-    # Generate block diagram of the Petri net
-
-    #pn.generate_diagram("/Users/brand/Documents/Github/PN_Alzheimers_Parkinsons/blockdiags/AD")
+    pn.timeseries_mean_for_place("p_Ca_cyto")
+    analysis = Analysis(pn)
+    run_save_name = "plot1"
+    Analysis.store_to_file(analysis, run_save_name)
+    print('Network saved to : "' + run_save_name+'.pkl"')
 
 if __name__ == "__main__":
     main()
