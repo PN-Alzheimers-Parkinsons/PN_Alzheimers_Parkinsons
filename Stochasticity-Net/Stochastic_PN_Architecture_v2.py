@@ -455,6 +455,7 @@ class PetriNetModel:
             #print(place.tokens, "dictionary population")
 
         return [place.tokens for place in self.places.values()]
+    #madddysphaghetticodeweedbrowniesidkwhattowrite
     
 class PetriNetDiagram:
     def __init__(self, petri_net):
