@@ -126,15 +126,13 @@ class Transition:
         if self.distribution_type[0] == "grf":
             gaussian_mean = self.distribution_type[2](pn.a)
             gaussian_mean = gaussian_mean*0.001
-            random_integer = random.gauss(gaussian_mean,gaussian_mean*self.distribution_type[1])
-            
-            #self.distribution_type[1]]*0.1 for the standard deviation gives a very smooth curve
-           
+            random_integer = random.gauss(gaussian_mean,gaussian_mean*self.distribution_type[1]) #self.distribution_type[1]]*0.1 for the standard deviation gives a very smooth curve
+            #print(gaussian_mean) #brandoggy
             #print(gaussian_mean*self.distribution_type[1], "standard deviation")
             #print(random_integer, "coefficient scalar")
             #print(pn.a)
  #
-            
+            #print(self.distribution_type[3](pn.a))
             
         #gaussian
         if self.distribution_type[0] =="g":
@@ -154,15 +152,13 @@ class Transition:
         firing_not_inhibited = all(inhib_arc.allowed_firing() for inhib_arc in self.inhib_arcs)
         firing_not_inhibited2 = all(catal_arc.allowed_firing() for catal_arc in self.catal_arcs)
         transition_specific_firing_condition = self.distribution_type[3](pn.a)  
+        #print(deliciousbrownies) #brandoggy
  
         if firing_allowed and firing_not_inhibited and firing_not_inhibited2 and transition_specific_firing_condition: 
 
             # Do "firing" for all input and output arcs associated with a transition
             for arc in self.out_arcs.union(self.in_arcs): 
                 arc.fire()
-                
-            #self.firings +=1 #in for loop or out? #brandoggy
-        #print(firing_allowed, "firing_allowed")
         return firing_allowed and firing_not_inhibited and firing_not_inhibited2 and transition_specific_firing_condition# Return if fired
 
 
@@ -238,10 +234,6 @@ class PetriNet:
         self.timeseries_mean = np.zeros((number_of_steps, len(self.place_id_to_index)))
         self.timeseries_std = np.zeros_like(self.timeseries_mean)
         
-        #Brandon Added
-        # self.firings_storage=np.zeros((self.number_of_runs, len(self.petri_net_model.transitions)))
-        # self.mean_firings = np.mean(self.firings_storage, axis=0)
-        
         # Run all copies and collect result (for later graphing for example)
         for step in range(number_of_steps):
             # runstep_tokens: array of arrays containing the number of tokens for a given run-step
@@ -253,8 +245,9 @@ class PetriNet:
             self.timeseries_mean[step] = np.mean(runstep_tokens, axis = 0) # averaging across the different copies for each place
             #print(self.timeseries_mean[step])#brandoggy
             self.timeseries_std[step] = np.std(runstep_tokens, axis = 0) 
-        self.number_of_steps = number_of_steps # added this
-        #return self.timeseries_mean #brandy     
+            #print(self.timeseries_std[0:10])
+        
+        #return self.a
 
         if print_stats:
             print('Order of places:\n', )
@@ -263,7 +256,6 @@ class PetriNet:
 
     def timeseries_mean_for_place(self, place_id):
         index = self.place_id_to_index[place_id]
-        print(self.timeseries_mean.T[index])
         return self.timeseries_mean.T[index]
 
     def timeseries_std_for_place(self, place_id):
@@ -279,9 +271,9 @@ class PetriNet:
         #places is a dictionary. So you can get the actual places using places.keys()
         #In the zip method below, self.petri_net_model.places.values() was changed to self.petri_net_model.places.keys() because this was more readable.
         
-        dict_of_tokens = {} #brandonadded. creates dictionary
+        dict_of_tokens = {} #creates dictionary
         for tokens, place in zip(self.timeseries_mean.T, self.petri_net_model.places.keys()):
-            dict_of_tokens["{}".format(place)]=tokens#brandonadded. this line assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
+            dict_of_tokens["{}".format(place)]=tokens #assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
     
         for x in place_ids:
             plt.plot(dict_of_tokens.get(x), label=x)
@@ -290,7 +282,6 @@ class PetriNet:
         plt.xlabel('Time-step')
         plt.ylabel('Mean tokens')
         plt.show()
-    
 
     def generate_diagram(self, file_name='diagram_petri_net'):     
         petri_net_diagram = PetriNetDiagram(self.petri_net_model)
@@ -304,7 +295,7 @@ class PetriNetModel:
         """Initialize an empty Petri net."""
         self.places = {} # dictionary of [place_id : Place instance]
         self.transitions = {} # dictionary of [transition_id : Transition instance]
-        #self.firings = 0 #brandoggy
+        self.successful_firings = []
         self.a={}
 
     @staticmethod
@@ -434,7 +425,7 @@ class PetriNetModel:
                 self.a[place.place_id]=place.tokens
            
             #print(t)
-        #firings = [t.firings for t in self.transitions.values()] #brandoggy
+            
         
         #NEW ORDERING METHOD
         # ordered_transitions = list(self.transitions.values())
