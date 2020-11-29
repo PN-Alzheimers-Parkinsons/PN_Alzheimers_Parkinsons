@@ -34,7 +34,7 @@ def main():
     # pn.add_place(it_p_chol_PM, place_id="p_chol_PM",label="Chol - perinuclear region")
     pn.add_place(it_p_chol_LE, place_id="p_chol_LE",label="Chol - late endosome")
     pn.add_place(it_p_chol_ER, place_id="p_chol_ER",label="Chol - ER")
-    # pn.add_place(it_p_chol_mito, place_id="p_chol_mito",label="Chol - mitochondria")
+    pn.add_place(it_p_chol_mito, place_id="p_chol_mito",label="Chol - mitochondria")
     # pn.add_place(it_p_27OHchol_extra, place_id="p_27OHchol_extra",label="27-OH chol - extracellular")
     # pn.add_place(it_p_27OHchol_intra, place_id="p_27OHchol_intra",label="27-OH chol - intracellular")
     pn.add_place(it_p_ApoEchol_extra, place_id="p_ApoEchol_extra",label="ApoE - extracellular")
@@ -103,13 +103,13 @@ def main():
     #Cholesterol Homeostasis Transitions
     
     # Cholesterol Endocytosis
-    # pn.add_transition(transition_id = 't_LDLR_endocyto',
-    #                 label      =     "LDLR endocyto",
-    #                 input_place_ids         =  ['p_ApoEchol_extra', 'p_chol_ER', 'p_LB'],
-    #                 input_arc_weights  =  [0,0,0],
-    #                 output_place_ids         =  ['p_ApoEchol_EE'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf", 0, r_t_LDLR_endocyto,fc_t_LDLR_endocyto ])
+    pn.add_transition(transition_id = 't_LDLR_endocyto',
+                    label      =     "LDLR endocyto",
+                    input_place_ids         =  ['p_ApoEchol_extra', 'p_chol_ER', 'p_LB'],
+                    input_arc_weights  =  [0,0,0],
+                    output_place_ids         =  ['p_ApoEchol_EE'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf", 0, r_t_LDLR_endocyto,fc_t_LDLR_endocyto ])
     
 #     # Cleavage of cholesteryl esters 
     pn.add_transition(transition_id = 't_ApoEchol_cleav',
@@ -119,23 +119,23 @@ def main():
                     output_place_ids         =  ['p_chol_LE'],
                     output_arc_weights =  [354], 
                     distribution_type = ["grf",0,r_t_ApoEchol_cleav, fc_t_ApoEchol_cleav]) #
-# #     # Transport Cholesterol from LE to ER
-    # pn.add_transition(transition_id = 't_chol_trans_LE_ER',
-    #                 label      =     "Chol transport LE-ER",
-    #                 input_place_ids         =  ['p_chol_LE'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_chol_ER'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf",0,r_t_chol_trans_LE_ER, fc_t_chol_trans_LE_ER])
+#     # Transport Cholesterol from LE to ER
+    pn.add_transition(transition_id = 't_chol_trans_LE_ER',
+                    label      =     "Chol transport LE-ER",
+                    input_place_ids         =  ['p_chol_LE'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_chol_ER'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf",0,r_t_chol_trans_LE_ER, fc_t_chol_trans_LE_ER])
     
-#     # Transport Cholesterol from LE to mito
-    # pn.add_transition(transition_id = 't_chol_trans_LE_mito',
-    #                 label      =     "Chol transport LE-mito",
-    #                 input_place_ids         =  ['p_chol_LE'],
-    #                 input_arc_weights  =  [1],
-    #                 output_place_ids         =  ['p_chol_mito'],
-    #                 output_arc_weights =  [1],
-    #                 distribution_type = ["grf",0,r_t_chol_trans_LE_mito, fc_t_chol_trans_LE_mito])
+    # Transport Cholesterol from LE to mito
+    pn.add_transition(transition_id = 't_chol_trans_LE_mito',
+                    label      =     "Chol transport LE-mito",
+                    input_place_ids         =  ['p_chol_LE'],
+                    input_arc_weights  =  [1],
+                    output_place_ids         =  ['p_chol_mito'],
+                    output_arc_weights =  [1],
+                    distribution_type = ["grf",0,r_t_chol_trans_LE_mito, fc_t_chol_trans_LE_mito])
 
 # #     #Transport Cholesterol from LE to PM
 #     pn.add_transition(transition_id = 't_chol_trans_LE_PM',

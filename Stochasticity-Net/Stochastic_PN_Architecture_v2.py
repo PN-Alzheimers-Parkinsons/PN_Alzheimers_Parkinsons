@@ -126,13 +126,7 @@ class Transition:
         if self.distribution_type[0] == "grf":
             gaussian_mean = self.distribution_type[2](pn.a)
             gaussian_mean = gaussian_mean*0.001
-            random_integer = random.gauss(gaussian_mean,gaussian_mean*self.distribution_type[1]) #self.distribution_type[1]]*0.1 for the standard deviation gives a very smooth curve
-            #print(gaussian_mean) #brandoggy
-            #print(gaussian_mean*self.distribution_type[1], "standard deviation")
-            #print(random_integer, "coefficient scalar")
-            #print(pn.a)
- #
-            #print(self.distribution_type[3](pn.a))
+            random_integer = random.gauss(gaussian_mean,gaussian_mean*self.distribution_type[1]) 
             
         #gaussian
         if self.distribution_type[0] =="g":
@@ -246,6 +240,7 @@ class PetriNet:
             #print(self.timeseries_mean[step])#brandoggy
             self.timeseries_std[step] = np.std(runstep_tokens, axis = 0) 
             #print(self.timeseries_std[0:10])
+        self.number_of_steps = number_of_steps
         
         #return self.a
 
@@ -446,7 +441,7 @@ class PetriNetModel:
             #print(place.tokens, "dictionary population")
 
         return [place.tokens for place in self.places.values()]
-    #madddysphaghetticodeweedbrowniesidkwhattowrite
+ 
     
 class PetriNetDiagram:
     def __init__(self, petri_net):
