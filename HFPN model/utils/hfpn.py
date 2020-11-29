@@ -560,12 +560,15 @@ class HFPN:
 
         # Store time (in seconds) at each time step 
         self.time_array = np.arange(0, self.time_step*(number_time_steps+1), self.time_step*storage_interval)
+       # print(self.time_array) brandoggy
         
         # First dimension = run number, second dimension = time step, third dimension = place 
         self.token_storage = np.zeros((number_runs, int(number_time_steps/storage_interval)+1, len(self.places)))
+        print(self.token_storage)
 
         # First dimension = run number, second dimension = transition
         self.firings_storage = np.zeros((number_runs, len(self.transitions)))
+       
 
         for i in range(number_runs):
             self.token_storage[i], self.firings_storage[i] = self.run(number_time_steps, storage_interval)

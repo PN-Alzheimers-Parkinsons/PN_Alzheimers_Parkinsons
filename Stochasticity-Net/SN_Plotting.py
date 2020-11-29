@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Nov 29 10:11:55 2020
+
+@author: brand
+"""
+
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -15,8 +22,8 @@ import numpy as np
 cwd = os.getcwd() # Get current working directory
 root_folder = os.sep + "PN_Alzheimers_Parkinsons"
 # Move to 'utils' from current directory position
-sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep + "HFPN model" + os.sep + "utils" + os.sep)
-from visualisation import Analysis
+sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep + "Stochasticity-Net" + os.sep)
+from Stochastic_Analysis import Analysis
 
 
 # In[2]:
@@ -42,6 +49,26 @@ analysis['ggjiaogjioa'] = Analysis.load_from_file('ggjiaogjioa')
 
 # In[3]:
 
+#brandonadded
+def plot_time_evolution(self, place_ids = []):#so the idea is you have the place IDs as a list.
+        """Plots time-evolution using mean number of tokens for each place in the net.
+        TODO: Only plot evolution of places specified in place_ids if place_ids is not empty.
+        """
+        #Info On the New Plotting Code Below:
+        #places is a dictionary. So you can get the actual places using places.keys()
+        #In the zip method below, self.petri_net_model.places.values() was changed to self.petri_net_model.places.keys() because this was more readable.
+        
+        dict_of_tokens = {} #brandonadded. creates dictionary
+        for tokens, place in zip(self.timeseries_mean.T, self.petri_net_model.places.keys()):
+            dict_of_tokens["{}".format(place)]=tokens#brandonadded. this line assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
+    
+        for x in place_ids:
+            plt.plot(dict_of_tokens.get(x), label=x)
+        
+        plt.legend(fontsize=10) #brandon
+        plt.xlabel('Time-step')
+        plt.ylabel('Mean tokens')
+        plt.show()
 
 def smoothen(array, filter_size):
     filt=np.ones(filter_size)/filter_size
@@ -49,7 +76,7 @@ def smoothen(array, filter_size):
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
     
-    t=np.arange(0,100.001,0.001) #divide 1 million by your number of timesteps on the middle line
+    t=np.arange(0,0.100,0.001) #divide 1 million by your number of timesteps on the middle line
     fig,ax=plt.subplots()
     linestep = 0.3
     line_width = 3
@@ -57,7 +84,7 @@ def create_plot(analysis, input_place_list, place_labels, mutation_list, mutatio
     for i, mutation in enumerate(mutation_list):
         for place, place_label in zip(input_place_list, place_labels):
             data = analysis[mutation].mean_token_history_for_places([place])[0:1000001]
-            print(data[100000])
+            #print(data[10])
             if place_label == "":
                 ax.plot(t, data, label = mutation_labels[i], linewidth = line_width- i*linestep)
             else:
@@ -158,11 +185,11 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 
 
 create_plot(analysis, 
-            input_place_list = ['p_chol_LE'], 
+            input_place_list = ['p_ApoEchol_EE'], 
             place_labels = [""], 
             mutation_list = ['ggjiaogjioa'], 
             mutation_labels = ['ggjiaogjioa'],
-            plot_title = 'PD - p_chol_LE')
+            plot_title = 'PD - p_ApoEchol_EE')
 
 
 # create_plot(analysis, 
@@ -281,6 +308,7 @@ create_plot(analysis,
 
 
 # In[ ]:
+
 
 
 

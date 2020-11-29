@@ -3,7 +3,7 @@ from Brandon_PD_SN_initial_tokens import *
 
 # Cholesterol homeostasis firing conditions
 fc_t_LDLR_endocyto = lambda a : a["p_ApoEchol_extra"] > 1
-fc_t_ApoEchol_cleav = lambda a : a["p_ApoEchol_EE"] > 1
+fc_t_ApoEchol_cleav = lambda a : a["p_ApoEchol_EE"] > 1 
 fc_t_chol_trans_LE_ER = lambda a : a["p_chol_LE"] > 1
 fc_t_chol_trans_LE_mito = lambda a : a["p_chol_LE"] > 1
 fc_t_chol_trans_LE_PM = lambda a : a["p_chol_LE"] > 1

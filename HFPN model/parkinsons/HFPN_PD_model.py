@@ -118,16 +118,16 @@ def main():
                     output_place_ids			 = ["p_chol_LE"],
                     production_coefficients		 = [354])
 
-    # # Transport Cholesterol from LE to ER
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_chol_trans_LE_ER",
-    #                 label 						 = "Chol transport LE-ER",
-    #                 input_place_ids				 = ["p_chol_LE"],
-    #                 firing_condition			 = fc_t_chol_trans_LE_ER,
-    #                 reaction_speed_function		 = r_t_chol_trans_LE_ER,
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_chol_ER"],
-    #                 production_coefficients		 = [1])
+    # Transport Cholesterol from LE to ER
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_chol_trans_LE_ER",
+                    label 						 = "Chol transport LE-ER",
+                    input_place_ids				 = ["p_chol_LE"],
+                    firing_condition			 = fc_t_chol_trans_LE_ER,
+                    reaction_speed_function		 = r_t_chol_trans_LE_ER,
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_chol_ER"],
+                    production_coefficients		 = [1])
 
     # # Transport Cholesterol from LE to mito
     # pn.add_transition_with_speed_function(

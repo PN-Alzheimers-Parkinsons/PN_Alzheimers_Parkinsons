@@ -17,12 +17,10 @@ from Brandon_PD_SN_parameters import *
 from Brandon_PD_SN_rate_functions import *
 from Brandon_PD_SN_initial_tokens import *
 from Brandon_PD_SN_firing_conditions import *
-
+from Stochastic_Analysis import Analysis
 
 
 def main():
-    
-    
         #only runs this chunk of code if running the file directly, not as an import
 
         # Initialize an empty Petri net
@@ -105,13 +103,13 @@ def main():
     #Cholesterol Homeostasis Transitions
     
     # Cholesterol Endocytosis
-    pn.add_transition(transition_id = 't_LDLR_endocyto',
-                    label      =     "LDLR endocyto",
-                    input_place_ids         =  ['p_ApoEchol_extra', 'p_chol_ER', 'p_LB'],
-                    input_arc_weights  =  [0,0,0],
-                    output_place_ids         =  ['p_ApoEchol_EE'],
-                    output_arc_weights =  [1],
-                    distribution_type = ["grf", 0, r_t_LDLR_endocyto,fc_t_LDLR_endocyto ])
+    # pn.add_transition(transition_id = 't_LDLR_endocyto',
+    #                 label      =     "LDLR endocyto",
+    #                 input_place_ids         =  ['p_ApoEchol_extra', 'p_chol_ER', 'p_LB'],
+    #                 input_arc_weights  =  [0,0,0],
+    #                 output_place_ids         =  ['p_ApoEchol_EE'],
+    #                 output_arc_weights =  [1],
+    #                 distribution_type = ["grf", 0, r_t_LDLR_endocyto,fc_t_LDLR_endocyto ])
     
 #     # Cleavage of cholesteryl esters 
     pn.add_transition(transition_id = 't_ApoEchol_cleav',
@@ -122,22 +120,22 @@ def main():
                     output_arc_weights =  [354], 
                     distribution_type = ["grf",0,r_t_ApoEchol_cleav, fc_t_ApoEchol_cleav]) #
 # #     # Transport Cholesterol from LE to ER
-#     pn.add_transition(transition_id = 't_chol_trans_LE_ER',
-#                     label      =     "Chol transport LE-ER",
-#                     input_place_ids         =  ['p_chol_LE'],
-#                     input_arc_weights  =  [1],
-#                     output_place_ids         =  ['p_chol_ER'],
-#                     output_arc_weights =  [1],
-#                     distribution_type = ["grf",0,r_t_chol_trans_LE_ER, fc_t_chol_trans_LE_ER])
+    # pn.add_transition(transition_id = 't_chol_trans_LE_ER',
+    #                 label      =     "Chol transport LE-ER",
+    #                 input_place_ids         =  ['p_chol_LE'],
+    #                 input_arc_weights  =  [1],
+    #                 output_place_ids         =  ['p_chol_ER'],
+    #                 output_arc_weights =  [1],
+    #                 distribution_type = ["grf",0,r_t_chol_trans_LE_ER, fc_t_chol_trans_LE_ER])
     
-# #     # Transport Cholesterol from LE to mito
-#     pn.add_transition(transition_id = 't_chol_trans_LE_mito',
-#                     label      =     "Chol transport LE-mito",
-#                     input_place_ids         =  ['p_chol_LE'],
-#                     input_arc_weights  =  [1],
-#                     output_place_ids         =  ['p_chol_mito'],
-#                     output_arc_weights =  [1],
-#                     distribution_type = ["grf",0,r_t_chol_trans_LE_mito, fc_t_chol_trans_LE_mito])
+#     # Transport Cholesterol from LE to mito
+    # pn.add_transition(transition_id = 't_chol_trans_LE_mito',
+    #                 label      =     "Chol transport LE-mito",
+    #                 input_place_ids         =  ['p_chol_LE'],
+    #                 input_arc_weights  =  [1],
+    #                 output_place_ids         =  ['p_chol_mito'],
+    #                 output_arc_weights =  [1],
+    #                 distribution_type = ["grf",0,r_t_chol_trans_LE_mito, fc_t_chol_trans_LE_mito])
 
 # #     #Transport Cholesterol from LE to PM
 #     pn.add_transition(transition_id = 't_chol_trans_LE_PM',
@@ -554,16 +552,19 @@ def main():
        
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    dictionary = pn.run(5, print_stats=False)
+    pn.run(100, print_stats=False)
     
-    #BSL: A good looking curve is, 2000 run steps, standard deviation of fixed 1 token, 200 starting tokens for asec. 10% of the mean gives a very smooth curve.
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
     list_for_plot = ["p_ApoEchol_EE"] 
     
     pn.plot_time_evolution(list_for_plot)
-
+    pn.timeseries_mean_for_place("p_ApoEchol_EE")
+    analysis = Analysis(pn)
+    run_save_name = "ggjiaogjioa"
+    Analysis.store_to_file(analysis, run_save_name)
+    print('Network saved to : "' + run_save_name+'.pkl"')
 
     # Generate block diagram of the Petri net
 
