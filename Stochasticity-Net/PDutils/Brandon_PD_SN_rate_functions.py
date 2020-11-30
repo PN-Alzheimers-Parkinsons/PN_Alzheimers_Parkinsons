@@ -108,7 +108,10 @@ rate_t_A = lambda a: 1
 rate_t_B = lambda a: 1
 rate_t_C = lambda a: 1
 rate_t_D = lambda a: 1
-
+rate_t_E = lambda a: 1
+rate_t_F = lambda a: 1
+rate_t_G = lambda a: 1
+rate_t_H = lambda a: 1
 #Construct Michaeles Menten Equation for rate_t_dephos_tauP
 rate_t_dephos_tauP = lambda a: vmax_t_dephos_tauP*a['p_tauP']/(Km_t_dephos_tauP+a['p_tauP']) 
 proper_rate_t_dephos_tauP = function(rate_t_dephos_tauP, vmax_scaling_t_dephos_tauP)

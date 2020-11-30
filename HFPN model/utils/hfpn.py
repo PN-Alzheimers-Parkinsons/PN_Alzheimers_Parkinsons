@@ -564,7 +564,7 @@ class HFPN:
         
         # First dimension = run number, second dimension = time step, third dimension = place 
         self.token_storage = np.zeros((number_runs, int(number_time_steps/storage_interval)+1, len(self.places)))
-        print(self.token_storage)
+        #print(self.token_storage)
 
         # First dimension = run number, second dimension = transition
         self.firings_storage = np.zeros((number_runs, len(self.transitions)))

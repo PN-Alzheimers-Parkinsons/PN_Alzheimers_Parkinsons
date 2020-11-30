@@ -23,18 +23,18 @@ def main():
     ## Define places
 
    #  # Cholesterol homeostasis
-    # pn.add_place(it_p_chol_PM, "p_chol_PM","Chol - perinuclear region", continuous = True)
+    pn.add_place(it_p_chol_PM, "p_chol_PM","Chol - perinuclear region", continuous = True)
     pn.add_place(it_p_chol_LE, "p_chol_LE", "Chol - late endosome", continuous = True)
     pn.add_place(it_p_chol_ER, "p_chol_ER", "Chol - ER", continuous = True)
-    # pn.add_place(it_p_chol_mito, "p_chol_mito", "Chol - mitochondria", continuous = True)
-    # pn.add_place(it_p_27OHchol_extra, "p_27OHchol_extra","27-OH chol - extracellular", continuous = True)
-    # pn.add_place(it_p_27OHchol_intra, "p_27OHchol_intra","27-OH chol - intracellular", continuous = True)
+    pn.add_place(it_p_chol_mito, "p_chol_mito", "Chol - mitochondria", continuous = True)
+    pn.add_place(it_p_27OHchol_extra, "p_27OHchol_extra","27-OH chol - extracellular", continuous = True)
+    pn.add_place(it_p_27OHchol_intra, "p_27OHchol_intra","27-OH chol - intracellular", continuous = True)
     pn.add_place(it_p_ApoEchol_extra, "p_ApoEchol_extra","ApoE - extracellular", continuous = True)
     pn.add_place(it_p_ApoEchol_EE, "p_ApoEchol_EE","ApoE - Early endosome", continuous = True)
-    # pn.add_place(it_p_7HOCA, "p_7HOCA","7-HOCA", continuous = True)
-    # pn.add_place(it_p_preg,place_id="p_preg", label="Pregnenolon", continuous=True)
-    # pn.add_place(it_p_24OHchol_extra,place_id="p_24OHchol_extra", label="24OHchol extra", continuous=True)
-    # pn.add_place(it_p_24OHchol_intra,place_id="p_24OHchol_intra", label="24OHchol intra", continuous=True)
+    pn.add_place(it_p_7HOCA, "p_7HOCA","7-HOCA", continuous = True)
+    pn.add_place(it_p_preg,place_id="p_preg", label="Pregnenolon", continuous=True)
+    pn.add_place(it_p_24OHchol_extra,place_id="p_24OHchol_extra", label="24OHchol extra", continuous=True)
+    pn.add_place(it_p_24OHchol_intra,place_id="p_24OHchol_intra", label="24OHchol intra", continuous=True)
 
    #  # PD specific places in cholesterol homeostasis
     # pn.add_place(it_p_GBA1, "p_GBA1","GBA1", continuous = False)
@@ -129,145 +129,145 @@ def main():
                     output_place_ids			 = ["p_chol_ER"],
                     production_coefficients		 = [1])
 
-    # # Transport Cholesterol from LE to mito
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_chol_trans_LE_mito",
-    #                 label 						 = "Chol transport LE-mito",
-    #                 input_place_ids				 = ["p_chol_LE"],
-    #                 firing_condition			 = fc_t_chol_trans_LE_mito,
-    #                 reaction_speed_function		 = r_t_chol_trans_LE_mito,
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_chol_mito"],
-    #                 production_coefficients		 = [1])
+    # Transport Cholesterol from LE to mito
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_chol_trans_LE_mito",
+                    label 						 = "Chol transport LE-mito",
+                    input_place_ids				 = ["p_chol_LE"],
+                    firing_condition			 = fc_t_chol_trans_LE_mito,
+                    reaction_speed_function		 = r_t_chol_trans_LE_mito,
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_chol_mito"],
+                    production_coefficients		 = [1])
 
-    # # Transport Cholesterol from LE to PM
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_chol_trans_LE_PM",
-    #                 label 						 = "Chol transport LE-PM",
-    #                 input_place_ids				 = ["p_chol_LE"],
-    #                 firing_condition			 = fc_t_chol_trans_LE_PM, 
-    #                 reaction_speed_function		 = r_t_chol_trans_LE_PM,
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_chol_PM"],
-    #                 production_coefficients		 = [1])
+    # Transport Cholesterol from LE to PM
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_chol_trans_LE_PM",
+                    label 						 = "Chol transport LE-PM",
+                    input_place_ids				 = ["p_chol_LE"],
+                    firing_condition			 = fc_t_chol_trans_LE_PM, 
+                    reaction_speed_function		 = r_t_chol_trans_LE_PM,
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_chol_PM"],
+                    production_coefficients		 = [1])
 
-    # # Transport Cholesterol from PM to ER
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_chol_trans_PM_ER",
-    #                 label 						 = "Chol transport PM-ER",
-    #                 input_place_ids				 = ["p_chol_PM"],
-    #                 firing_condition			 = fc_t_chol_trans_PM_ER,
-    #                 reaction_speed_function		 = r_t_chol_trans_PM_ER,
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_chol_ER"],
-    #                 production_coefficients		 = [1])
+    # Transport Cholesterol from PM to ER
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_chol_trans_PM_ER",
+                    label 						 = "Chol transport PM-ER",
+                    input_place_ids				 = ["p_chol_PM"],
+                    firing_condition			 = fc_t_chol_trans_PM_ER,
+                    reaction_speed_function		 = r_t_chol_trans_PM_ER,
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_chol_ER"],
+                    production_coefficients		 = [1])
 
-    # # Transport Cholesterol from ER to PM
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_chol_trans_ER_PM",
-    #                 label 						 = "Chol transport ER-PM",
-    #                 input_place_ids				 = ["p_chol_ER"],
-    #                 firing_condition			 = fc_t_chol_trans_ER_PM,
-    #                 reaction_speed_function		 = r_t_chol_trans_ER_PM,
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_chol_PM"],
-    #                 production_coefficients		 = [1])
+    # Transport Cholesterol from ER to PM
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_chol_trans_ER_PM",
+                    label 						 = "Chol transport ER-PM",
+                    input_place_ids				 = ["p_chol_ER"],
+                    firing_condition			 = fc_t_chol_trans_ER_PM,
+                    reaction_speed_function		 = r_t_chol_trans_ER_PM,
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_chol_PM"],
+                    production_coefficients		 = [1])
 
-    # # Transport Cholesterol from ER to mito
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_chol_trans_ER_mito",
-    #                 label 						 = "Chol transport ER-mito",
-    #                 input_place_ids				 = ["p_chol_ER"],
-    #                 firing_condition			 = fc_t_chol_trans_ER_mito,
-    #                 reaction_speed_function		 = r_t_chol_trans_ER_mito,
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_chol_mito"],
-    #                 production_coefficients		 = [1])
+    # Transport Cholesterol from ER to mito
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_chol_trans_ER_mito",
+                    label 						 = "Chol transport ER-mito",
+                    input_place_ids				 = ["p_chol_ER"],
+                    firing_condition			 = fc_t_chol_trans_ER_mito,
+                    reaction_speed_function		 = r_t_chol_trans_ER_mito,
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_chol_mito"],
+                    production_coefficients		 = [1])
 
-    # # Metabolisation of chol by CYP27A1
-    # pn.add_transition_with_michaelis_menten(
-    #                 transition_id				 = "t_CYP27A1_metab",
-    #                 label 						 = "Chol metab CYP27A1",
-    #                 Km							 = Km_t_CYP27A1_metab,
-    #                 vmax						 = vmax_t_CYP27A1_metab,
-    #                 input_place_ids				 = ["p_chol_mito"],
-    #                 substrate_id				 = "p_chol_mito",
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_27OHchol_intra"],
-    #                 production_coefficients		 = [1],
-    #                 vmax_scaling_function		 = lambda a : chol_mp)
+    # Metabolisation of chol by CYP27A1
+    pn.add_transition_with_michaelis_menten(
+                    transition_id				 = "t_CYP27A1_metab",
+                    label 						 = "Chol metab CYP27A1",
+                    Km							 = Km_t_CYP27A1_metab,
+                    vmax						 = vmax_t_CYP27A1_metab,
+                    input_place_ids				 = ["p_chol_mito"],
+                    substrate_id				 = "p_chol_mito",
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_27OHchol_intra"],
+                    production_coefficients		 = [1],
+                    vmax_scaling_function		 = lambda a : chol_mp)
 
-    # # Metabolism of chol by CYP11A1
-    # pn.add_transition_with_michaelis_menten(
-    #                 transition_id				 = "t_CYP11A1_metab",
-    #                 label 						 = "Chol metab CYP11A1",
-    #                 Km							 = Km_t_CYP11A1_metab,
-    #                 vmax						 = vmax_t_CYP11A1_metab,
-    #                 input_place_ids				 = ["p_chol_mito"],
-    #                 substrate_id				 = "p_chol_mito",
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_preg"],
-    #                 production_coefficients		 = [1],
-    #                 vmax_scaling_function		 = lambda a : chol_mp)
+    # Metabolism of chol by CYP11A1
+    pn.add_transition_with_michaelis_menten(
+                    transition_id				 = "t_CYP11A1_metab",
+                    label 						 = "Chol metab CYP11A1",
+                    Km							 = Km_t_CYP11A1_metab,
+                    vmax						 = vmax_t_CYP11A1_metab,
+                    input_place_ids				 = ["p_chol_mito"],
+                    substrate_id				 = "p_chol_mito",
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_preg"],
+                    production_coefficients		 = [1],
+                    vmax_scaling_function		 = lambda a : chol_mp)
 
-    # # Metabolisation of 27OHchol by CYP7B1
-    # pn.add_transition_with_michaelis_menten(
-    #                 transition_id				 = "t_CYP7B1_metab",
-    #                 label 						 = "27OHchol metab CYP7B1",
-    #                 Km							 = Km_t_CYP7B1_metab,
-    #                 vmax						 = vmax_t_CYP7B1_metab,
-    #                 input_place_ids				 = ["p_27OHchol_intra"],
-    #                 substrate_id				 = "p_27OHchol_intra",
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_7HOCA"],
-    #                 production_coefficients		 = [1],
-    #                 vmax_scaling_function		 = lambda a : chol_mp)
+    # Metabolisation of 27OHchol by CYP7B1
+    pn.add_transition_with_michaelis_menten(
+                    transition_id				 = "t_CYP7B1_metab",
+                    label 						 = "27OHchol metab CYP7B1",
+                    Km							 = Km_t_CYP7B1_metab,
+                    vmax						 = vmax_t_CYP7B1_metab,
+                    input_place_ids				 = ["p_27OHchol_intra"],
+                    substrate_id				 = "p_27OHchol_intra",
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_7HOCA"],
+                    production_coefficients		 = [1],
+                    vmax_scaling_function		 = lambda a : chol_mp)
 
-    # # Endocytosis of 27OHchol
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_27OHchol_endocyto",
-    #                 label 						 = "27OHchol endocyto",
-    #                 input_place_ids				 = ["p_27OHchol_extra"],
-    #                 firing_condition			 = fc_t_27OHchol_endocyto,
-    #                 reaction_speed_function		 = r_t_27OHchol_endocyto,
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_27OHchol_intra", "p_27OHchol_extra"],
-    #                 production_coefficients		 = [1,1])
+    # Endocytosis of 27OHchol
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_27OHchol_endocyto",
+                    label 						 = "27OHchol endocyto",
+                    input_place_ids				 = ["p_27OHchol_extra"],
+                    firing_condition			 = fc_t_27OHchol_endocyto,
+                    reaction_speed_function		 = r_t_27OHchol_endocyto,
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_27OHchol_intra", "p_27OHchol_extra"],
+                    production_coefficients		 = [1,1])
 
-    # # Metabolisation of chol by CYP46A1
-    # pn.add_transition_with_michaelis_menten(
-    #                 transition_id				 = "t_CYP46A1_metab",
-    #                 label 						 = "Chol metab CYP46A1",
-    #                 Km							 = Km_t_CYP46A1_metab,
-    #                 vmax						 = vmax_t_CYP46A1_metab,
-    #                 input_place_ids				 = ["p_chol_ER"],
-    #                 substrate_id				 = "p_chol_ER",
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_24OHchol_intra"],
-    #                 production_coefficients		 = [1],
-    #                 vmax_scaling_function		 = lambda a : chol_mp)
+    # Metabolisation of chol by CYP46A1
+    pn.add_transition_with_michaelis_menten(
+                    transition_id				 = "t_CYP46A1_metab",
+                    label 						 = "Chol metab CYP46A1",
+                    Km							 = Km_t_CYP46A1_metab,
+                    vmax						 = vmax_t_CYP46A1_metab,
+                    input_place_ids				 = ["p_chol_ER"],
+                    substrate_id				 = "p_chol_ER",
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_24OHchol_intra"],
+                    production_coefficients		 = [1],
+                    vmax_scaling_function		 = lambda a : chol_mp)
 
-    # # Exocytosis of 24OHchol
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_24OHchol_exocyto",
-    #                 label 						 = "24OHchol exocyto",
-    #                 input_place_ids				 = ["p_24OHchol_intra"],
-    #                 firing_condition			 = fc_t_24OHchol_exocyto,
-    #                 reaction_speed_function		 = r_t_24OHchol_exocyto,
-    #                 consumption_coefficients	 = [1],
-    #                 output_place_ids			 = ["p_24OHchol_extra"],
-    #                 production_coefficients		 = [1])
+    # Exocytosis of 24OHchol
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_24OHchol_exocyto",
+                    label 						 = "24OHchol exocyto",
+                    input_place_ids				 = ["p_24OHchol_intra"],
+                    firing_condition			 = fc_t_24OHchol_exocyto,
+                    reaction_speed_function		 = r_t_24OHchol_exocyto,
+                    consumption_coefficients	 = [1],
+                    output_place_ids			 = ["p_24OHchol_extra"],
+                    production_coefficients		 = [1])
 
-    # # Transport of Chol into ECM
-    # pn.add_transition_with_speed_function(
-    #                 transition_id				 = "t_chol_trans_PM_ECM",
-    #                 label 						 = "Chol transport PM-ECM",
-    #                 input_place_ids				 = ["p_chol_PM", "p_24OHchol_intra"],
-    #                 firing_condition			 = fc_t_chol_trans_PM_ECM,
-    #                 reaction_speed_function		 = r_t_chol_trans_PM_ECM,
-    #                 consumption_coefficients	 = [1,0],
-    #                 output_place_ids			 = [],
-    #                 production_coefficients		 = [])
+    # Transport of Chol into ECM
+    pn.add_transition_with_speed_function(
+                    transition_id				 = "t_chol_trans_PM_ECM",
+                    label 						 = "Chol transport PM-ECM",
+                    input_place_ids				 = ["p_chol_PM", "p_24OHchol_intra"],
+                    firing_condition			 = fc_t_chol_trans_PM_ECM,
+                    reaction_speed_function		 = r_t_chol_trans_PM_ECM,
+                    consumption_coefficients	 = [1,0],
+                    output_place_ids			 = [],
+                    production_coefficients		 = [])
 
 
     # # PD specific

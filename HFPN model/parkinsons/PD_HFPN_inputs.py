@@ -20,4 +20,4 @@ number_time_steps = 100000
 time_step_size = 0.001
 
 # Output file name
-run_save_name = '3_100000'
+run_save_name = 'whole_cholesterol10e5'

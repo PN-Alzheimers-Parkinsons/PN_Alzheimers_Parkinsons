@@ -28,9 +28,7 @@ class Analysis:
         self.place_ids = np.array(list(hfpn.places.keys())) 
         self.transition_ids = np.array(list(hfpn.transitions.keys()))
         self.token_storage = hfpn.token_storage[:,::step,:]
-        print(self.token_storage, "self.token_storage")
         self.mean_firings = hfpn.mean_firings
-        #print(self.mean_firings) brandoggy
         self.time_array = hfpn.time_array[::step]
         self.place_dict = self.place_number_dict_maker()
         self.transition_dict = self.transition_dict_maker()
