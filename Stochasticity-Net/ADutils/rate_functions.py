@@ -130,6 +130,14 @@ r_t_SERCA = lambda a : k_t_SERCA_no_ATP*a['p_Ca_cyto']#Ca/s
 #r_t_SERCA = lambda a : k_t_SERCA*a['p_Ca_cyto']*a['p_ATP'] #Ca/s
 r_t_NCX_PMCA = lambda a: (k_t_NCX_PMCA*a['p_Ca_cyto'])*(a['p_Ca_cyto']<=7.5*1e7)+ (k_t_NCX_PMCA/10*a['p_Ca_cyto'])*(a['p_Ca_cyto']>7.5*1e7)
 
+r_t_A = lambda a : 1
+r_t_B = lambda a : 1
+r_t_C = lambda a : 1
+r_t_D = lambda a : 1
+r_t_E = lambda a: 1
+r_t_F = lambda a: 1
+r_t_G = lambda a: 1
+r_t_H = lambda a: 1
 
 # Energy metabolism
 r_t_krebs = lambda a : k_t_krebs * a['p_ADP'] * a['p_Ca_mito'] * min( [1.0, max([0.0018,(m_t_ETC_inhib_Ab * a["p_Ab"] + n_t_ETC_inhib_Ab)])])

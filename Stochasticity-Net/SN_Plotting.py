@@ -29,7 +29,7 @@ from Stochastic_Analysis import Analysis
 # In[2]:
 
 analysis = {}
-analysis['calcium_clock_v1'] = Analysis.load_from_file('calcium_clock_v1')
+analysis['plot1'] = Analysis.load_from_file('plot1')
 # analysis['LRRK2_mut_100000'] = Analysis.load_from_file('LRRK2_mut_100000')
 # analysis['DJ1'] = Analysis.load_from_file('pd_DJ1_ds_smallertimestep')
 # analysis['lrrk2'] = Analysis.load_from_file('pd_lrrk2_ds_smallertimestep')
@@ -76,7 +76,7 @@ def smoothen(array, filter_size):
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
     
-    t=np.arange(0,5.00,0.001) #middle number divided by 3rd number, should equal number of time_steps, if no error
+    t=np.arange(0,1,0.001) #divide 1 million by your number of timesteps on the middle line
     fig,ax=plt.subplots()
     linestep = 0.3
     line_width = 3
@@ -185,11 +185,11 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 
 
 create_plot(analysis, 
-            input_place_list = ['p_on3'], 
+            input_place_list = ['p_Ca_cyto'], 
             place_labels = [""], 
-            mutation_list = ['calcium_clock_v1'], 
-            mutation_labels = ['calcium_clock_v1'],
-            plot_title = 'PD - p_on3')
+            mutation_list = ['plot1'], 
+            mutation_labels = ['plot1'],
+            plot_title = 'PD - p_Ca_cyto')
 
 
 # create_plot(analysis, 

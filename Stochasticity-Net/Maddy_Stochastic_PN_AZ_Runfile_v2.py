@@ -99,10 +99,14 @@ def main():
     pn.add_place(it_p_Ca_ER, place_id="p_Ca_ER", label="Calcium (ER)")
 
     # Discrete on/of-switches calcium pacemaking
-    pn.add_place(1, place_id="p_Ca_extra", label="on1 - Calcium (extracellular)")
-    pn.add_place(0, place_id="p_on2", label="on2")
-    pn.add_place(0, place_id="p_on3", label="on3")
-    pn.add_place(0, place_id="p_on4", label="on4")
+    pn.add_place(0, place_id="p_Ca_extra", label="on1 - Calcium (extracellular)")
+
+    pn.add_place(0, "p_on3","on3")
+    pn.add_place(0, "p_on4","on4")    
+    pn.add_place(1000, "p_on5","on5") 
+    pn.add_place(0, "p_on6","on6") 
+    pn.add_place(0, "p_on7","on7") 
+    pn.add_place(0, "p_on8","on8") 
 
     
     # AB pathology transitions
@@ -562,49 +566,65 @@ def main():
     #                     output_arc_weights = [1],
     #                     distribution_type = ["grf", 0.1, r_t_mNCLX]) 
 
-    # # Discrete on/of-switches calcium pacemaking
-    # pn.add_transition(transition_id = 't_A',
-    #                     label = 'A',
-    #                     input_place_ids = ['p_on4'],
-    #                     firing_condition = lambda a: a['p_on4']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_Ca_extra'],         
-    #                     production_coefficients = [1]) 
+    # Discrete on/of-switches calcium pacemaking
     
-    # hfpn.add_transition_with_speed_function(
-    #                     transition_id = 't_B',
-    #                     label = 'B',
-    #                     input_place_ids = ['p_Ca_extra'],
-    #                     firing_condition = lambda a: a['p_Ca_extra']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_on2'],         
-    #                     production_coefficients = [1],
-    #                     delay=0.5) 
     
-    # hfpn.add_transition_with_speed_function(
-    #                     transition_id = 't_C',
-    #                     label = 'C',
-    #                     input_place_ids = ['p_on2'],
-    #                     firing_condition = lambda a: a['p_on2']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_on3'],         
-    #                     production_coefficients = [1],
-    #                     delay=0) 
+    pn.add_transition(transition_id = 't_A',
+                    label      =     "A",
+                    input_place_ids         =  ['p_on4'],
+                    input_arc_weights  =  [2],  
+                    output_place_ids         = ['p_on8'], 
+                    output_arc_weights =  [2], 
+                    distribution_type = ["calcium",0,r_t_A, fc_t_A])
 
-    # hfpn.add_transition_with_speed_function(
-    #                     transition_id = 't_D',
-    #                     label = 'D',
-    #                     input_place_ids = ['p_on3'],
-    #                     firing_condition = lambda a: a['p_on3']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_on4'],         
-    #                     production_coefficients = [1],
-    #                     delay=0.5)
+    pn.add_transition(transition_id = 't_B',
+                    label      =     "B",
+                    input_place_ids         =  ['p_on6'],
+                    input_arc_weights  =  [1000],  
+                    output_place_ids         = ['p_on3'], 
+                    output_arc_weights =  [1000], 
+                    distribution_type = ["calcium",0,r_t_B, fc_t_B])
 
+    pn.add_transition(transition_id = 't_D',
+                    label      =     "D",
+                    input_place_ids         =  ['p_on3'],
+                    input_arc_weights  =  [2],  
+                    output_place_ids         = ['p_on7'], 
+                    output_arc_weights =  [2], 
+                    distribution_type = ["calcium",0,r_t_D, fc_t_D])
+    
+    pn.add_transition(transition_id = 't_E',
+                    label      =     "E",
+                    input_place_ids         =  ['p_on5'],
+                    input_arc_weights  =  [2],  
+                    output_place_ids         = ['p_Ca_extra'], 
+                    output_arc_weights =  [2], 
+                    distribution_type = ["calcium",0,r_t_E, fc_t_E])
+    
+    pn.add_transition(transition_id = 't_F',
+                    label      =     "F",
+                    input_place_ids         =  ['p_Ca_extra'],
+                    input_arc_weights  =  [1000],  
+                    output_place_ids         = ['p_on6'], 
+                    output_arc_weights =  [1000], 
+                    distribution_type = ["calcium",0,r_t_F, fc_t_F])
+    
+    pn.add_transition(transition_id = 't_G',
+                    label      =     "G",
+                    input_place_ids         =  ['p_on7'],
+                    input_arc_weights  =  [1000],  
+                    output_place_ids         = ['p_on4'], 
+                    output_arc_weights =  [1000], 
+                    distribution_type = ["calcium",0,r_t_G, fc_t_G])
+        
+    pn.add_transition(transition_id = 't_H',
+                    label      =     "H",
+                    input_place_ids         =  ['p_on8'],
+                    input_arc_weights  =  [1000],  
+                    output_place_ids         = ['p_on5'], 
+                    output_arc_weights =  [1000], 
+                    distribution_type = ["calcium",0,r_t_H, fc_t_H])
+    
     # # Link to energy metabolism in that it needs ATP replenishment
     # hfpn.add_transition_with_mass_action(
     #                     transition_id = 't_NaK_ATPase',
@@ -618,16 +638,16 @@ def main():
        
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(1000, print_stats=False)
+    pn.run(5000, print_stats=False)
     
     #BSL: A good looking curve is, 2000 run steps, standard deviation of fixed 1 token, 200 starting tokens for asec. 10% of the mean gives a very smooth curve.
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ['p_Ca_cyto'] 
+    list_for_plot = ['p_Ca_extra'] 
     
     pn.plot_time_evolution(list_for_plot)
-    pn.timeseries_mean_for_place("p_Ca_cyto")
+    pn.timeseries_mean_for_place("p_Ca_extra")
     analysis = Analysis(pn)
     run_save_name = "plot1"
     Analysis.store_to_file(analysis, run_save_name)
