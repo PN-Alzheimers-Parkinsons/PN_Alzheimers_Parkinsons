@@ -562,49 +562,48 @@ def main():
     #                     output_arc_weights = [1],
     #                     distribution_type = ["grf", 0.1, r_t_mNCLX]) 
 
-    # # Discrete on/of-switches calcium pacemaking
-    # pn.add_transition(transition_id = 't_A',
-    #                     label = 'A',
-    #                     input_place_ids = ['p_on4'],
-    #                     firing_condition = lambda a: a['p_on4']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_Ca_extra'],         
-    #                     production_coefficients = [1]) 
+    # Discrete on/of-switches calcium pacemaking
+    pn.add_transition(transition_id = 't_A',
+                        label = 'A',
+                        input_place_ids = ['p_on4'],
+                        input_arc_weights = [1], 
+                        output_place_ids = ['p_Ca_extra'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0, r_t_A, fc_t_A]) 
     
-    # hfpn.add_transition_with_speed_function(
-    #                     transition_id = 't_B',
-    #                     label = 'B',
-    #                     input_place_ids = ['p_Ca_extra'],
-    #                     firing_condition = lambda a: a['p_Ca_extra']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_on2'],         
-    #                     production_coefficients = [1],
-    #                     delay=0.5) 
+    pn.add_transition(transition_id = 't_B',
+                        label = 'B',
+                        input_place_ids = ['p_Ca_extra'],
+                        input_arc_weights = [1], 
+                        output_place_ids = ['p_on2'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0, r_t_B, fc_t_B]) 
     
-    # hfpn.add_transition_with_speed_function(
-    #                     transition_id = 't_C',
-    #                     label = 'C',
-    #                     input_place_ids = ['p_on2'],
-    #                     firing_condition = lambda a: a['p_on2']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_on3'],         
-    #                     production_coefficients = [1],
-    #                     delay=0) 
+    pn.add_transition(transition_id = 't_C',
+                        label = 'C',
+                        input_place_ids = ['p_on2'],
+                        input_arc_weights = [1], 
+                        output_place_ids = ['p_on3'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0, r_t_C, fc_t_C]) 
 
-    # hfpn.add_transition_with_speed_function(
-    #                     transition_id = 't_D',
-    #                     label = 'D',
-    #                     input_place_ids = ['p_on3'],
-    #                     firing_condition = lambda a: a['p_on3']==1,
-    #                     reaction_speed_function = lambda a: 1,
-    #                     consumption_coefficients = [1], 
-    #                     output_place_ids = ['p_on4'],         
-    #                     production_coefficients = [1],
-    #                     delay=0.5)
+    pn.add_transition(transition_id = 't_D',
+                        label = 'D',
+                        input_place_ids = ['p_on3'],
+                        input_arc_weights = [1], 
+                        output_place_ids = ['p_on4'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0, r_t_C, fc_t_C])
 
+    pn.add_transition(transition_id = 't_E',
+                        label = 'E',
+                        input_place_ids = ['p_on3'],
+                        input_arc_weights = [1], 
+                        output_place_ids = ['p_on4'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0, r_t_C, fc_t_C])
+    
+    
     # # Link to energy metabolism in that it needs ATP replenishment
     # hfpn.add_transition_with_mass_action(
     #                     transition_id = 't_NaK_ATPase',

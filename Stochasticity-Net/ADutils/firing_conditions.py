@@ -66,13 +66,22 @@ fc_t_dephos_tau = lambda a : True
 
 
 # Calcium Homeostasis
-fc_t_Ca_imp = lambda a : a['p_Ca_extra']==1
+fc_t_Ca_imp = lambda a : a['p_Ca_extra']>0
 fc_t_mCU = lambda a : a['p_Ca_cyto']>it_p_Ca_cyto
 fc_t_mNCLX = lambda a : a['p_Ca_mito']>0
 fc_t_MAM = lambda a : a['p_Ca_ER']>it_p_Ca_cyto #and a['p_Ca_mito']<2.8*1e7 or a['p_Ca_mito']>3.2*1e7
 fc_t_RyR_IP3R = lambda a : a['p_Ca_extra']==0
 fc_t_SERCA = lambda a : a['p_ATP']>0
 fc_t_NCX_PMCA = lambda a : 1
+fc_t_NaK_ATPase = lambda a: a['p_on3']>0
+
+fc_t_A = lambda a : 1
+fc_t_B = lambda a : 1
+fc_t_C = lambda a : 1
+fc_t_D = lambda a : 1
+
+
+
 
 # Energy metabolism
 fc_t_krebs = lambda a : a['p_ADP'] > 3
