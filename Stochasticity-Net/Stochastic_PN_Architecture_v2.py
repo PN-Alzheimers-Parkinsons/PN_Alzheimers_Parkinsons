@@ -148,6 +148,9 @@ class Transition:
         transition_specific_firing_condition = self.distribution_type[3](pn.a)  
         #print(deliciousbrownies) #brandoggy
  
+    #
+    
+    
         if firing_allowed and firing_not_inhibited and firing_not_inhibited2 and transition_specific_firing_condition: 
 
             # Do "firing" for all input and output arcs associated with a transition

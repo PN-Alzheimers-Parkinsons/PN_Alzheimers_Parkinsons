@@ -22,7 +22,7 @@ from visualisation import Analysis
 # In[2]:
 
 analysis = {}
-analysis['ggjiaogjioa'] = Analysis.load_from_file('ggjiaogjioa')
+analysis['whole_cholesterol10e5'] = Analysis.load_from_file('whole_cholesterol10e5')
 # analysis['LRRK2_mut_100000'] = Analysis.load_from_file('LRRK2_mut_100000')
 # analysis['DJ1'] = Analysis.load_from_file('pd_DJ1_ds_smallertimestep')
 # analysis['lrrk2'] = Analysis.load_from_file('pd_lrrk2_ds_smallertimestep')
@@ -158,11 +158,11 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 
 
 create_plot(analysis, 
-            input_place_list = ['p_chol_LE'], 
+            input_place_list = ['p_chol_mito'], 
             place_labels = [""], 
-            mutation_list = ['ggjiaogjioa'], 
-            mutation_labels = ['ggjiaogjioa'],
-            plot_title = 'PD - p_chol_LE')
+            mutation_list = ['whole_cholesterol10e5'], 
+            mutation_labels = ['whole_cholesterol10e5'],
+            plot_title = 'PD - p_chol_mito')
 
 
 # create_plot(analysis, 
