@@ -121,11 +121,15 @@ proper_rate_t_dephos_tauP = function(rate_t_dephos_tauP, vmax_scaling_t_dephos_t
 #vmax_t_dephos_tauP
 #input places are p_tauP and p_Ca_cyto. So how do I construct the rate equation. more p_ca_Cyto should lead to faster rate right?
 
-
-vmax_t_phos_tau = lambda a: kcat_t_phos_tau*a['p_SNCA_act']
-Expression1 = lambda a: a['p_tau']/(Km_t_phos_tau+a['p_tau']) 
-rate_t_phos_tau = function(vmax_t_phos_tau, Expression1)
+#HFPN rate_t_phos_tau 
+rate_t_phos_tau = lambda a: kcat_t_phos_tau*a['p_tau']/(Km_t_phos_tau+a['p_tau']) 
 proper_rate_t_phos_tau = function(rate_t_phos_tau, vmax_scaling_t_phos_tau)
+
+#Improved tau vmax - unused rn so that SN and HFPN can be comparative
+# vmax_t_phos_tau = lambda a: kcat_t_phos_tau*a['p_SNCA_act']
+# Expression1 = lambda a: a['p_tau']/(Km_t_phos_tau+a['p_tau']) 
+# rate_t_phos_tau = function(vmax_t_phos_tau, Expression1)
+# proper_rate_t_phos_tau = function(rate_t_phos_tau, vmax_scaling_t_phos_tau)
 
 
 #Parameters Available:
