@@ -134,7 +134,10 @@ r_t_A = lambda a : 1
 r_t_B = lambda a : 1
 r_t_C = lambda a : 1
 r_t_D = lambda a : 1
-
+r_t_E = lambda a: 1
+r_t_F = lambda a: 1
+r_t_G = lambda a: 1
+r_t_H = lambda a: 1
 
 # Energy metabolism
 r_t_krebs = lambda a : k_t_krebs * a['p_ADP'] * a['p_Ca_mito'] * min( [1.0, max([0.0018,(m_t_ETC_inhib_Ab * a["p_Ab"] + n_t_ETC_inhib_Ab)])])
