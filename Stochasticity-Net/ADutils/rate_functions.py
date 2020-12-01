@@ -130,6 +130,8 @@ r_t_SERCA = lambda a : k_t_SERCA_no_ATP*a['p_Ca_cyto']#Ca/s
 #r_t_SERCA = lambda a : k_t_SERCA*a['p_Ca_cyto']*a['p_ATP'] #Ca/s
 r_t_NCX_PMCA = lambda a: (k_t_NCX_PMCA*a['p_Ca_cyto'])*(a['p_Ca_cyto']<=7.5*1e7)+ (k_t_NCX_PMCA/10*a['p_Ca_cyto'])*(a['p_Ca_cyto']>7.5*1e7)
 
+r_t_NAK_ATPase = lambda a: k_t_NaK_ATPase * (a['p_ATP']**1)*(a['p_on3']**0)
+
 r_t_A = lambda a : 1
 r_t_B = lambda a : 1
 r_t_C = lambda a : 1

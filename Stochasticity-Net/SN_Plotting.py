@@ -76,7 +76,7 @@ def smoothen(array, filter_size):
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
     
-    t=np.arange(0,1,0.001) #divide 1 million by your number of timesteps on the middle line
+    t=np.arange(0,5,0.001) #divide 1 million by your number of timesteps on the middle line
     fig,ax=plt.subplots()
     linestep = 0.3
     line_width = 3
@@ -185,11 +185,11 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 
 
 create_plot(analysis, 
-            input_place_list = ['p_Ca_cyto'], 
+            input_place_list = ['p_on3'], 
             place_labels = [""], 
             mutation_list = ['plot1'], 
             mutation_labels = ['plot1'],
-            plot_title = 'PD - p_Ca_cyto')
+            plot_title = 'on3')
 
 
 # create_plot(analysis, 

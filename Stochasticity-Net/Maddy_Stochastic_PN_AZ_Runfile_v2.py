@@ -548,26 +548,23 @@ def main():
                         output_arc_weights = [1,0.5],
                         distribution_type = ["grf", SD, r_t_SERCA, fc_t_SERCA]) 
 
-    # pn.add_transition(transition_id = 't_NCX_PMCA',
-    #                     label = 'Ca efflux to extracellular space',
-    #                     input_place_ids = ['p_Ca_cyto'],
-    #                     input_arc_weights = [1],
-    #                     output_place_ids = [],         
-    #                     output_arc_weights = [],
-    #                     switch_place_ids = ['p_on3'],
-    #                     switch_arc_weights = [0],
-    #                     distribution_type = ["grf", 0.1, r_t_NCX_PMCA])
+    pn.add_transition(transition_id = 't_NCX_PMCA',
+                        label = 'Ca efflux to extracellular space',
+                        input_place_ids = ['p_Ca_cyto'],
+                        input_arc_weights = [1],
+                        output_place_ids = [],         
+                        output_arc_weights = [],
+                        distribution_type = ["grf", SD, r_t_NCX_PMCA, fc_t_NCX_PMCA])
     
-    # pn.add_transition(transition_id = 't_mNCLX',
-    #                     label = 'Ca export from mitochondria via mNCLX',
-    #                     input_place_ids = ['p_Ca_mito'],
-    #                     input_arc_weights = [1], 
-    #                     output_place_ids = ['p_Ca_cyto'],         
-    #                     output_arc_weights = [1],
-    #                     distribution_type = ["grf", 0.1, r_t_mNCLX]) 
+    pn.add_transition(transition_id = 't_mNCLX',
+                        label = 'Ca export from mitochondria via mNCLX',
+                        input_place_ids = ['p_Ca_mito'],
+                        input_arc_weights = [1], 
+                        output_place_ids = ['p_Ca_cyto'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_mNCLX, fc_t_mNCLX]) 
 
     # Discrete on/of-switches calcium pacemaking
-    
     
     pn.add_transition(transition_id = 't_A',
                     label      =     "A",
@@ -623,33 +620,31 @@ def main():
                     input_arc_weights  =  [1000],  
                     output_place_ids         = ['p_on5'], 
                     output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,r_t_H, fc_t_H])
+                    distribution_type = ["calcium",0, r_t_H, fc_t_H])
     
-    # # Link to energy metabolism in that it needs ATP replenishment
-    # hfpn.add_transition_with_mass_action(
-    #                     transition_id = 't_NaK_ATPase',
-    #                     label = 'NaK ATPase',
-    #                     rate_constant =  k_t_NaK_ATPase,
-    #                     input_place_ids = ['p_ATP', 'p_on3'],
-    #                     firing_condition = lambda a: a['p_on3']==1,
-    #                     consumption_coefficients = [1,0], 
-    #                     output_place_ids = ['p_ADP'],         
-    #                     production_coefficients = [1])
+    # Link to energy metabolism in that it needs ATP replenishment
+    pn.add_transition(transition_id = 't_NaK_ATPase',
+                        label = 'NaK ATPase',
+                        input_place_ids = ['p_ATP', 'p_on3'],
+                        input_arc_weights = [1,0], 
+                        output_place_ids = ['p_ADP'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_NAK_ATPase, fc_t_NaK_ATPase])
        
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(5000, print_stats=False)
+    pn.run(1000000, print_stats=False)
     
     #BSL: A good looking curve is, 2000 run steps, standard deviation of fixed 1 token, 200 starting tokens for asec. 10% of the mean gives a very smooth curve.
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ['p_Ca_extra'] 
+    list_for_plot = ['p_ADP'] 
     
     pn.plot_time_evolution(list_for_plot)
-    pn.timeseries_mean_for_place("p_Ca_extra")
+    pn.timeseries_mean_for_place("p_ADP")
     analysis = Analysis(pn)
-    run_save_name = "plot1"
+    run_save_name = "FinalAnalysis"
     Analysis.store_to_file(analysis, run_save_name)
     print('Network saved to : "' + run_save_name+'.pkl"')
 

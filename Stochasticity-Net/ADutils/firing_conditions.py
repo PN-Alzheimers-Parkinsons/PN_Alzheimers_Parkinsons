@@ -83,7 +83,6 @@ fc_t_F = lambda a: a['p_Ca_extra'] == 1000
 fc_t_G = lambda a: a['p_on7'] == 1000
 fc_t_H = lambda a: a['p_on8'] ==1000
 
-
 # Energy metabolism
 fc_t_krebs = lambda a : a['p_ADP'] > 3
 fc_t_ATP_hydro_mito = lambda a : a['p_ATP'] > 1
