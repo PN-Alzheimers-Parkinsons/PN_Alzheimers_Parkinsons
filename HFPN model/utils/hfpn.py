@@ -66,6 +66,7 @@ class ConsumptionSpeed: # The new input arc
 
     def calculate_firing_tokens(self, time_step):
         self.firing_tokens = self.consumption_function(self.get_input_place_tokens()) * time_step
+       # print(self.firing_tokens) brandon_debugging
 
     def perform_firing(self):
         self.consumption_place.tokens -= self.firing_tokens
@@ -412,13 +413,13 @@ class HFPN:
                 consumption_coefficients (list): list of numbers relating the consumption speed of the input places
                 output_place_ids (list): list with place_id for each output place
                 production_coefficients (list): list of numbers relating the production speed of the output places
-                vmax_scaling_function: lambda function spefifying how promoters/inhibitors affect vmax
+                vmax_scaling_function: lambda function specifying how promoters/inhibitors affect vmax
         """
 
         speed_function = lambda a : vmax * a[substrate_id] / (Km + a[substrate_id])
-
         function = lambda f, g : lambda a : f(a) * g(a) # compound the two funtions
         scaled_speed_function = function(speed_function, vmax_scaling_function)
+
 
         self.add_transition_with_speed_function(
             transition_id = transition_id,
@@ -490,6 +491,7 @@ class HFPN:
         for t in random_order_transitions:
             t.fire(self.time_step)
 
+
             
         # Store tokens weights for each place at specific time step 
         tokens = [place.tokens for place in self.places.values()]
@@ -558,12 +560,15 @@ class HFPN:
 
         # Store time (in seconds) at each time step 
         self.time_array = np.arange(0, self.time_step*(number_time_steps+1), self.time_step*storage_interval)
+       # print(self.time_array) brandoggy
         
         # First dimension = run number, second dimension = time step, third dimension = place 
         self.token_storage = np.zeros((number_runs, int(number_time_steps/storage_interval)+1, len(self.places)))
+        #print(self.token_storage)
 
         # First dimension = run number, second dimension = transition
         self.firings_storage = np.zeros((number_runs, len(self.transitions)))
+       
 
         for i in range(number_runs):
             self.token_storage[i], self.firings_storage[i] = self.run(number_time_steps, storage_interval)

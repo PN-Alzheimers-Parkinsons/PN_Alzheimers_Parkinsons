@@ -5,7 +5,7 @@ import os
 import sys
 
 cwd = os.getcwd()
-root_folder = os.sep+"team-project"
+root_folder = os.sep+"HFPN model"
 sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep+"utils"+os.sep)
 
 # Import class to work with hybrid functional Petri nets

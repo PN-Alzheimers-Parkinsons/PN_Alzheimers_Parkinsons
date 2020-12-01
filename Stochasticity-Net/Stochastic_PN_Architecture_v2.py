@@ -91,8 +91,7 @@ class CatalArc(BaseArc):
     
     def allowed_firing(self):
         """Only fires if tokens are present"""
-        return self.place.tokens >= self.arc_weight*self.coefficient_scalar 
-    
+        return self.place.tokens >= self.arc_weight*self.coefficient_scalar
     
 class Transition:
     def __init__(self, in_arcs, out_arcs, inhib_arcs, catal_arcs, transition_id, label, distribution_type):#which distribution to pick # added distribution type
@@ -111,6 +110,7 @@ class Transition:
         self.transition_id = transition_id
         self.label = label
         self.distribution_type = distribution_type
+        
     def stochastic_distribution(self, distribution_type): #[g,3,1]
         #if distribution_type is gaussian, mean and standard deviation
         #random integer, uniform distribution    
@@ -124,11 +124,9 @@ class Transition:
         #poisson and bernoulli try, gene transcribed maybe bernoulli
 
         if self.distribution_type[0] == "grf":
-            random_integer = random.gauss(self.distribution_type[1],self.distribution_type[1]*4) #self.distribution_type[1]]*0.1 for the standard deviation gives a very smooth curve
-            print(random_integer)
-            #print(pn.a)
-            self.distribution_type[1] = self.distribution_type[3](pn.a) #
-            #print(self.distribution_type[3](pn.a))
+            gaussian_mean = self.distribution_type[2](pn.a)
+            gaussian_mean = gaussian_mean*0.001
+            random_integer = random.gauss(gaussian_mean,gaussian_mean*self.distribution_type[1]) 
             
         #gaussian
         if self.distribution_type[0] =="g":
@@ -136,6 +134,9 @@ class Transition:
         #uniform
         if self.distribution_type[0] =="u":
             random_integer = random.randint(self.distribution_type[1],self.distribution_type[2])
+        
+        if self.distribution_type[0] =="calcium":
+            random_integer = 1
 
         for arc2 in self.out_arcs.union(self.in_arcs):
             #print(self.out_arcs.union(self.in_arcs))
@@ -144,12 +145,18 @@ class Transition:
         firing_allowed = all(in_arc.allowed_firing() for in_arc in self.in_arcs)
         firing_not_inhibited = all(inhib_arc.allowed_firing() for inhib_arc in self.inhib_arcs)
         firing_not_inhibited2 = all(catal_arc.allowed_firing() for catal_arc in self.catal_arcs)
-        if firing_allowed and firing_not_inhibited and firing_not_inhibited2:
+        transition_specific_firing_condition = self.distribution_type[3](pn.a)  
+        #print(deliciousbrownies) #brandoggy
+ 
+    #
+    
+    
+        if firing_allowed and firing_not_inhibited and firing_not_inhibited2 and transition_specific_firing_condition: 
 
             # Do "firing" for all input and output arcs associated with a transition
             for arc in self.out_arcs.union(self.in_arcs): 
                 arc.fire()
-        return firing_allowed and firing_not_inhibited and firing_not_inhibited2# Return if fired
+        return firing_allowed and firing_not_inhibited and firing_not_inhibited2 and transition_specific_firing_condition# Return if fired
 
 
 class PetriNet:
@@ -188,18 +195,22 @@ class PetriNet:
 
         self.petri_net_model.add_place(initial_tokens, place_id, label)
 
-    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids =[], catal_arc_weights=[], distribution_type=["g",5,1]):#sets the default, if distribution type is empty
+    def add_transition(self, transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids=[], inhib_arc_weights=[], catal_place_ids =[], catal_arc_weights=[],  distribution_type=["g",5,1]):#sets the default, if distribution type is empty
+
         """Add a transition to the Petri net.
             Args:
                 input_places (list): collection of places with arcs going into a transition
                 output_places (list): collection of places with arcs going out of a transition
                 inhib_places (list): collection of places with arcs inhibiting a transition
-                catal_places (list): collection of places with arcs inhibiting a transition
+                catal_places (list): collection of places with arcs catalysing a transition
+          
+
         """
         if self.locked:
             raise RuntimeError('Error: do not change PetriNet after it has run.')
 
         self.petri_net_model.add_transition(transition_id, label, input_place_ids, input_arc_weights, output_place_ids, output_arc_weights, inhib_place_ids, inhib_arc_weights, catal_place_ids, catal_arc_weights, distribution_type)
+
 
     def run(self, number_of_steps, print_stats = False):
         """Runs multiple copies of the Petri net declared using this instance. 
@@ -229,11 +240,15 @@ class PetriNet:
             runstep_tokens = [pn.run_one_step() for pn in self.petri_net_copies] 
             #print(runstep_tokens)
             self.timeseries_mean[step] = np.mean(runstep_tokens, axis = 0) # averaging across the different copies for each place
-            #print(self.timeseries_mean[step])#debugging1
+            #print(self.timeseries_mean[step])#brandoggy
             self.timeseries_std[step] = np.std(runstep_tokens, axis = 0) 
+            #print(self.timeseries_std[0:10])
+        self.number_of_steps = number_of_steps
+        
+        #return self.a
 
         if print_stats:
-            print('Order of placs:\n', )
+            print('Order of places:\n', )
             print('Mean number of tokens for given time-step:\n', self.timeseries_mean)
             print('Var number of tokens for given time-step:\n', self.timeseries_std)
 
@@ -254,9 +269,9 @@ class PetriNet:
         #places is a dictionary. So you can get the actual places using places.keys()
         #In the zip method below, self.petri_net_model.places.values() was changed to self.petri_net_model.places.keys() because this was more readable.
         
-        dict_of_tokens = {} #brandonadded. creates dictionary
+        dict_of_tokens = {} #creates dictionary
         for tokens, place in zip(self.timeseries_mean.T, self.petri_net_model.places.keys()):
-            dict_of_tokens["{}".format(place)]=tokens#brandonadded. this line assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
+            dict_of_tokens["{}".format(place)]=tokens #assigns each places list of tokens over all timesteps, to the dictionary dict_of_tokens and assigns the dictionary key using whats inside the square brackets.
     
         for x in place_ids:
             plt.plot(dict_of_tokens.get(x), label=x)
@@ -304,6 +319,7 @@ class PetriNetModel:
             inhib_place_ids = [arc.place.place_id for arc in t.inhib_arcs]
             #print(str(inhib_place_ids))#brandon
             catal_place_ids = [arc.place.place_id for arc in t.catal_arcs]
+            
             #print(str(catal_place_ids)) #brandon
 
 
@@ -355,6 +371,7 @@ class PetriNetModel:
                 output_places (list): collection of places with arcs going out of a transition
                 inhib_places (list): collection of places with arcs inhibiting a transition
                 catal_places (list): collection of places with arcs catalysing a transition
+
         """
 
         if len(input_place_ids) != len(input_arc_weights):
@@ -364,8 +381,8 @@ class PetriNetModel:
         if len(inhib_place_ids) != len(inhib_arc_weights):
             raise ValueError(f"Unequal numbers of inhib places and inhib arc weights in transition {label}")
         if len(catal_place_ids) != len(catal_arc_weights):
-            raise ValueError(f"Unequal numbers of cattal places and catal arc weights in transition {label}")
-
+            raise ValueError(f"Unequal numbers of catal places and catal arc weights in transition {label}")
+            
         check_label_length(label)
         if ' ' in transition_id:
             raise ValueError(f"Transition_id should not contain any spaces {transition_id}. Did you reverse transition_id and label?")
@@ -396,15 +413,38 @@ class PetriNetModel:
             Returns: 
                 A list of the current number of tokens for each place.
         """
-        t = random.choice(list(self.transitions.values()))
-        successful_firing = t.fire(self)
-        self.successful_firings.append(successful_firing)
+        #NEWER ORDERING METHOD
+        ordered_transitions = list(self.transitions.values())
+        random_order_transitions = random.sample(ordered_transitions, len(ordered_transitions))
+       
+        for t in random_order_transitions:
+            t.fire(self)
+            for place in self.places.values():
+                self.a[place.place_id]=place.tokens
+           
+            #print(t)
+            
+        
+        #NEW ORDERING METHOD
+        # ordered_transitions = list(self.transitions.values())
+        # random_order_transitions = random.sample(ordered_transitions, len(ordered_transitions))
+       
+        # for t in random_order_transitions:
+        #     successful_firing = t.fire(self)
+        #     self.successful_firings.append(successful_firing)
+            
+        #OLD ORDERING METHOD 
+        # t = random.choice(list(self.transitions.values()))
+        # successful_firing = t.fire(self)
+        # self.successful_firings.append(successful_firing)
         
         #populating the a dictionary
-        for place in self.places.values():
-            self.a[place.place_id]=place.tokens
+        #for place in self.places.values():
+            #self.a[place.place_id]=place.tokens
+            #print(place.tokens, "dictionary population")
 
         return [place.tokens for place in self.places.values()]
+ 
     
 class PetriNetDiagram:
     def __init__(self, petri_net):
@@ -436,9 +476,7 @@ class PetriNetDiagram:
              #connect catal arc brandon. I want to connect place to transition
               for catal_arc in transition.catal_arcs:
                   strings.append(f'{transition_id} -> {catal_arc.place.place_id} [label = "{catal_arc.arc_weight}", fontsize = 11, color=pink];')
-                 
-            
-                 
+
                  
 
           # build into string

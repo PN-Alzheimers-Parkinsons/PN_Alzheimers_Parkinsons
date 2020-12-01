@@ -1,6 +1,6 @@
-from parameters import *
-from initial_tokens import *
-from inputs import *
+from Brandon_PD_SN_parameters import *
+from Brandon_PD_SN_initial_tokens import *
+from Brandon_PD_SN_inputs import *
 
 # Cholesterol homeostasis rates 
 # rate_constant * a['p_H2']**2 * a['p_O2']**1
@@ -58,11 +58,11 @@ r_t_ETC = lambda a : (1-0.2*(a['p_LRRK2_mut']>0)) * k_t_ETC * a['p_ADP'] * a['p_
 r_t_krebs = lambda a : k_t_krebs * a['p_ADP'] * a['p_Ca_mito']
 r_t_ATP_hydro_mito = lambda a : k_t_ATP_hydro_mito * a['p_ATP']
 r_t_ROS_metab = lambda a : ((k_t_ROS_metab * a['p_ROS_mito'] / a['p_chol_mito'])*(a['p_LB']<LB_threshold) +(k_t_ROS_metab_LB * a['p_ROS_mito'] / a['p_chol_mito'])*(a['p_LB']>=LB_threshold))*(1-k_t_ROS_metab_DJ1*(a['p_DJ1']>0))
-r_t_mito_dysfunc = lambda a : k_t_mito_dysfunc * a['p_ROS_mito']
-r_t_cas3_inact = lambda a : k_t_mito_dysfunc * a['p_ROS_mito'] / cas3_homeostasis
+#r_t_mito_dysfunc = lambda a : k_t_mito_dysfunc * a['p_ROS_mito'] #probably old rate equation
+#Brandon: There is a duplicated rate equation for some reason? maybe this is supposed to be named something different? #r_t_cas3_inact = lambda a : k_t_mito_dysfunc * a['p_ROS_mito'] / cas3_homeostasis
 #r_t_mito_dysfunc = lambda a : c_t_mito_dysfunc + k_t_mito_dysfunc * a["p_ROS_mito"] * (m_t_mito_dysfunc * a["p_ROS_mito"] + n_t_mito_dysfunc) #from AD
 r_t_mito_dysfunc = lambda a : k_t_mito_dysfunc * (m_t_mito_dysfunc * a["p_ROS_mito"] + n_t_mito_dysfunc) 
-r_t_cas3_inact = lambda a : k_t_cas3_inact * a["p_cas3"]
+r_t_cas3_inact = lambda a :k_t_cas3_inact * a["p_cas3"]
 
 # Late endosome pathology rates
 # #In retrograde transport still need to incoorporate 'p_LRRK2_mut','p_VPS35','p_LB' either in rate eq. or firing condition
@@ -84,6 +84,66 @@ r_t_RTN3_dys_lyso = lambda a : a["p_RTN3_HMW_auto"] * k_t_RTN3_lyso * max(0,(1 -
 #     print(a["p_RTN3_HMW_auto"] * k_t_RTN3_lyso * max(0,(1 - a["p_tau"]/it_p_tau)))
 #     print(a["p_tau"],it_p_tau)
 #     return a["p_RTN3_HMW_auto"] * k_t_RTN3_lyso * max(0,(1 - a["p_tau"]/it_p_tau))
-
 vmax_scaling_t_phos_tau = lambda a : 2815005*(a['p_SNCA_act']<p_SNCA_act_homeostasis) +2815005*1.25*(a['p_SNCA_act']>=p_SNCA_act_homeostasis)
 vmax_scaling_t_dephos_tauP = lambda a : 1 
+
+#BrandonAdded
+function = lambda f,g: lambda a: f(a)*g(a)
+
+#CYP ENZYMES
+rate_t_CYP27A1_metab = lambda a: vmax_t_CYP27A1_metab*a['p_chol_mito']/(Km_t_CYP27A1_metab+a['p_chol_mito'])
+rate_t_CYP11A1_metab = lambda a: vmax_t_CYP11A1_metab*a['p_chol_mito']/(Km_t_CYP11A1_metab+a['p_chol_mito'])
+rate_t_CYP7B1_metab = lambda a: vmax_t_CYP7B1_metab*a['p_27OHchol_intra']/(Km_t_CYP7B1_metab+a['p_27OHchol_intra'])
+rate_t_CYP46A1_metab = lambda a: vmax_t_CYP46A1_metab*a['p_chol_ER']/(Km_t_CYP46A1_metab+a['p_chol_ER'])
+rate_t_CYP27A1_metab_vmax_scaled = lambda a : chol_mp
+rate_t_CYP11A1_metab_vmax_scaled = lambda a : chol_mp
+rate_t_CYP7B1_metab_vmax_scaled = lambda a : chol_mp
+rate_t_CYP46A1_metab_vmax_scaled = lambda a : chol_mp
+proper_rate_t_CYP27A1_metab = function(rate_t_CYP27A1_metab, rate_t_CYP27A1_metab_vmax_scaled)
+proper_rate_t_CYP11A1_metab = function(rate_t_CYP11A1_metab, rate_t_CYP11A1_metab_vmax_scaled)
+proper_rate_t_CYP7B1_metab = function(rate_t_CYP7B1_metab, rate_t_CYP7B1_metab_vmax_scaled)
+proper_rate_t_CYP46A1_metab = function(rate_t_CYP46A1_metab, rate_t_CYP46A1_metab_vmax_scaled)
+
+rate_t_A = lambda a: 1
+rate_t_B = lambda a: 1
+rate_t_C = lambda a: 1
+rate_t_D = lambda a: 1
+rate_t_E = lambda a: 1
+rate_t_F = lambda a: 1
+rate_t_G = lambda a: 1
+rate_t_H = lambda a: 1
+#Construct Michaeles Menten Equation for rate_t_dephos_tauP
+rate_t_dephos_tauP = lambda a: vmax_t_dephos_tauP*a['p_tauP']/(Km_t_dephos_tauP+a['p_tauP']) 
+proper_rate_t_dephos_tauP = function(rate_t_dephos_tauP, vmax_scaling_t_dephos_tauP)
+
+#Parameters Availabe: 
+#Km_t_dephos_tauP
+#vmax_t_dephos_tauP
+#input places are p_tauP and p_Ca_cyto. So how do I construct the rate equation. more p_ca_Cyto should lead to faster rate right?
+
+#HFPN rate_t_phos_tau 
+rate_t_phos_tau = lambda a: kcat_t_phos_tau*a['p_tau']/(Km_t_phos_tau+a['p_tau']) 
+proper_rate_t_phos_tau = function(rate_t_phos_tau, vmax_scaling_t_phos_tau)
+
+#Improved tau vmax - unused rn so that SN and HFPN can be comparative
+# vmax_t_phos_tau = lambda a: kcat_t_phos_tau*a['p_SNCA_act']
+# Expression1 = lambda a: a['p_tau']/(Km_t_phos_tau+a['p_tau']) 
+# rate_t_phos_tau = function(vmax_t_phos_tau, Expression1)
+# proper_rate_t_phos_tau = function(rate_t_phos_tau, vmax_scaling_t_phos_tau)
+
+
+#Parameters Available:
+#Km_t_phos_tau
+#kcat_t_phos_tau
+#Vmax=Kcat*[Total Enzyme Concentration], so I need to use the number of tokens for p_SNCA_act
+#Input Places are p_tau and p_SNCA_act. p_SNCA_Act is not consumed so Im assuming it catalyses but is not a substrate.
+
+    
+#        function = lambda f, g : lambda a : f(a) * g(a) # compound the two funtions
+#        rate_x = function(speed_function, vmax_scaling_function)    
+    
+#Mass Action Equation
+rate_t_NAK_ATPase = lambda a: k_t_NaK_ATPase * (a['p_ATP']**1)*(a['p_on3']**0)
+#mass_action_function = lambda a : rate_constant * np.prod([a[place_id] ** ratio for place_id, ratio in zip(input_place_ids, consumption_coefficients)])
+
+

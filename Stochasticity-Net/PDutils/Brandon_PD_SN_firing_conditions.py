@@ -1,9 +1,9 @@
-from parameters import *
-from initial_tokens import *
+from Brandon_PD_SN_parameters import *
+from Brandon_PD_SN_initial_tokens import *
 
 # Cholesterol homeostasis firing conditions
 fc_t_LDLR_endocyto = lambda a : a["p_ApoEchol_extra"] > 1
-fc_t_ApoEchol_cleav = lambda a : a["p_ApoEchol_EE"] > 1
+fc_t_ApoEchol_cleav = lambda a : a["p_ApoEchol_EE"] > 1 
 fc_t_chol_trans_LE_ER = lambda a : a["p_chol_LE"] > 1
 fc_t_chol_trans_LE_mito = lambda a : a["p_chol_LE"] > 1
 fc_t_chol_trans_LE_PM = lambda a : a["p_chol_LE"] > 1
@@ -13,6 +13,11 @@ fc_t_chol_trans_ER_mito = lambda a : a["p_chol_ER"] > 0
 fc_t_27OHchol_endocyto = lambda a : a["p_27OHchol_extra"] > 1
 fc_t_24OHchol_exocyto = lambda a : a["p_24OHchol_intra"] > 0
 fc_t_chol_trans_PM_ECM = lambda a : a["p_chol_PM"] > 0
+#CYP Enzymes
+fc_t_CYP27A1_metab = lambda a: a['p_chol_mito'] > 0
+fc_t_CYP11A1_metab = lambda a: a['p_chol_mito']>0
+fc_t_CYP7B1_metab = lambda a: a['p_27OHchol_intra']>0
+fc_t_CYP46A1_metab = lambda a: a['p_chol_ER']>0
 #PD specific
 fc_t_SNCA_bind_ApoEchol_extra = lambda a : a['p_ApoEchol_extra']>0 and a['p_SNCA_act']>4.34*1e8
 fc_t_SNCAApoEchol_endocyto = lambda a : a['p_SNCAApoEchol_extra']>0
@@ -22,14 +27,23 @@ fc_t_SNCA_exocyto= lambda a : a['p_SNCA_act']>0
 fc_t_chol_LE_upreg= lambda a : a['p_GBA1']>0
 
 # Calcium homeostasis firing conditions
-fc_t_Ca_imp = lambda a : a['p_Ca_extra']==1
+fc_t_Ca_imp = lambda a : a['p_Ca_extra']>0 #brandoggy
 fc_t_mCU = lambda a : a['p_Ca_cyto']>it_p_Ca_cyto
 fc_t_mNCLX = lambda a : a['p_Ca_mito']>0
 fc_t_MAM = lambda a : a['p_Ca_ER']>it_p_Ca_cyto #and a['p_Ca_mito']<2.8*1e7 or a['p_Ca_mito']>3.2*1e7
-fc_t_RyR_IP3R = lambda a : a['p_Ca_extra']==0
+fc_t_RyR_IP3R = lambda a : a['p_Ca_extra']==0 #brandoggy
 fc_t_SERCA = lambda a : a['p_ATP']>0
-fc_t_Ca_NCX = lambda a : 1
-
+fc_t_NCX_PMCA = lambda a : a['p_on3'] >0
+fc_t_NaK_ATPase = lambda a: a['p_on3']>0
+#Calcium Clock
+fc_t_A = lambda a: a['p_on4']>0 #brandoggy
+fc_t_B = lambda a: a['p_on6']== 1000 #brandoggy
+fc_t_C = lambda a: a['p_on2']==1000 #brandoggy
+fc_t_D = lambda a: a['p_on3']>0 #brandoggy
+fc_t_E = lambda a: a['p_on5']>0 #brandoggy
+fc_t_F = lambda a: a['p_Ca_extra'] == 1000 #brandoggy
+fc_t_G = lambda a: a['p_on7'] == 1000
+fc_t_H = lambda a: a['p_on8'] ==1000
 # Lewy bodies pathology firing conditions 
 fc_t_SNCA_degr = lambda a : a['p_SNCA_act']>0
 fc_t_SNCA_aggr = lambda a : a['p_SNCA_act']>5.2*1e8
@@ -62,6 +76,8 @@ fc_t_RTN3_auto = lambda a : a['p_RTN3_HMW_cyto'] > 1 and a['p_RTN3_axon'] > 1
 fc_t_RTN3_lyso = lambda a : a['p_RTN3_HMW_auto'] > 1
 fc_t_RTN3_dys_auto = lambda a : a['p_RTN3_HMW_cyto'] > 1 and a['p_RTN3_axon'] < it_p_RTN3_axon # any reduction in functional tubular ER from starting value can cause dysfunctional autophagosome formation
 fc_t_RTN3_dys_lyso = lambda a : a["p_RTN3_HMW_auto"] > 1
+
+
 
 
 

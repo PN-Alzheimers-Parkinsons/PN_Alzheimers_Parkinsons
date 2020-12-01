@@ -3,6 +3,9 @@
 from parameters import *
 from initial_tokens import *
 
+function = lambda f, g : lambda a : f(a) * g(a)
+
+
 # Cholesterol homeostasis
 r_t_LDLR_endocyto = lambda a : chol_multiplier * (vmax_t_LDLR_endocyto * min([1, max([0.3,(m_t_LDLR_endocyto * (a["p_chol_ER"]/it_p_chol_ER) + n_t_LDLR_endocyto)])]) * a["p_ApoEchol_extra"]/(Km_t_LDLR_endocyto + a["p_ApoEchol_extra"]))
 
@@ -11,16 +14,33 @@ r_t_chol_trans_LE_mito = lambda a : chol_multiplier * k_t_chol_trans_LE_mito * a
 r_t_chol_trans_LE_PM = lambda a : chol_multiplier * k_t_chol_trans_LE_PM * a["p_chol_LE"]
 r_t_chol_trans_ER_PM = lambda a : chol_multiplier * k_t_chol_trans_ER_PM * a["p_chol_ER"]
 r_t_chol_trans_PM_ER = lambda a : chol_multiplier * k_t_chol_trans_PM_ER * a["p_chol_PM"]
-r_t_chol_trans_ER_mito = lambda a : chol_multiplier * k_t_chol_trans_ER_mito * a["p_chol_ER"]  
+r_t_chol_trans_ER_mito = lambda a : chol_multiplier * k_t_chol_trans_ER_mito * a["p_chol_ER"]
 r_t_chol_trans_PM_ECM = lambda a : chol_multiplier * k_t_chol_trans_PM_ECM * a["p_chol_PM"] * min( [3.5, max([0,(m_t_chol_trans_PM_ECM * (a["p_24OHchol_intra"]/it_p_24OHchol_intra) + n_t_chol_trans_PM_ECM)])])
 
-r_t_27OHchol_endocyto = lambda a : chol_multiplier * disease_multiplier_27OH * k_t_27OHchol_endocyto 
-r_t_24OHchol_exocyto = lambda a : chol_multiplier * k_t_24OHchol_exocyto * a["p_24OHchol_intra"] 
+r_t_27OHchol_endocyto = lambda a : chol_multiplier * disease_multiplier_27OH * k_t_27OHchol_endocyto
+r_t_24OHchol_exocyto = lambda a : chol_multiplier * k_t_24OHchol_exocyto * a["p_24OHchol_intra"]
 
 vmax_scaling_t_CYP27A1_metab = lambda a : chol_multiplier
 vmax_scaling_t_CYP11A1_metab = lambda a : chol_multiplier
 vmax_scaling_t_CYP7B1_metab = lambda a : chol_multiplier
 vmax_scaling_t_CYP46A1_metab = lambda a : chol_multiplier
+
+#Speed Functions
+
+speed_function_CYP27A1_metab = lambda a : vmax_t_CYP27A1_metab * a['p_chol_mito'] / (Km_t_CYP27A1_metab + a['p_chol_mito'])
+
+speed_function_CYP11A1_metab = lambda a : vmax_t_CYP11A1_metab * a['p_chol_mito'] / (Km_t_CYP11A1_metab + a['p_chol_mito'])
+
+speed_function_CYP7B1_metab = lambda a : vmax_t_CYP7B1_metab * a['p_27OHchol_intra'] / (Km_t_CYP7B1_metab + a['p_27OHchol_intra'])
+
+speed_function_CYP46A1_metab = lambda a : vmax_t_CYP46A1_metab * a['p_chol_ER'] / (Km_t_CYP46A1_metab + a['p_chol_ER'])
+
+#Scaled rate functions
+
+r_t_CYP27A1_metab = function(speed_function_CYP27A1_metab, vmax_scaling_t_CYP27A1_metab)
+r_t_CYP11A1_metab = function(speed_function_CYP11A1_metab, vmax_scaling_t_CYP11A1_metab)
+r_t_CYP7B1_metab = function(speed_function_CYP7B1_metab, vmax_scaling_t_CYP7B1_metab)
+r_t_CYP46A1_metab = function(speed_function_CYP46A1_metab, vmax_scaling_t_CYP46A1_metab)
 
 
 # ER Retraction & Collapse
@@ -36,33 +56,66 @@ r_t_RTN3_dys_auto = lambda a : ER_multiplier * a["p_RTN3_HMW_cyto"] * k_t_RTN3_a
 r_t_RTN3_dys_lyso = lambda a : ER_multiplier * a["p_RTN3_HMW_auto"] * k_t_RTN3_lyso * max(0, (1 - a["p_tau"]/it_p_tau)) # any reduction in normal lysosomal processing instead goes to this transitoin. didn't incorporate transport-inhibiting effect of dystrophic neurites yet
 
 
-# Abeta Pathology 
-r_t_asec_exp = lambda a : Abeta_multiplier * k_t_asec_exp * (mchol_t_asec_exp * a['p_24OHchol_intra'] + nchol_t_asec_exp) 
-r_t_asec_degr = lambda a : Abeta_multiplier * k_t_asec_degr * a['p_asec'] 
+# Abeta Pathology
+r_t_asec_exp = lambda a : Abeta_multiplier * k_t_asec_exp * (mchol_t_asec_exp * a['p_24OHchol_intra'] + nchol_t_asec_exp)
+r_t_asec_degr = lambda a : Abeta_multiplier * k_t_asec_degr *a['p_asec']
 r_t_APP_exp = lambda a : Abeta_multiplier * k_t_APP_exp * (1 + dis_t_APP_exp * a['p_ApoE']) #* min(max((m_t_APP_exp * a['p_ROS_mito'] + n_t_APP_exp),1),1.5)
 r_t_APP_endocyto = lambda a : Abeta_multiplier * a['p_APP_pm'] * (k_t_APP_endocyto + a['p_ApoE'] * dis_t_APP_endocyto)
 r_t_APP_endo_event = lambda a :Abeta_multiplier *  k_t_APP_endo_event * a['p_APP_endo']
 
 r_t_bsec_exp = lambda a : Abeta_multiplier * k_t_bsec_exp * (mchol_t_bsec_exp * a['p_27OHchol_intra'] + nchol_t_bsec_exp) * (mRTN_t_bsec_exp * a['p_RTN3_axon'] + nRTN_t_bsec_exp) #* max(min((mROS_t_bsec_exp * a['p_ROS_mito'] + nROS_t_bsec_exp),2),1) #arbitrary upper limit of 2 to avoid breaking model in extreme runs
-r_t_bsec_degr = lambda a : Abeta_multiplier * k_t_bsec_degr * a['p_bsec'] 
+r_t_bsec_degr = lambda a : Abeta_multiplier * k_t_bsec_degr * a['p_bsec']
 
 r_t_gsec_exp = lambda a : Abeta_multiplier * k_t_gsec_exp # need to incorporate effect of p_ROS_mito
-r_t_gsec_degr = lambda a : Abeta_multiplier * k_t_gsec_degr * a['p_gsec'] 
+r_t_gsec_degr = lambda a : Abeta_multiplier * k_t_gsec_degr * a['p_gsec']
 
 r_t_Ab_degr = lambda a : Abeta_multiplier * k_t_Ab_degr * a['p_Ab']
+
+
+##AB Michealis Menten Rate Functions
 
 vmax_scaling_t_APP_asec_cleav = lambda a : Abeta_multiplier * a['p_asec']
 vmax_scaling_t_APP_bsec_cleav = lambda a : Abeta_multiplier * a['p_bsec'] * (mchol_t_APP_bsec_cleav * a['p_chol_PM'] + nchol_t_APP_bsec_cleav) * (1 + a['p_age'] * age_t_APP_bsec_cleav)
 vmax_scaling_t_CTF99_gsec_cleav = lambda a : Abeta_multiplier * a['p_gsec']
 
 
+# Speed functions
+
+speed_function_APP_asec_cleav = lambda a : kcat_t_APP_asec_cleav * a['p_APP_pm'] / (Km_t_APP_asec_cleav + a['p_APP_pm'])
+
+speed_function_APP_bsec_cleav = lambda a : kcat_t_APP_bsec_cleav * a['p_APP_endo'] / (Km_t_APP_bsec_cleav + a['p_APP_endo'])
+
+speed_function_CTF99_gsec_cleav = lambda a : kcat_t_CTF99_gsec_cleav * a['p_CTF99'] / (Km_t_CTF99_gsec_cleav + a['p_CTF99'])
+
+# Scaled Rate Functions
+
+r_t_APP_asec_cleav = function(speed_function_APP_asec_cleav, vmax_scaling_t_APP_asec_cleav)
+
+r_t_APP_bsec_cleav = function(speed_function_APP_bsec_cleav, vmax_scaling_t_APP_bsec_cleav)
+
+r_t_CTF99_gsec_cleav = function(speed_function_CTF99_gsec_cleav, vmax_scaling_t_CTF99_gsec_cleav)
+
+
 # Tau Pathology
-r_t_actv_GSK3b = lambda a : tau_multiplier * k_t_actv_GSK3b * a['p_GSK3b_inact'] * (dis_t_act_GSK3b * a['p_ApoE'] + 1) * (m_t_act_GSK3b * a['p_Ab'] + n_t_act_GSK3b) 
+r_t_actv_GSK3b = lambda a : tau_multiplier * k_t_actv_GSK3b * a['p_GSK3b_inact'] * (dis_t_act_GSK3b * a['p_ApoE'] + 1) * (m_t_act_GSK3b * a['p_Ab'] + n_t_act_GSK3b)
 r_t_inactv_GSK3b = lambda a : tau_multiplier * k_t_inactv_GSK3b * a['p_GSK3b_act']
-r_t_GSK3b_exp_deg = lambda a : tau_multiplier * (k_t_p_GSK3b_exp - k_t_p_GSK3b_deg * a['p_GSK3b_inact']) 
+r_t_GSK3b_exp_deg = lambda a : tau_multiplier * (k_t_p_GSK3b_exp - k_t_p_GSK3b_deg * a['p_GSK3b_inact'])
+
 
 vmax_scaling_t_phos_tau = lambda a : tau_multiplier * a['p_GSK3b_act']*(a['p_GSK3b_act']/it_p_GSK3b_act)**2.547 #(1*a['p_cas']+1) * (0.2*a['p_GSK3b_act']+1))
-vmax_scaling_t_dephos_tauP = lambda a : tau_multiplier 
+vmax_scaling_t_dephos_tauP = lambda a : tau_multiplier
+
+
+# Speed functions
+
+
+speed_function_phos_tau = lambda a : kcat_t_phos_tau * a['p_tau'] / (Km_t_phos_tau + a['p_tau'])
+speed_function_dephos_tauP = lambda a : vmax_t_dephos_tauP * a['p_tauP'] / (Km_t_dephos_tauP + a['p_tauP'])
+
+# Scaled Rate Functions
+
+r_t_phos_tau = function(speed_function_phos_tau, vmax_scaling_t_phos_tau)
+r_t_dephos_tau = function(speed_function_dephos_tauP, vmax_scaling_t_dephos_tauP)
 
 
 # Calcium Homeostasis
@@ -77,9 +130,17 @@ r_t_SERCA = lambda a : k_t_SERCA_no_ATP*a['p_Ca_cyto']#Ca/s
 #r_t_SERCA = lambda a : k_t_SERCA*a['p_Ca_cyto']*a['p_ATP'] #Ca/s
 r_t_NCX_PMCA = lambda a: (k_t_NCX_PMCA*a['p_Ca_cyto'])*(a['p_Ca_cyto']<=7.5*1e7)+ (k_t_NCX_PMCA/10*a['p_Ca_cyto'])*(a['p_Ca_cyto']>7.5*1e7)
 
+r_t_A = lambda a : 1
+r_t_B = lambda a : 1
+r_t_C = lambda a : 1
+r_t_D = lambda a : 1
+r_t_E = lambda a: 1
+r_t_F = lambda a: 1
+r_t_G = lambda a: 1
+r_t_H = lambda a: 1
 
 # Energy metabolism
-r_t_krebs = lambda a : k_t_krebs * a['p_ADP'] * a['p_Ca_mito'] * min( [1.0, max([0.0018,(m_t_ETC_inhib_Ab * a["p_Ab"] + n_t_ETC_inhib_Ab)])]) 
+r_t_krebs = lambda a : k_t_krebs * a['p_ADP'] * a['p_Ca_mito'] * min( [1.0, max([0.0018,(m_t_ETC_inhib_Ab * a["p_Ab"] + n_t_ETC_inhib_Ab)])])
 r_t_ATP_hydro_mito = lambda a : k_t_ATP_hydro_mito * a['p_ATP']
 r_t_ETC = lambda a : k_t_ETC * a['p_ADP'] * a['p_Ca_mito'] *  a['p_reduc_mito'] / a['p_ROS_mito']**0.5 / max(a['p_chol_mito'], it_p_chol_mito) * min( [1.0, max([0.0018,(m_t_ETC_inhib_Ab * a["p_Ab"] + n_t_ETC_inhib_Ab)])])
 r_t_ROS_metab = lambda a : k_t_ROS_metab * a['p_ROS_mito'] / max(a['p_chol_mito'], it_p_chol_mito)

@@ -7,6 +7,7 @@ Abeta_multiplier = 100
 tau_multiplier = 10
 chol_multiplier = 300
 ER_multiplier = 10
+SD = 0
 
 neurone_cell_volume = 9008e-15 # L
 avagadros_constant = 6.022e23 # mol-1
