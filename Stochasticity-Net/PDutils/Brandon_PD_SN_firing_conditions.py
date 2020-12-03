@@ -78,6 +78,8 @@ fc_t_RTN3_dys_auto = lambda a : a['p_RTN3_HMW_cyto'] > 1 and a['p_RTN3_axon'] < 
 fc_t_RTN3_dys_lyso = lambda a : a["p_RTN3_HMW_auto"] > 1
 
 
-
+#Tau Phosphorylation/Dephosphorylation
+fc_t_phos_tau =  lambda a: a['p_tau'] >0 
+fc_t_dephos_tauP = lambda a: a['p_tauP'] >0
 
 

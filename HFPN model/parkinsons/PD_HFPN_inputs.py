@@ -16,8 +16,8 @@ mp_ApoEchol=1 #1 or 2
 
 # Number of runs and timesteps
 number_runs = 1
-number_time_steps = 100000
+number_time_steps = 1000000
 time_step_size = 0.001
 
 # Output file name
-run_save_name = 'whole_cholesterol10e5'
+run_save_name = 'whole_HFPN_10e6'

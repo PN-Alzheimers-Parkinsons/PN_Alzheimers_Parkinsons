@@ -22,7 +22,7 @@ from visualisation import Analysis
 # In[2]:
 
 analysis = {}
-analysis['whole_cholesterol10e5'] = Analysis.load_from_file('whole_cholesterol10e5')
+analysis['whole_HFPN_10e6'] = Analysis.load_from_file('whole_HFPN_10e6')
 # analysis['LRRK2_mut_100000'] = Analysis.load_from_file('LRRK2_mut_100000')
 
 # analysis['DJ1'] = Analysis.load_from_file('pd_DJ1_ds_smallertimestep')
@@ -49,7 +49,7 @@ def smoothen(array, filter_size):
     return convolve(array[:-(filter_size-1),0],filt)
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
-    t=np.arange(0,100.001,0.001) #divide 1 million by your number of timesteps on the middle line
+    t=np.arange(0,1000.001,0.001) #divide 1 million by your number of timesteps on the middle line
 
     fig,ax=plt.subplots()
     linestep = 0.3
@@ -58,7 +58,7 @@ def create_plot(analysis, input_place_list, place_labels, mutation_list, mutatio
     for i, mutation in enumerate(mutation_list):
         for place, place_label in zip(input_place_list, place_labels):
             data = analysis[mutation].mean_token_history_for_places([place])[0:1000001]
-            print(data[100000])
+            print(data[9000])
 
             if place_label == "":
                 ax.plot(t, data, label = mutation_labels[i], linewidth = line_width- i*linestep)
@@ -162,8 +162,8 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 create_plot(analysis, 
             input_place_list = ['p_chol_mito'], 
             place_labels = [""], 
-            mutation_list = ['whole_cholesterol10e5'], 
-            mutation_labels = ['whole_cholesterol10e5'],
+            mutation_list = ['whole_HFPN_10e6'], 
+            mutation_labels = ['whole_HFPN_10e6'],
             plot_title = 'PD - p_chol_mito')
 
 
@@ -272,24 +272,12 @@ create_plot(analysis,
 
 # # In[ ]:
 
-            input_place_list = ['p_ROS_mito'], 
-            place_labels = [""], 
-            mutation_list = ['healthy', 'chol600'], 
-            mutation_labels = ['healthy', 'chol600'],
-            plot_title = 'PD - p_ROS_mito')
 
 
 # ## Lewy body formation
 
 # In[ ]:
 
-
-create_plot(analysis, 
-            input_place_list = ['p_LB'], 
-            place_labels = [""], 
-            mutation_list = ['healthy', 'chol600'], 
-            mutation_labels = ['healthy', 'chol600'],
-            plot_title = 'PD - Lewy body formation')
 
 
 # ## Chol (LB and cas3)
@@ -298,55 +286,55 @@ create_plot(analysis,
 
 
 #THE CORRECT ONE FOR CHOL
-create_plot(analysis, 
-            input_place_list = ['p_LB'], 
-            place_labels = [""], 
-            mutation_list = ['healthy','gba1_lrrk2','27OHchol','27OH_lrrk2_gba1','ApoEchol','ApoE_lrrk2_gba1'], 
-            mutation_labels = ['Healthy','GBA1 + LRRK2','2x 27OH-chol','2x 27OH-chol + LRRK2 + GBA1','2x APOE-chol','2x APOE-chol + LRRK2 + GBA1'],
-            plot_title = 'PD - Lewy body formation and high levels chol')
-#THE CORRECT ONE FOR CHOL
-create_plot(analysis, 
-            input_place_list = ['p_cas3'], 
-            place_labels = [""], 
-            mutation_list = ['healthy','gba1_lrrk2','27OHchol','27OH_lrrk2_gba1','ApoEchol','ApoE_lrrk2_gba1'], 
-            mutation_labels = ['Healthy','GBA1 + LRRK2','2x 27OH-chol','2x 27OH-chol + LRRK2 + GBA1','2x APOE-chol','2x APOE-chol + LRRK2 + GBA1'],
-            plot_title = 'PD - Active Caspase-3 and high levels chol')
-
-
-# ## Therapeutics
-
-# In[ ]:
-
-
-create_plot(analysis, 
-            input_place_list = ['p_cas3'], 
-            place_labels = [""], 
-            mutation_list = ['all_mutations', 'lrrk2', 'DNL','NPT','LAMP2A', 'healthy'], 
-            mutation_labels = ['Combined diseased state','LRRK2','LRRK2 + DNL151','Combined diseased state + NPT200','Combined diseased state + LAMP2A', 'Healthy'],
-            plot_title = 'PD - Active Caspase-3 and therapeutics')
 # create_plot(analysis, 
-#             input_place_list = ['p_SNCA_olig'], 
+#             input_place_list = ['p_LB'], 
+#             place_labels = [""], 
+#             mutation_list = ['healthy','gba1_lrrk2','27OHchol','27OH_lrrk2_gba1','ApoEchol','ApoE_lrrk2_gba1'], 
+#             mutation_labels = ['Healthy','GBA1 + LRRK2','2x 27OH-chol','2x 27OH-chol + LRRK2 + GBA1','2x APOE-chol','2x APOE-chol + LRRK2 + GBA1'],
+#             plot_title = 'PD - Lewy body formation and high levels chol')
+# #THE CORRECT ONE FOR CHOL
+# create_plot(analysis, 
+#             input_place_list = ['p_cas3'], 
+#             place_labels = [""], 
+#             mutation_list = ['healthy','gba1_lrrk2','27OHchol','27OH_lrrk2_gba1','ApoEchol','ApoE_lrrk2_gba1'], 
+#             mutation_labels = ['Healthy','GBA1 + LRRK2','2x 27OH-chol','2x 27OH-chol + LRRK2 + GBA1','2x APOE-chol','2x APOE-chol + LRRK2 + GBA1'],
+#             plot_title = 'PD - Active Caspase-3 and high levels chol')
+
+
+# # ## Therapeutics
+
+# # In[ ]:
+
+
+# create_plot(analysis, 
+#             input_place_list = ['p_cas3'], 
+#             place_labels = [""], 
+#             mutation_list = ['all_mutations', 'lrrk2', 'DNL','NPT','LAMP2A', 'healthy'], 
+#             mutation_labels = ['Combined diseased state','LRRK2','LRRK2 + DNL151','Combined diseased state + NPT200','Combined diseased state + LAMP2A', 'Healthy'],
+#             plot_title = 'PD - Active Caspase-3 and therapeutics')
+# # create_plot(analysis, 
+# #             input_place_list = ['p_SNCA_olig'], 
+# #             place_labels = [""], 
+# #             mutation_list = ['all_mutations', 'lrrk2', 'DNL','NPT','LAMP2A','healthy'], 
+# #             mutation_labels = ['Combined diseased state','LRRK2','LRRK2 + DNL151','Combined diseased state + NPT200','Combined diseased state + LAMP2A', 'Healthy'],
+# #             plot_title = 'PD - SNCA oligomerisation and therapeutics')
+# create_plot(analysis, 
+#             input_place_list = ['p_LB'], 
 #             place_labels = [""], 
 #             mutation_list = ['all_mutations', 'lrrk2', 'DNL','NPT','LAMP2A','healthy'], 
 #             mutation_labels = ['Combined diseased state','LRRK2','LRRK2 + DNL151','Combined diseased state + NPT200','Combined diseased state + LAMP2A', 'Healthy'],
-#             plot_title = 'PD - SNCA oligomerisation and therapeutics')
-create_plot(analysis, 
-            input_place_list = ['p_LB'], 
-            place_labels = [""], 
-            mutation_list = ['all_mutations', 'lrrk2', 'DNL','NPT','LAMP2A','healthy'], 
-            mutation_labels = ['Combined diseased state','LRRK2','LRRK2 + DNL151','Combined diseased state + NPT200','Combined diseased state + LAMP2A', 'Healthy'],
-            plot_title = 'PD - Lewy body formation and therapeutics')
+#             plot_title = 'PD - Lewy body formation and therapeutics')
 
 
-# # Computing the mean
+# # # Computing the mean
 
-# In[ ]:
+# # In[ ]:
 
 
-mean_healthy = np.mean(analysis['healthy'].token_storage[:,50000:,analysis['healthy'].place_dict["p_ATP"]])
-print("healthy", mean_healthy)
-mean_lrrk2 = np.mean(analysis['lrrk2'].token_storage[:,50000:,analysis['lrrk2'].place_dict["p_ATP"]])
-print("lrrk2", mean_lrrk2)
+# mean_healthy = np.mean(analysis['healthy'].token_storage[:,50000:,analysis['healthy'].place_dict["p_ATP"]])
+# print("healthy", mean_healthy)
+# mean_lrrk2 = np.mean(analysis['lrrk2'].token_storage[:,50000:,analysis['lrrk2'].place_dict["p_ATP"]])
+# print("lrrk2", mean_lrrk2)
 
 
 # In[ ]:
