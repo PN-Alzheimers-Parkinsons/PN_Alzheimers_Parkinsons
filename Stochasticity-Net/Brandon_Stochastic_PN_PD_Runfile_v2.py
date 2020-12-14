@@ -18,6 +18,7 @@ from Brandon_PD_SN_rate_functions import *
 from Brandon_PD_SN_initial_tokens import *
 from Brandon_PD_SN_firing_conditions import *
 from Stochastic_Analysis import Analysis
+from Brandon_PD_SN_inputs import *
 
 
 def main():
@@ -82,7 +83,7 @@ def main():
     pn.add_place(0, "p_Ca_extra", "on1 - Ca - extracellular")
     pn.add_place(0, "p_on3","on3")
     pn.add_place(0, "p_on4","on4")    
-    pn.add_place(1000, "p_on5","on5") 
+    pn.add_place(500000, "p_on5","on5") 
     pn.add_place(0, "p_on6","on6") 
     pn.add_place(0, "p_on7","on7") 
     pn.add_place(0, "p_on8","on8") 
@@ -106,6 +107,7 @@ def main():
     #Cholesterol Homeostasis Transitions
     
     SD = 0.1 #Standard Deviation. 0.1 means 10%
+    SDCalcium = 10 #recommend set the value to 10 for some solid stochasticity.
     
     # Cholesterol Endocytosis
     pn.add_transition(transition_id = 't_LDLR_endocyto',
@@ -114,7 +116,7 @@ def main():
                     input_arc_weights  =  [0,0,0],
                     output_place_ids         =  ['p_ApoEchol_EE'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf", SD, r_t_LDLR_endocyto,fc_t_LDLR_endocyto ])
+                    distribution_type = ["grf", SD, r_t_LDLR_endocyto,fc_t_LDLR_endocyto, False])
     
 #     # Cleavage of cholesteryl esters 
     pn.add_transition(transition_id = 't_ApoEchol_cleav',
@@ -123,7 +125,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_chol_LE'],
                     output_arc_weights =  [354], 
-                    distribution_type = ["grf",SD,r_t_ApoEchol_cleav, fc_t_ApoEchol_cleav]) #
+                    distribution_type = ["grf",SD,r_t_ApoEchol_cleav, fc_t_ApoEchol_cleav, False]) #
 #     # Transport Cholesterol from LE to ER
     pn.add_transition(transition_id = 't_chol_trans_LE_ER',
                     label      =     "Chol transport LE-ER",
@@ -131,7 +133,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_chol_ER'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,r_t_chol_trans_LE_ER, fc_t_chol_trans_LE_ER])
+                    distribution_type = ["grf",SD,r_t_chol_trans_LE_ER, fc_t_chol_trans_LE_ER, False])
     
     # Transport Cholesterol from LE to mito
     pn.add_transition(transition_id = 't_chol_trans_LE_mito',
@@ -140,7 +142,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_chol_mito'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,r_t_chol_trans_LE_mito, fc_t_chol_trans_LE_mito])
+                    distribution_type = ["grf",SD,r_t_chol_trans_LE_mito, fc_t_chol_trans_LE_mito, False])
 
 #     #Transport Cholesterol from LE to PM
     pn.add_transition(transition_id = 't_chol_trans_LE_PM',
@@ -149,7 +151,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_chol_PM'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_chol_trans_LE_PM,fc_t_chol_trans_LE_PM])
+                    distribution_type = ["grf",SD,r_t_chol_trans_LE_PM,fc_t_chol_trans_LE_PM, False])
     
     
 #     # Transport Cholesterol from PM to ER
@@ -159,7 +161,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_chol_ER'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_chol_trans_PM_ER,fc_t_chol_trans_PM_ER])    
+                    distribution_type = ["grf",SD,r_t_chol_trans_PM_ER,fc_t_chol_trans_PM_ER, False])    
     
 
 
@@ -170,7 +172,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_chol_PM'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,r_t_chol_trans_ER_PM, fc_t_chol_trans_ER_PM])   
+                    distribution_type = ["grf",SD,r_t_chol_trans_ER_PM, fc_t_chol_trans_ER_PM, False])   
     
 
 
@@ -181,7 +183,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_chol_mito'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_chol_trans_ER_mito,fc_t_chol_trans_ER_mito])
+                    distribution_type = ["grf",SD,r_t_chol_trans_ER_mito,fc_t_chol_trans_ER_mito, False])
     
 
 #     # Metabolisation of chol by CYP27A1
@@ -191,7 +193,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_27OHchol_intra'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,proper_rate_t_CYP27A1_metab,fc_t_CYP27A1_metab])                                          
+                    distribution_type = ["grf",SD,proper_rate_t_CYP27A1_metab,fc_t_CYP27A1_metab, False])                                          
     
     
 #     # Metabolism of chol by CYP11A1
@@ -201,7 +203,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_preg'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,proper_rate_t_CYP11A1_metab, fc_t_CYP11A1_metab])  
+                    distribution_type = ["grf",SD,proper_rate_t_CYP11A1_metab, fc_t_CYP11A1_metab, False])  
 
 #     # Metabolisation of 27OHchol by CYP7B1
     pn.add_transition(transition_id = 't_CYP7B1_metab',
@@ -210,7 +212,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_7HOCA'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,proper_rate_t_CYP7B1_metab,fc_t_CYP7B1_metab])                                                  
+                    distribution_type = ["grf",SD,proper_rate_t_CYP7B1_metab,fc_t_CYP7B1_metab, False])                                                  
     
     
 
@@ -221,7 +223,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_27OHchol_extra', 'p_27OHchol_intra'],
                     output_arc_weights =  [1,1], 
-                    distribution_type = ["grf",SD,r_t_27OHchol_endocyto,fc_t_27OHchol_endocyto])  
+                    distribution_type = ["grf",SD,r_t_27OHchol_endocyto,fc_t_27OHchol_endocyto, False])  
     
 
 
@@ -232,7 +234,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_24OHchol_intra'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,proper_rate_t_CYP46A1_metab,fc_t_CYP46A1_metab])                                                  
+                    distribution_type = ["grf",SD,proper_rate_t_CYP46A1_metab,fc_t_CYP46A1_metab, False])                                                  
     
 
 #     # Exocytosis of 24OHchol
@@ -242,7 +244,7 @@ def main():
                     input_arc_weights  =  [1],
                     output_place_ids         =  ['p_24OHchol_extra'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_24OHchol_exocyto,fc_t_24OHchol_exocyto])                                                  
+                    distribution_type = ["grf",SD,r_t_24OHchol_exocyto,fc_t_24OHchol_exocyto, False])                                                  
     
 
 #     # Transport of Chol into ECM
@@ -252,7 +254,7 @@ def main():
                     input_arc_weights  =  [1, 0],
                     output_place_ids         =  [],
                     output_arc_weights =  [], 
-                    distribution_type = ["grf",SD,r_t_chol_trans_PM_ECM, fc_t_chol_trans_PM_ECM])                                                  
+                    distribution_type = ["grf",SD,r_t_chol_trans_PM_ECM, fc_t_chol_trans_PM_ECM, False])                                                  
     
     
         # PD specific
@@ -263,7 +265,7 @@ def main():
                     input_arc_weights  =  [0,30],
                     output_place_ids   =  ['p_SNCA_olig'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_SNCA_bind_ApoEchol_extra, fc_t_SNCA_bind_ApoEchol_extra])
+                    distribution_type = ["grf",SD,r_t_SNCA_bind_ApoEchol_extra, fc_t_SNCA_bind_ApoEchol_extra, False])
     
     pn.add_transition(transition_id = 't_chol_LE_upreg',
                       label      =     "Upregulation of chol in LE",
@@ -271,7 +273,7 @@ def main():
                       input_arc_weights  =  [0],
                     output_place_ids         =  ['p_chol_LE'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_chol_LE_upreg,fc_t_chol_LE_upreg]) #BSL: I think this should be a catalysis Arc
+                    distribution_type = ["grf",SD,r_t_chol_LE_upreg,fc_t_chol_LE_upreg, False]) #BSL: I think this should be a catalysis Arc
 
 
  
@@ -284,7 +286,7 @@ def main():
                     input_arc_weights  =  [0],  # Need to review this 
                     output_place_ids         =  ['p_Ca_cyto'],
                     output_arc_weights =  [1], # Need to review this 
-                    distribution_type = ["grf",SD,r_t_Ca_imp,fc_t_Ca_imp])
+                    distribution_type = ["grf",SD,r_t_Ca_imp,fc_t_Ca_imp, False])
                     
     pn.add_transition(transition_id = 't_mCU',
                     label      =     "Ca import into mitochondria via mCU",
@@ -292,7 +294,7 @@ def main():
                     input_arc_weights  =  [1,0],  
                     output_place_ids         =  ['p_Ca_mito'], 
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_mCU, fc_t_mCU])
+                    distribution_type = ["grf",SD,r_t_mCU, fc_t_mCU, False])
 
     pn.add_transition(transition_id = 't_MAM',
                     label      =     "Ca transport from ER to mitochondria",
@@ -300,7 +302,7 @@ def main():
                     input_arc_weights  =  [1,0],  
                     output_place_ids         =  ['p_Ca_mito'],  
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_MAM, fc_t_MAM])
+                    distribution_type = ["grf",SD,r_t_MAM, fc_t_MAM, False])
 
     
     pn.add_transition(transition_id = 't_RyR_IP3R',
@@ -309,7 +311,7 @@ def main():
                     input_arc_weights  =  [0,1],  
                     output_place_ids         =  ['p_Ca_cyto'], 
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_RyR_IP3R,fc_t_RyR_IP3R])
+                    distribution_type = ["grf",SD,r_t_RyR_IP3R,fc_t_RyR_IP3R, False])
     
     pn.add_transition(transition_id = 't_SERCA',
                     label      =     "Ca import to ER",
@@ -317,7 +319,7 @@ def main():
                     input_arc_weights  =  [1,1],  #!!!!! Need to review this 0 should be 1
                     output_place_ids         =  ['p_Ca_ER','p_ADP'], 
                     output_arc_weights =  [1,1], # Need to review this
-                    distribution_type = ["grf",SD,r_t_SERCA, fc_t_SERCA])
+                    distribution_type = ["grf",SD,r_t_SERCA, fc_t_SERCA, False])
 
     pn.add_transition(transition_id = 't_NCX_PMCA',
                     label      =     "Ca efflux to extracellular space",
@@ -325,7 +327,7 @@ def main():
                     input_arc_weights  =  [1,0],
                     output_place_ids         =  [], 
                     output_arc_weights =  [], 
-                    distribution_type = ["grf",SD,r_t_NCX_PMCA, fc_t_NCX_PMCA])
+                    distribution_type = ["grf",SD,r_t_NCX_PMCA, fc_t_NCX_PMCA, False])
     
     pn.add_transition(transition_id = 't_mNCLX',
                     label      =     "Ca export from mitochondria via mNCLX",
@@ -333,65 +335,65 @@ def main():
                     input_arc_weights  =  [1,0], 
                     output_place_ids         = ['p_Ca_cyto'], 
                     output_arc_weights =   [1], 
-                    distribution_type = ["grf",SD,r_t_mNCLX, fc_t_mNCLX])
+                    distribution_type = ["grf",SD,r_t_mNCLX, fc_t_mNCLX, False])
     
 # #     # Discrete on/of-switches calcium pacemaking
     
     pn.add_transition(transition_id = 't_A',
                     label      =     "A",
                     input_place_ids         =  ['p_on4'],
-                    input_arc_weights  =  [2],  
+                    input_arc_weights  =  [1],  
                     output_place_ids         = ['p_on8'], 
-                    output_arc_weights =  [2], 
-                    distribution_type = ["calcium",0,rate_t_A, fc_t_A]) 
+                    output_arc_weights =  [1], 
+                    distribution_type = ["calcium_stochastic",SDCalcium,rate_t_A, fc_t_A, rate_t_A_Extract]) 
 
     pn.add_transition(transition_id = 't_B',
                     label      =     "B",
                     input_place_ids         =  ['p_on6'],
-                    input_arc_weights  =  [1000],  
+                    input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on3'], 
-                    output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,rate_t_B, fc_t_B])
+                    output_arc_weights =  [500000], 
+                    distribution_type = ["calcium",SDCalcium,rate_t_B, fc_t_B, rate_t_B_Extract])
     
     pn.add_transition(transition_id = 't_D',
                     label      =     "D",
                     input_place_ids         =  ['p_on3'],
-                    input_arc_weights  =  [2],  
+                    input_arc_weights  =  [1],  
                     output_place_ids         = ['p_on7'], 
-                    output_arc_weights =  [2], 
-                    distribution_type = ["calcium",0,rate_t_D, fc_t_D])
+                    output_arc_weights =  [1], 
+                    distribution_type = ["calcium_stochastic",SDCalcium,rate_t_D, fc_t_D, rate_t_D_Extract])
     
     pn.add_transition(transition_id = 't_E',
                     label      =     "E",
                     input_place_ids         =  ['p_on5'],
-                    input_arc_weights  =  [2],  
+                    input_arc_weights  =  [1],  
                     output_place_ids         = ['p_Ca_extra'], 
-                    output_arc_weights =  [2], 
-                    distribution_type = ["calcium",0,rate_t_E, fc_t_E])
+                    output_arc_weights =  [1], 
+                    distribution_type = ["calcium_stochastic",SDCalcium,rate_t_E, fc_t_E, rate_t_E_Extract])
     
     pn.add_transition(transition_id = 't_F',
                     label      =     "F",
                     input_place_ids         =  ['p_Ca_extra'],
-                    input_arc_weights  =  [1000],  
+                    input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on6'], 
-                    output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,rate_t_F, fc_t_F])
+                    output_arc_weights =  [500000], 
+                    distribution_type = ["calcium",SDCalcium,rate_t_F, fc_t_F, rate_t_F_Extract])
     
     pn.add_transition(transition_id = 't_G',
                     label      =     "G",
                     input_place_ids         =  ['p_on7'],
-                    input_arc_weights  =  [1000],  
+                    input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on4'], 
-                    output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,rate_t_G, fc_t_G])
+                    output_arc_weights =  [500000], 
+                    distribution_type = ["calcium",SDCalcium,rate_t_G, fc_t_G, rate_t_G_Extract])
         
     pn.add_transition(transition_id = 't_H',
                     label      =     "H",
                     input_place_ids         =  ['p_on8'],
-                    input_arc_weights  =  [1000],  
+                    input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on5'], 
-                    output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,rate_t_H, fc_t_H])
+                    output_arc_weights =  [500000], 
+                    distribution_type = ["calcium",SDCalcium,rate_t_H, fc_t_H, rate_t_H_Extract])
 
 
     
@@ -403,7 +405,7 @@ def main():
                     input_arc_weights  =  [1,0],   
                     output_place_ids         = ['p_ADP'], 
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,rate_t_NAK_ATPase, fc_t_NaK_ATPase])    
+                    distribution_type = ["grf",SD,rate_t_NAK_ATPase, fc_t_NaK_ATPase, False])    
     
    # Lewy bodies pathology
     pn.add_transition(transition_id = 't_SNCA_degr',
@@ -412,7 +414,7 @@ def main():
                     input_arc_weights  =  [1,0,0,0,0,0,0],
                     output_place_ids         =  ['p_SNCA_inact'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_SNCA_degr, fc_t_SNCA_degr])                                                  
+                    distribution_type = ["grf",SD,r_t_SNCA_degr, fc_t_SNCA_degr, False])                                                  
     
     
     pn.add_transition(transition_id = 't_SNCA_aggr',
@@ -421,7 +423,7 @@ def main():
                     input_arc_weights  =  [30,0,0,0,0], #should be reviewed if Ca is consumed
                     output_place_ids         =  ['p_SNCA_olig'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_SNCA_aggr, fc_t_SNCA_aggr])                                                  
+                    distribution_type = ["grf",SD,r_t_SNCA_aggr, fc_t_SNCA_aggr, False])                                                  
 
 
     pn.add_transition(transition_id = 't_SNCA_fibril',
@@ -430,7 +432,7 @@ def main():
                       input_arc_weights  =  [100],
                       output_place_ids         =  ['p_LB'],
                       output_arc_weights =  [1], 
-                      distribution_type = ["grf",SD,r_t_SNCA_fibril,fc_t_SNCA_fibril])                                                  
+                      distribution_type = ["grf",SD,r_t_SNCA_fibril,fc_t_SNCA_fibril, False])                                                  
 
 
     pn.add_transition(transition_id = 't_IRE',
@@ -439,7 +441,7 @@ def main():
                     input_arc_weights  =  [0],
                     output_place_ids         =  ['p_SNCA_act'],
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_IRE, fc_t_IRE]) #I think this catalyses?
+                    distribution_type = ["grf",SD,r_t_IRE, fc_t_IRE, False]) #I think this catalyses?
    
     
 #     # # Energy metabolism
@@ -449,7 +451,7 @@ def main():
                     input_arc_weights  =  [1],    
                     output_place_ids         = ['p_ADP'], 
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_ATP_hydro_mito, fc_t_ATP_hydro_mito])       
+                    distribution_type = ["grf",SD,r_t_ATP_hydro_mito, fc_t_ATP_hydro_mito, False])       
     
     
     pn.add_transition(transition_id = 't_ROS_metab',
@@ -458,7 +460,7 @@ def main():
                     input_arc_weights  =  [1,0,0,0],    
                     output_place_ids         = ['p_H2O_mito'], 
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_ROS_metab, fc_t_ROS_metab])   
+                    distribution_type = ["grf",SD,r_t_ROS_metab, fc_t_ROS_metab, False])   
 
 
 #     # # #Link of krebs to calcium homeostasis
@@ -469,7 +471,7 @@ def main():
                     input_arc_weights  =  [1,0], #need review    
                     output_place_ids         = ['p_reduc_mito','p_ATP'],         
                     output_arc_weights =  [4,1], 
-                    distribution_type = ["grf",SD,r_t_krebs, fc_t_krebs])  
+                    distribution_type = ["grf",SD,r_t_krebs, fc_t_krebs, False])  
 
 #     # #Link of ETC to calcium and cholesterol
     
@@ -479,7 +481,7 @@ def main():
                     input_arc_weights  =  [22/3,22,0,0,0,0], # Need to review this   
                     output_place_ids         = ['p_ATP', 'p_ROS_mito'],         
                     output_arc_weights =  [22,0.005],
-                    distribution_type = ["grf",SD,r_t_ETC, fc_t_ETC])  
+                    distribution_type = ["grf",SD,r_t_ETC, fc_t_ETC, False])  
 #     # # # Output transitions: Cas3 for apoptosis
 
     pn.add_transition(transition_id = 't_mito_dysfunc',
@@ -488,7 +490,7 @@ def main():
                     input_arc_weights  =  [1],     
                     output_place_ids         = ['p_cas3'], 
                     output_arc_weights =  [1], 
-                    distribution_type = ["grf",SD,r_t_mito_dysfunc, fc_t_mito_dysfunc]) 
+                    distribution_type = ["grf",SD,r_t_mito_dysfunc, fc_t_mito_dysfunc, False]) 
     
     pn.add_transition(transition_id = 't_cas3_inact',
                     label      =     "Caspase 3 degredation",
@@ -496,7 +498,7 @@ def main():
                     input_arc_weights  =  [1],     
                     output_place_ids         = [], 
                     output_arc_weights =  [], 
-                    distribution_type = ["grf",SD,r_t_cas3_inact,fc_t_cas3_inact]) 
+                    distribution_type = ["grf",SD,r_t_cas3_inact,fc_t_cas3_inact, False]) 
 
     
 #     # # Late endosome pathology #problem
@@ -506,7 +508,7 @@ def main():
                     input_arc_weights  =  [1, 0],     
                     output_place_ids         = ['p_tauP'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,proper_rate_t_phos_tau, fc_t_phos_tau])     
+                    distribution_type = ["grf",SD,proper_rate_t_phos_tau, fc_t_phos_tau, False])     
 # #problem
     pn.add_transition(transition_id = 't_dephos_tauP',
                     label      =     "Dephosphorylation of tau protein",
@@ -514,7 +516,7 @@ def main():
                     input_arc_weights  =  [1, 0],     
                     output_place_ids         = ['p_tau'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,proper_rate_t_dephos_tauP,fc_t_dephos_tauP]) 
+                    distribution_type = ["grf",SD,proper_rate_t_dephos_tauP,fc_t_dephos_tauP, False]) 
     
     pn.add_transition(transition_id = 't_RTN3_exp',
                     label      =     "Expression rate of RTN3",
@@ -522,7 +524,7 @@ def main():
                     input_arc_weights  =  [],     
                     output_place_ids         = ['p_RTN3_PN'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,r_t_RTN3_exp, fc_t_RTN3_exp]) 
+                    distribution_type = ["grf",SD,r_t_RTN3_exp, fc_t_RTN3_exp, False]) 
 
 #     ATPcons_t_LE_trans = 0 #BSL: placeholder value coz idk
    
@@ -532,7 +534,7 @@ def main():
                     input_arc_weights  = [ATPcons_t_LE_trans, 0, 1, 0,0,0],     
                     output_place_ids         = ['p_ADP','p_RTN3_PN'],
                     output_arc_weights = [ATPcons_t_LE_trans, 1], 
-                    distribution_type = ["grf",SD,r_t_LE_retro,fc_t_LE_retro]) 
+                    distribution_type = ["grf",SD,r_t_LE_retro,fc_t_LE_retro, False]) 
     
     pn.add_transition(transition_id = 't_LE_antero',
                     label      =     "anterograde transport of LEs & ER",
@@ -540,7 +542,7 @@ def main():
                     input_arc_weights  =  [ATPcons_t_LE_trans, 1, 0], # tune these coefficients based on PD   
                     output_place_ids         = ['p_ADP','p_RTN3_axon'],
                     output_arc_weights =  [ATPcons_t_LE_trans, 1], # tune these coefficients based on PD
-                    distribution_type = ["grf",SD,r_t_LE_antero,fc_t_LE_antero]) # get later from NPCD
+                    distribution_type = ["grf",SD,r_t_LE_antero,fc_t_LE_antero, False]) # get later from NPCD
 
     pn.add_transition(transition_id = 't_RTN3_aggregation',
                     label      =     "aggregation of monomeric RTN3 into HMW RTN3",
@@ -548,7 +550,7 @@ def main():
                     input_arc_weights  = [1, 1],     
                     output_place_ids         = ['p_RTN3_HMW_cyto'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,r_t_RTN3_aggregation,fc_t_RTN3_aggregation]) 
+                    distribution_type = ["grf",SD,r_t_RTN3_aggregation,fc_t_RTN3_aggregation, False]) 
     
     pn.add_transition(transition_id = 't_RTN3_auto',
                     label      =     "functional autophagy of HMW RTN3",
@@ -556,7 +558,7 @@ def main():
                     input_arc_weights  =  [1, 0],     
                     output_place_ids         = ['p_RTN3_HMW_auto'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,r_t_RTN3_auto, fc_t_RTN3_auto])   
+                    distribution_type = ["grf",SD,r_t_RTN3_auto, fc_t_RTN3_auto, False])   
     
     pn.add_transition(transition_id = 't_RTN3_lyso',
                     label      =     "functional delivery of HMW RTN3 to the lysosome",
@@ -564,7 +566,7 @@ def main():
                     input_arc_weights  =  [1, 0],    
                     output_place_ids         = ['p_RTN3_HMW_lyso'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,r_t_RTN3_lyso, fc_t_RTN3_lyso])  
+                    distribution_type = ["grf",SD,r_t_RTN3_lyso, fc_t_RTN3_lyso, False])  
     
     pn.add_transition(transition_id = 't_RTN3_dys_auto',
                     label      =     "dysfunctional autophagy of HMW RTN3",
@@ -572,7 +574,7 @@ def main():
                     input_arc_weights  =  [1, 0],    
                     output_place_ids         = ['p_RTN3_HMW_dys1'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,r_t_RTN3_dys_auto, fc_t_RTN3_dys_auto])# tune later when data are incorporated
+                    distribution_type = ["grf",SD,r_t_RTN3_dys_auto, fc_t_RTN3_dys_auto, False])# tune later when data are incorporated
 
     pn.add_transition(transition_id = 't_RTN3_dys_lyso',
                     label      =     "dysfunctional delivery of HMW RTN3 to the lysosome",
@@ -580,21 +582,20 @@ def main():
                     input_arc_weights  =  [1, 0, 0],    
                     output_place_ids         = ['p_RTN3_HMW_dys2'],
                     output_arc_weights =  [1],
-                    distribution_type = ["grf",SD,r_t_RTN3_dys_lyso,fc_t_RTN3_dys_lyso])
+                    distribution_type = ["grf",SD,r_t_RTN3_dys_lyso,fc_t_RTN3_dys_lyso, False])
        
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(1000000, print_stats=False)
-    
+    pn.run(10000, print_stats=False)
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ["p_cas3"] 
+    list_for_plot = ["p_Ca_extra"] 
     
     pn.plot_time_evolution(list_for_plot)
-    #pn.timeseries_mean_for_place("p_chol_ER")
+    #pn.timeseries_mean_for_place("p_Ca_extra")
     analysis = Analysis(pn)
-    run_save_name = "Whole_Module_10e6_SD_10_percent"
+    run_save_name = "test"
     Analysis.store_to_file(analysis, run_save_name)
     print('Network saved to : "' + run_save_name+'.pkl"')
 

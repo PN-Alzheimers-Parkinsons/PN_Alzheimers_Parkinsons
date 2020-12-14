@@ -112,6 +112,17 @@ rate_t_E = lambda a: 1
 rate_t_F = lambda a: 1
 rate_t_G = lambda a: 1
 rate_t_H = lambda a: 1
+
+
+rate_t_A_Extract = lambda a: a['p_on4']
+rate_t_B_Extract = lambda a: a['p_on6']
+rate_t_D_Extract = lambda a: a['p_on3']
+rate_t_E_Extract = lambda a: a['p_on5']
+rate_t_F_Extract = lambda a: a['p_Ca_extra']
+rate_t_G_Extract = lambda a: a['p_on7']
+rate_t_H_Extract = lambda a: a['p_on8']
+
+
 #Construct Michaeles Menten Equation for rate_t_dephos_tauP
 rate_t_dephos_tauP = lambda a: vmax_t_dephos_tauP*a['p_tauP']/(Km_t_dephos_tauP+a['p_tauP']) 
 proper_rate_t_dephos_tauP = function(rate_t_dephos_tauP, vmax_scaling_t_dephos_tauP)

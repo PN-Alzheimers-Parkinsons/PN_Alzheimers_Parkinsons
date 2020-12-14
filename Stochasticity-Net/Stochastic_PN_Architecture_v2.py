@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from blockdiag import parser, builder, drawer
 # Examples: http://blockdiag.com/en/blockdiag/examples.html#simple-diagram
 
-
 MAX_LABEL_CHARACTERS = 50
 
 def check_label_length(label, limit = MAX_LABEL_CHARACTERS):
@@ -60,17 +59,31 @@ class InArc(BaseArc):
     def fire(self):
         """Remove tokens from the input place."""
         self.place.tokens -= self.arc_weight*self.coefficient_scalar
-
+        
+     
+       ###BRANDONMADDYHERE
+    # def fire_CALCIUM_ONLY(self):
+    #     if self.place.tokens >= self.arc_weight*self.coefficient_scalar:
+    #         self.place.tokens -= self.arc_weight*self.coefficient_scalar
+    #     if self.place.tokens <= self.arc_weight*self.coefficient_scalar:
+    #         self.place.tokens = 0
+            
     def allowed_firing(self):
         """Check whether the input place has enough tokens for the transition to occur."""
         return self.place.tokens >= self.arc_weight*self.coefficient_scalar
+    # ####BRANDONMADDYHERE
+    # def allowed_firing_CALCIUM_ONLY_Not_boolean(self):
+    #     if self.place.tokens >= self.arc_weight*self.coefficient_scalar:
+            
+  
 
 class OutArc(BaseArc):
     """An arc going from a transition T to a place P."""
     def fire(self):
         """Add tokens to the output place."""
         self.place.tokens += self.arc_weight*self.coefficient_scalar
-        
+    # def fire_CALCIUM_ONLY(self):
+    #     if self.place.tokens >
 
     def __str__(self):
         return f"OutArc to {self.place}"
@@ -120,14 +133,18 @@ class Transition:
         return f"Transition {self.label}"
         
     def fire(self, pn): 
+        #print(pn.a)
         """Fire!"""  
-        #poisson and bernoulli try, gene transcribed maybe bernoulli
+        #print(inspect.getmembers(self))
+        #so what we can do is we can get the places and pass that into pn.a,
+        
+        
 
         if self.distribution_type[0] == "grf":
             gaussian_mean = self.distribution_type[2](pn.a)
             gaussian_mean = gaussian_mean*0.001
             random_integer = random.gauss(gaussian_mean,gaussian_mean*self.distribution_type[1]) 
-            
+            # if self.distribution_type[4] == True: #Please don't remove, important debugging information.
         #gaussian
         if self.distribution_type[0] =="g":
             random_integer = random.gauss(self.distribution_type[1],self.distribution_type[2])
@@ -137,18 +154,61 @@ class Transition:
         
         if self.distribution_type[0] =="calcium":
             random_integer = 1
+           # print(self.distribution_type[4](pn.a))
+            
+        
+        if self.distribution_type[0] =="calcium_stochastic":
+            
+            x1 = random.gauss(1000,self.distribution_type[1]*1000)
+            x2 = np.round(x1,0)
+            x3 = int(x2) 
+            random_integer = x3
+            #print(random_integer)
+            #if random_integer > self.place.tokens:
+                
+            #random_integer = random.gauss()
+            #if self.place.tokens>
+            #if self.place.tokens < transferred tokens
+            #random_integer = self.place.tokens
+            
 
         for arc2 in self.out_arcs.union(self.in_arcs):
             #print(self.out_arcs.union(self.in_arcs))
-            arc2.coefficient_scalar = random_integer
+            if self.distribution_type[0] == "grf": #might have to add arc2's specific distribution type if this doesn't work
+                arc2.coefficient_scalar = random_integer
+            if self.distribution_type[0] == "calcium": #might have to add arc2's specific distribution type if this doesn't work
+                arc2.coefficient_scalar = random_integer
+            if self.distribution_type[0] == "calcium_stochastic":
+                if self.distribution_type[4](pn.a) >= random_integer: #if number of tokens is greater than transferring token number, then normal.
+                    arc2.coefficient_scalar = random_integer
+                if self.distribution_type[4](pn.a) < random_integer: #if place token number is less than transferring tokens, transfer last drop.
+                    arc2.coefficient_scalar = self.distribution_type[4](pn.a)
+                    
+                    # if self.transition_id == "t_E":
+                    #     print(self.distribution_type[4](pn.a), "second")
+                    #p[arc2.coeffient_scalar]
+                    #pn.a
+            
         # Check if transition can occur by inspecting whether each place has enough tokens
         firing_allowed = all(in_arc.allowed_firing() for in_arc in self.in_arcs)
+
         firing_not_inhibited = all(inhib_arc.allowed_firing() for inhib_arc in self.inhib_arcs)
+        
         firing_not_inhibited2 = all(catal_arc.allowed_firing() for catal_arc in self.catal_arcs)
-        transition_specific_firing_condition = self.distribution_type[3](pn.a)  
-        #print(deliciousbrownies) #brandoggy
+        
+        transition_specific_firing_condition = self.distribution_type[3](pn.a)
+        #if self.transition_id == "t_E":
+            #print(firing_allowed, "1st E")
+            #print(transition_specific_firing_condition, "2nd E")
+        
+        #if self.transition_id =="t_F":
+           # print(firing_allowed, "1st F")
+           # print(transition_specific_firing_condition, "2nd F")
+           # print(self.distribution_type[4](pn.a), "number of tokens")
+  
+
  
-    #
+ 
     
     
         if firing_allowed and firing_not_inhibited and firing_not_inhibited2 and transition_specific_firing_condition: 
@@ -254,6 +314,7 @@ class PetriNet:
 
     def timeseries_mean_for_place(self, place_id):
         index = self.place_id_to_index[place_id]
+        print(self.timeseries_mean.T[index])
         return self.timeseries_mean.T[index]
 
     def timeseries_std_for_place(self, place_id):

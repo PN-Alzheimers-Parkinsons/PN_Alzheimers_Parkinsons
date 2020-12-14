@@ -18,18 +18,15 @@ import numpy as np
 #from scipy.signal import convolve
 #get_ipython().run_line_magic('matplotlib', 'qt')
 # Only run this cell once to avoid confusion with directories
-# Point this to the directory where HFPN.py is relative to your working directory
-cwd = os.getcwd() # Get current working directory
-root_folder = os.sep + "PN_Alzheimers_Parkinsons"
-# Move to 'utils' from current directory position
-sys.path.insert(0, cwd[:(cwd.index(root_folder)+len(root_folder))] + os.sep + "Stochasticity-Net" + os.sep)
 from Stochastic_Analysis import Analysis
 
 
 # In[2]:
 
 analysis = {}
-analysis['test'] = Analysis.load_from_file('test')
+analysis['Whole_Module_10e6'] = Analysis.load_from_file('Whole_Module_10e6')
+analysis['Whole_Module_10e6_SD_10_percent'] = Analysis.load_from_file('Whole_Module_10e6_SD_10_percent')
+analysis['Whole_Module_10e5_SD_50_percent'] = Analysis.load_from_file('Whole_Module_10e5_SD_50_percent')
 #Whole_Module_10e6
 #Whole_Module_10e6_SD_10_percent
 # analysis['LRRK2_mut_100000'] = Analysis.load_from_file('LRRK2_mut_100000')
@@ -78,7 +75,7 @@ def smoothen(array, filter_size):
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
     
-    t=np.arange(0,6,0.001) #divide middle number by 0.001 to get ur number of time steps
+    t=np.arange(0,100,0.001) #divide 1 million by your number of timesteps on the middle line
     fig,ax=plt.subplots()
     linestep = 0.3
     line_width = 3
@@ -86,7 +83,7 @@ def create_plot(analysis, input_place_list, place_labels, mutation_list, mutatio
     for i, mutation in enumerate(mutation_list):
         for place, place_label in zip(input_place_list, place_labels):
             data = analysis[mutation].mean_token_history_for_places([place])[0:1000001]
-            print(data[3000])
+            print(data[9000])
             if place_label == "":
                 ax.plot(t, data, label = mutation_labels[i], linewidth = line_width- i*linestep)
             else:
@@ -200,11 +197,11 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 #             plot_title = 'PD - p_tauP')
 
 create_plot(analysis, 
-            input_place_list = ['p_on6'], 
+            input_place_list = ['p_chol_mito'], 
             place_labels = [""], 
-            mutation_list = ['test'], 
-            mutation_labels = ['test'],
-            plot_title = 'PD - p_on6')
+            mutation_list = ['Whole_Module_10e5_SD_50_percent'], 
+            mutation_labels = ['Whole_Module_10e5_SD_50_percent'],
+            plot_title = 'PD - p_chol_mito')
 
 
 #Whole_Module_10e6_SD_10_percent

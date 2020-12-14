@@ -37,13 +37,13 @@ fc_t_NCX_PMCA = lambda a : a['p_on3'] >0
 fc_t_NaK_ATPase = lambda a: a['p_on3']>0
 #Calcium Clock
 fc_t_A = lambda a: a['p_on4']>0 #brandoggy
-fc_t_B = lambda a: a['p_on6']== 1000 #brandoggy
-fc_t_C = lambda a: a['p_on2']==1000 #brandoggy
+fc_t_B = lambda a: a['p_on6']== 500000 #brandoggy
+fc_t_C = lambda a: a['p_on2']==500000 #brandoggy
 fc_t_D = lambda a: a['p_on3']>0 #brandoggy
 fc_t_E = lambda a: a['p_on5']>0 #brandoggy
-fc_t_F = lambda a: a['p_Ca_extra'] == 1000 #brandoggy
-fc_t_G = lambda a: a['p_on7'] == 1000
-fc_t_H = lambda a: a['p_on8'] ==1000
+fc_t_F = lambda a: a['p_Ca_extra'] == 500000 #brandoggy
+fc_t_G = lambda a: a['p_on7'] == 500000
+fc_t_H = lambda a: a['p_on8'] ==500000
 # Lewy bodies pathology firing conditions 
 fc_t_SNCA_degr = lambda a : a['p_SNCA_act']>0
 fc_t_SNCA_aggr = lambda a : a['p_SNCA_act']>5.2*1e8

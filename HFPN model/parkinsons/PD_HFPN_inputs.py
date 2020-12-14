@@ -1,6 +1,6 @@
 #MUTATIONS (BINARY)
 it_p_GBA1 = 0
-it_p_LRRK2_mut = 0
+it_p_LRRK2_mut = 1
 it_p_VPS35 = 0
 it_p_DJ1 = 0
 
@@ -16,8 +16,8 @@ mp_ApoEchol=1 #1 or 2
 
 # Number of runs and timesteps
 number_runs = 1
-number_time_steps = 1000000
+number_time_steps = 6000000
 time_step_size = 0.001
 
 # Output file name
-run_save_name = 'whole_HFPN_10e6'
+run_save_name = 'HFPN_LRRK2_6x10e6'

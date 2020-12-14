@@ -176,7 +176,7 @@ class Analysis:
 
         # Take the mean token count over all runs
         mean_run_tokens = np.mean(self.token_storage, axis = 0)
-        print(mean_run_tokens)
+        #print(mean_run_tokens)
         # Returns a truth table of which places to plot
         truth_values = [place in places for place in self.place_ids]
         #print(mean_run_tokens[:,truth_values]) brandoggy

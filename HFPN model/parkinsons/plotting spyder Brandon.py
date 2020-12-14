@@ -22,8 +22,9 @@ from visualisation import Analysis
 # In[2]:
 
 analysis = {}
-analysis['whole_HFPN_10e6'] = Analysis.load_from_file('whole_HFPN_10e6')
-# analysis['LRRK2_mut_100000'] = Analysis.load_from_file('LRRK2_mut_100000')
+analysis['HFPN_Healthy_6x10e6'] = Analysis.load_from_file('HFPN_Healthy_6x10e6')
+analysis['HFPN_DJ1_6x10e6'] = Analysis.load_from_file('HFPN_DJ1_6x10e6')
+analysis['HFPN_VPS35_6x10e6'] = Analysis.load_from_file('HFPN_VPS35_6x10e6')
 
 # analysis['DJ1'] = Analysis.load_from_file('pd_DJ1_ds_smallertimestep')
 # analysis['lrrk2'] = Analysis.load_from_file('pd_lrrk2_ds_smallertimestep')
@@ -49,7 +50,7 @@ def smoothen(array, filter_size):
     return convolve(array[:-(filter_size-1),0],filt)
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
-    t=np.arange(0,1000.001,0.001) #divide 1 million by your number of timesteps on the middle line
+    t=np.arange(0,6000.001,0.001) #divide 1 million by your number of timesteps on the middle line
 
     fig,ax=plt.subplots()
     linestep = 0.3
@@ -57,8 +58,8 @@ def create_plot(analysis, input_place_list, place_labels, mutation_list, mutatio
     
     for i, mutation in enumerate(mutation_list):
         for place, place_label in zip(input_place_list, place_labels):
-            data = analysis[mutation].mean_token_history_for_places([place])[0:1000001]
-            print(data[9000])
+            data = analysis[mutation].mean_token_history_for_places([place])[0:6000001]
+            #print(data[9000])
 
             if place_label == "":
                 ax.plot(t, data, label = mutation_labels[i], linewidth = line_width- i*linestep)
@@ -157,13 +158,19 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 # ## Energy metabolism 
 
 # In[4]:
+# create_plot(analysis, 
+#             input_place_list = ['p_chol_mito'], 
+#             place_labels = [""], 
+#             mutation_list = ['HFPN_Healthy_6x10e6'], 
+#             mutation_labels = ['HFPN_Healthy_6x10e6'],
+#             plot_title = 'PD - p_chol_mito')
 
 
 create_plot(analysis, 
             input_place_list = ['p_chol_mito'], 
             place_labels = [""], 
-            mutation_list = ['whole_HFPN_10e6'], 
-            mutation_labels = ['whole_HFPN_10e6'],
+            mutation_list = ['HFPN_DJ1_6x10e6'], 
+            mutation_labels = ['HFPN_DJ1_6x10e6'],
             plot_title = 'PD - p_chol_mito')
 
 
