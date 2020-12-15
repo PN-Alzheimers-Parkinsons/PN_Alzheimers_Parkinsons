@@ -548,23 +548,21 @@ def main():
                         output_arc_weights = [1,0.5],
                         distribution_type = ["grf", SD, r_t_SERCA, fc_t_SERCA]) 
 
-    # pn.add_transition(transition_id = 't_NCX_PMCA',
-    #                     label = 'Ca efflux to extracellular space',
-    #                     input_place_ids = ['p_Ca_cyto'],
-    #                     input_arc_weights = [1],
-    #                     output_place_ids = [],         
-    #                     output_arc_weights = [],
-    #                     switch_place_ids = ['p_on3'],
-    #                     switch_arc_weights = [0],
-    #                     distribution_type = ["grf", 0.1, r_t_NCX_PMCA])
+    pn.add_transition(transition_id = 't_NCX_PMCA',
+                        label = 'Ca efflux to extracellular space',
+                        input_place_ids = ['p_Ca_cyto'],
+                        input_arc_weights = [1],
+                        output_place_ids = [],         
+                        output_arc_weights = [],
+                        distribution_type = ["grf", SD, r_t_NCX_PMCA, fc_t_NCX_PMCA])
     
-    # pn.add_transition(transition_id = 't_mNCLX',
-    #                     label = 'Ca export from mitochondria via mNCLX',
-    #                     input_place_ids = ['p_Ca_mito'],
-    #                     input_arc_weights = [1], 
-    #                     output_place_ids = ['p_Ca_cyto'],         
-    #                     output_arc_weights = [1],
-    #                     distribution_type = ["grf", 0.1, r_t_mNCLX]) 
+    pn.add_transition(transition_id = 't_mNCLX',
+                        label = 'Ca export from mitochondria via mNCLX',
+                        input_place_ids = ['p_Ca_mito'],
+                        input_arc_weights = [1], 
+                        output_place_ids = ['p_Ca_cyto'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_mNCLX, fc_t_mNCLX]) 
 
     # Discrete on/of-switches calcium pacemaking
     
@@ -572,57 +570,57 @@ def main():
     pn.add_transition(transition_id = 't_A',
                     label      =     "A",
                     input_place_ids         =  ['p_on4'],
-                    input_arc_weights  =  [2],  
+                    input_arc_weights  =  [1],  
                     output_place_ids         = ['p_on8'], 
-                    output_arc_weights =  [2], 
+                    output_arc_weights =  [1], 
                     distribution_type = ["calcium_stochastic", SDCalcium ,r_t_A, fc_t_A, rate_t_A_Extract])
 
     pn.add_transition(transition_id = 't_B',
                     label      =     "B",
                     input_place_ids         =  ['p_on6'],
-                    input_arc_weights  =  [1000],  
+                    input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on3'], 
-                    output_arc_weights =  [1000], 
+                    output_arc_weights =  [500000], 
                     distribution_type = ["calcium_stochastic", SDCalcium ,r_t_B, fc_t_B, rate_t_B_Extract])
 
     pn.add_transition(transition_id = 't_D',
                     label      =     "D",
                     input_place_ids         =  ['p_on3'],
-                    input_arc_weights  =  [2],  
+                    input_arc_weights  =  [1],  
                     output_place_ids         = ['p_on7'], 
-                    output_arc_weights =  [2], 
+                    output_arc_weights =  [1], 
                     distribution_type = ["calcium_stochastic", SDCalcium ,r_t_D, fc_t_D, rate_t_D_Extract])
     
     pn.add_transition(transition_id = 't_E',
                     label      =     "E",
                     input_place_ids         =  ['p_on5'],
-                    input_arc_weights  =  [2],  
+                    input_arc_weights  =  [1],  
                     output_place_ids         = ['p_Ca_extra'], 
-                    output_arc_weights =  [2], 
+                    output_arc_weights =  [1], 
                     distribution_type = ["calcium_stochastic", SDCalcium, r_t_E, fc_t_E, rate_t_E_Extract])
     
     pn.add_transition(transition_id = 't_F',
                     label      =     "F",
                     input_place_ids         =  ['p_Ca_extra'],
-                    input_arc_weights  =  [1000],  
+                    input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on6'], 
-                    output_arc_weights =  [1000], 
+                    output_arc_weights =  [500000], 
                     distribution_type = ["calcium", SDCalcium, r_t_F, fc_t_F, rate_t_F_Extract])
     
     pn.add_transition(transition_id = 't_G',
                     label      =     "G",
                     input_place_ids         =  ['p_on7'],
-                    input_arc_weights  =  [1000],  
+                    input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on4'], 
-                    output_arc_weights =  [1000], 
+                    output_arc_weights =  [500000], 
                     distribution_type = ["calcium", SDCalcium, r_t_G, fc_t_G, rate_t_G_Extract])
         
     pn.add_transition(transition_id = 't_H',
                     label      =     "H",
                     input_place_ids         =  ['p_on8'],
-                    input_arc_weights  =  [1000],  
+                    input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on5'], 
-                    output_arc_weights =  [1000], 
+                    output_arc_weights =  [500000], 
                     distribution_type = ["calcium", SDCalcium, r_t_H, fc_t_H, rate_t_H_Extract])
     
     pn.add_transition(transition_id = 't_NaK_ATPase',
