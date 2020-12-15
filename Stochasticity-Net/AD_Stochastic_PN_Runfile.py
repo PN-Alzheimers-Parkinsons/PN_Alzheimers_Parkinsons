@@ -581,7 +581,7 @@ def main():
                     input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on3'], 
                     output_arc_weights =  [500000], 
-                    distribution_type = ["calcium_stochastic", SDCalcium ,r_t_B, fc_t_B, rate_t_B_Extract])
+                    distribution_type = ["calcium", SDCalcium ,r_t_B, fc_t_B, rate_t_B_Extract])
 
     pn.add_transition(transition_id = 't_D',
                     label      =     "D",
@@ -629,12 +629,12 @@ def main():
                         input_arc_weights = [1,0], 
                         output_place_ids = ['p_ADP'],         
                         output_arc_weights = [1],
-                        distribution_type = ["grf", SD, r_t_NAK_ATPase])
+                        distribution_type = ["grf", SD, r_t_NAK_ATPase, fc_t_NaK_ATPase])
   
   
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(5000, print_stats=False)
+    pn.run(6000000, print_stats=False)
     
     #BSL: A good looking curve is, 2000 run steps, standard deviation of fixed 1 token, 200 starting tokens for asec. 10% of the mean gives a very smooth curve.
 
@@ -645,7 +645,7 @@ def main():
     pn.plot_time_evolution(list_for_plot)
     pn.timeseries_mean_for_place("p_Ca_extra")
     analysis = Analysis(pn)
-    run_save_name = "plot1"
+    run_save_name = "6M_SDall10_healthy"
     Analysis.store_to_file(analysis, run_save_name)
     print('Network saved to : "' + run_save_name+'.pkl"')
 
