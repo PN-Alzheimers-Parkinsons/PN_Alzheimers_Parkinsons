@@ -139,6 +139,14 @@ r_t_F = lambda a: 1
 r_t_G = lambda a: 1
 r_t_H = lambda a: 1
 
+rate_t_A_Extract = lambda a: a['p_on4']
+rate_t_B_Extract = lambda a: a['p_on6']
+rate_t_D_Extract = lambda a: a['p_on3']
+rate_t_E_Extract = lambda a: a['p_on5']
+rate_t_F_Extract = lambda a: a['p_Ca_extra']
+rate_t_G_Extract = lambda a: a['p_on7']
+rate_t_H_Extract = lambda a: a['p_on8']
+
 # Energy metabolism
 r_t_krebs = lambda a : k_t_krebs * a['p_ADP'] * a['p_Ca_mito'] * min( [1.0, max([0.0018,(m_t_ETC_inhib_Ab * a["p_Ab"] + n_t_ETC_inhib_Ab)])])
 r_t_ATP_hydro_mito = lambda a : k_t_ATP_hydro_mito * a['p_ATP']

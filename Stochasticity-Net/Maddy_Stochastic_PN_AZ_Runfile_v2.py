@@ -103,7 +103,7 @@ def main():
 
     pn.add_place(0, "p_on3","on3")
     pn.add_place(0, "p_on4","on4")    
-    pn.add_place(1000, "p_on5","on5") 
+    pn.add_place(500000, "p_on5","on5") 
     pn.add_place(0, "p_on6","on6") 
     pn.add_place(0, "p_on7","on7") 
     pn.add_place(0, "p_on8","on8") 
@@ -575,7 +575,7 @@ def main():
                     input_arc_weights  =  [2],  
                     output_place_ids         = ['p_on8'], 
                     output_arc_weights =  [2], 
-                    distribution_type = ["calcium",0,r_t_A, fc_t_A])
+                    distribution_type = ["calcium_stochastic", SDCalcium ,r_t_A, fc_t_A, rate_t_A_Extract])
 
     pn.add_transition(transition_id = 't_B',
                     label      =     "B",
@@ -583,7 +583,7 @@ def main():
                     input_arc_weights  =  [1000],  
                     output_place_ids         = ['p_on3'], 
                     output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,r_t_B, fc_t_B])
+                    distribution_type = ["calcium_stochastic", SDCalcium ,r_t_B, fc_t_B, rate_t_B_Extract])
 
     pn.add_transition(transition_id = 't_D',
                     label      =     "D",
@@ -591,7 +591,7 @@ def main():
                     input_arc_weights  =  [2],  
                     output_place_ids         = ['p_on7'], 
                     output_arc_weights =  [2], 
-                    distribution_type = ["calcium",0,r_t_D, fc_t_D])
+                    distribution_type = ["calcium_stochastic", SDCalcium ,r_t_D, fc_t_D, rate_t_D_Extract])
     
     pn.add_transition(transition_id = 't_E',
                     label      =     "E",
@@ -599,7 +599,7 @@ def main():
                     input_arc_weights  =  [2],  
                     output_place_ids         = ['p_Ca_extra'], 
                     output_arc_weights =  [2], 
-                    distribution_type = ["calcium",0,r_t_E, fc_t_E])
+                    distribution_type = ["calcium_stochastic", SDCalcium, r_t_E, fc_t_E, rate_t_E_Extract])
     
     pn.add_transition(transition_id = 't_F',
                     label      =     "F",
@@ -607,7 +607,7 @@ def main():
                     input_arc_weights  =  [1000],  
                     output_place_ids         = ['p_on6'], 
                     output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,r_t_F, fc_t_F])
+                    distribution_type = ["calcium", SDCalcium, r_t_F, fc_t_F, rate_t_F_Extract])
     
     pn.add_transition(transition_id = 't_G',
                     label      =     "G",
@@ -615,7 +615,7 @@ def main():
                     input_arc_weights  =  [1000],  
                     output_place_ids         = ['p_on4'], 
                     output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,r_t_G, fc_t_G])
+                    distribution_type = ["calcium", SDCalcium, r_t_G, fc_t_G, rate_t_G_Extract])
         
     pn.add_transition(transition_id = 't_H',
                     label      =     "H",
@@ -623,7 +623,7 @@ def main():
                     input_arc_weights  =  [1000],  
                     output_place_ids         = ['p_on5'], 
                     output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,r_t_H, fc_t_H])
+                    distribution_type = ["calcium", SDCalcium, r_t_H, fc_t_H, rate_t_H_Extract])
     
     # # Link to energy metabolism in that it needs ATP replenishment
     # hfpn.add_transition_with_mass_action(
