@@ -625,17 +625,15 @@ def main():
                     output_arc_weights =  [1000], 
                     distribution_type = ["calcium", SDCalcium, r_t_H, fc_t_H, rate_t_H_Extract])
     
-    # # Link to energy metabolism in that it needs ATP replenishment
-    # hfpn.add_transition_with_mass_action(
-    #                     transition_id = 't_NaK_ATPase',
-    #                     label = 'NaK ATPase',
-    #                     rate_constant =  k_t_NaK_ATPase,
-    #                     input_place_ids = ['p_ATP', 'p_on3'],
-    #                     firing_condition = lambda a: a['p_on3']==1,
-    #                     consumption_coefficients = [1,0], 
-    #                     output_place_ids = ['p_ADP'],         
-    #                     production_coefficients = [1])
-       
+    pn.add_transition(transition_id = 't_NaK_ATPase',
+                        label = 'NaK ATPase',
+                        input_place_ids = ['p_ATP', 'p_on3'],
+                        input_arc_weights = [1,0], 
+                        output_place_ids = ['p_ADP'],         
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_NAK_ATPase])
+  
+  
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
     pn.run(5000, print_stats=False)
