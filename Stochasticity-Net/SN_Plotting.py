@@ -29,7 +29,7 @@ from Stochastic_Analysis import Analysis
 # In[2]:
 
 analysis = {}
-analysis['plot1'] = Analysis.load_from_file('plot1')
+analysis['6MSD10'] = Analysis.load_from_file('6MSD10')
 # analysis['LRRK2_mut_100000'] = Analysis.load_from_file('LRRK2_mut_100000')
 # analysis['DJ1'] = Analysis.load_from_file('pd_DJ1_ds_smallertimestep')
 # analysis['lrrk2'] = Analysis.load_from_file('pd_lrrk2_ds_smallertimestep')
@@ -76,14 +76,14 @@ def smoothen(array, filter_size):
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
     
-    t=np.arange(0,5,0.001) #divide 1 million by your number of timesteps on the middle line
+    t=np.arange(0,6000,0.001) #divide 1 million by your number of timesteps on the middle line
     fig,ax=plt.subplots()
     linestep = 0.3
     line_width = 3
     
     for i, mutation in enumerate(mutation_list):
         for place, place_label in zip(input_place_list, place_labels):
-            data = analysis[mutation].mean_token_history_for_places([place])[0:1000001]
+            data = analysis[mutation].mean_token_history_for_places([place])[0:6000000]
             #print(data[10])
             if place_label == "":
                 ax.plot(t, data, label = mutation_labels[i], linewidth = line_width- i*linestep)
@@ -185,11 +185,11 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 
 
 create_plot(analysis, 
-            input_place_list = ['p_on3'], 
+            input_place_list = ['p_chol_mito'], 
             place_labels = [""], 
-            mutation_list = ['plot1'], 
-            mutation_labels = ['plot1'],
-            plot_title = 'on3')
+            mutation_list = ['6MSD10'], 
+            mutation_labels = ['Healthy'],
+            plot_title = 'chol mito')
 
 
 # create_plot(analysis, 

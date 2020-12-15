@@ -572,7 +572,7 @@ def main():
                     input_arc_weights  =  [2],  
                     output_place_ids         = ['p_on8'], 
                     output_arc_weights =  [2], 
-                    distribution_type = ["calcium",0,r_t_A, fc_t_A])
+                    distribution_type = ["calcium",SDcalcium,r_t_A, fc_t_A])
 
     pn.add_transition(transition_id = 't_B',
                     label      =     "B",
@@ -580,7 +580,7 @@ def main():
                     input_arc_weights  =  [1000],  
                     output_place_ids         = ['p_on3'], 
                     output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,r_t_B, fc_t_B])
+                    distribution_type = ["calcium",SDcalcium,r_t_B, fc_t_B])
 
     pn.add_transition(transition_id = 't_D',
                     label      =     "D",
@@ -588,7 +588,7 @@ def main():
                     input_arc_weights  =  [2],  
                     output_place_ids         = ['p_on7'], 
                     output_arc_weights =  [2], 
-                    distribution_type = ["calcium",0,r_t_D, fc_t_D])
+                    distribution_type = ["calcium",SDcalcium,r_t_D, fc_t_D])
     
     pn.add_transition(transition_id = 't_E',
                     label      =     "E",
@@ -596,7 +596,7 @@ def main():
                     input_arc_weights  =  [2],  
                     output_place_ids         = ['p_Ca_extra'], 
                     output_arc_weights =  [2], 
-                    distribution_type = ["calcium",0,r_t_E, fc_t_E])
+                    distribution_type = ["calcium",SDcalcium,r_t_E, fc_t_E])
     
     pn.add_transition(transition_id = 't_F',
                     label      =     "F",
@@ -604,7 +604,7 @@ def main():
                     input_arc_weights  =  [1000],  
                     output_place_ids         = ['p_on6'], 
                     output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,r_t_F, fc_t_F])
+                    distribution_type = ["calcium",SDcalcium,r_t_F, fc_t_F])
     
     pn.add_transition(transition_id = 't_G',
                     label      =     "G",
@@ -612,7 +612,7 @@ def main():
                     input_arc_weights  =  [1000],  
                     output_place_ids         = ['p_on4'], 
                     output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0,r_t_G, fc_t_G])
+                    distribution_type = ["calcium",SDcalcium,r_t_G, fc_t_G])
         
     pn.add_transition(transition_id = 't_H',
                     label      =     "H",
@@ -620,7 +620,7 @@ def main():
                     input_arc_weights  =  [1000],  
                     output_place_ids         = ['p_on5'], 
                     output_arc_weights =  [1000], 
-                    distribution_type = ["calcium",0, r_t_H, fc_t_H])
+                    distribution_type = ["calcium",SDcalcium, r_t_H, fc_t_H])
     
     # Link to energy metabolism in that it needs ATP replenishment
     pn.add_transition(transition_id = 't_NaK_ATPase',
@@ -633,18 +633,18 @@ def main():
        
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(1000000, print_stats=False)
+    pn.run(5000, print_stats=False)
     
     #BSL: A good looking curve is, 2000 run steps, standard deviation of fixed 1 token, 200 starting tokens for asec. 10% of the mean gives a very smooth curve.
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ['p_ADP'] 
+    list_for_plot = ['p_on5'] 
     
     pn.plot_time_evolution(list_for_plot)
-    pn.timeseries_mean_for_place("p_ADP")
+    pn.timeseries_mean_for_place("p_on5")
     analysis = Analysis(pn)
-    run_save_name = "FinalAnalysis"
+    run_save_name = "test"
     Analysis.store_to_file(analysis, run_save_name)
     print('Network saved to : "' + run_save_name+'.pkl"')
 
