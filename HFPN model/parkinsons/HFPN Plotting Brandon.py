@@ -22,10 +22,11 @@ from visualisation import Analysis
 # In[2]:
 
 analysis = {}
-analysis['HFPN_Healthy_6x10e6'] = Analysis.load_from_file('HFPN_Healthy_6x10e6')
+#analysis['HFPN_Healthy_6x10e6'] = Analysis.load_from_file('HFPN_Healthy_6x10e6')
 analysis['HFPN_DJ1_6x10e6'] = Analysis.load_from_file('HFPN_DJ1_6x10e6')
-analysis['HFPN_VPS35_6x10e6'] = Analysis.load_from_file('HFPN_VPS35_6x10e6')
+# analysis['HFPN_VPS35_6x10e6'] = Analysis.load_from_file('HFPN_VPS35_6x10e6')
 
+# analysis['HFPN_DJ1_6x10e6'] = Analysis.load_from_file('HFPN_DJ1_6x10e6')
 # analysis['DJ1'] = Analysis.load_from_file('pd_DJ1_ds_smallertimestep')
 # analysis['lrrk2'] = Analysis.load_from_file('pd_lrrk2_ds_smallertimestep')
 # analysis['vps35'] = Analysis.load_from_file('pd_vps35_ds_smallertimestep')
@@ -41,6 +42,7 @@ analysis['HFPN_VPS35_6x10e6'] = Analysis.load_from_file('HFPN_VPS35_6x10e6')
 # analysis['DNL'] = Analysis.load_from_file('pd_DNL_ds_smallertimestep')
 # analysis['LAMP2A'] = Analysis.load_from_file('pd_LAMP2A_ds_smallertimestep')
 
+desired_plotting_steps = 3000000
 
 # In[3]:
 
@@ -50,7 +52,7 @@ def smoothen(array, filter_size):
     return convolve(array[:-(filter_size-1),0],filt)
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
-    t=np.arange(0,6000.001,0.001) #divide 1 million by your number of timesteps on the middle line
+    t=np.arange(0,(desired_plotting_steps/1000)+0.001,0.001) #divide 1 million by your number of timesteps on the middle line
 
     fig,ax=plt.subplots()
     linestep = 0.3
@@ -58,8 +60,8 @@ def create_plot(analysis, input_place_list, place_labels, mutation_list, mutatio
     
     for i, mutation in enumerate(mutation_list):
         for place, place_label in zip(input_place_list, place_labels):
-            data = analysis[mutation].mean_token_history_for_places([place])[0:6000001]
-            #print(data[9000])
+            data = analysis[mutation].mean_token_history_for_places([place])[0:desired_plotting_steps+1]
+            #print(data[4000000:4000100:1])
 
             if place_label == "":
                 ax.plot(t, data, label = mutation_labels[i], linewidth = line_width- i*linestep)
@@ -166,12 +168,136 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 #             plot_title = 'PD - p_chol_mito')
 
 
+# create_plot(analysis, 
+#             input_place_list = ['p_27OHchol_intra'], 
+#             place_labels = [""], 
+#             mutation_list = ['HFPN_DJ1_6x10e6'], 
+#             mutation_labels = ['HFPN_DJ1_6x10e6'],
+#             plot_title = 'PD - p_27OHchol_intra')
+# create_plot(analysis, 
+#             input_place_list = ['p_24OHchol_intra'], 
+#             place_labels = [""], 
+#             mutation_list = ['HFPN_DJ1_6x10e6'], 
+#             mutation_labels = ['HFPN_DJ1_6x10e6'],
+#             plot_title = 'PD - p_24OHchol_intra')
+# create_plot(analysis, 
+#             input_place_list = ['p_cas3'], 
+#             place_labels = [""], 
+#             mutation_list = ['HFPN_DJ1_6x10e6'], 
+#             mutation_labels = ['HFPN_DJ1_6x10e6'],
+#             plot_title = 'PD - p_cas3')
+
+
 create_plot(analysis, 
-            input_place_list = ['p_chol_mito'], 
+            input_place_list = ['p_Ca_mito'], 
             place_labels = [""], 
             mutation_list = ['HFPN_DJ1_6x10e6'], 
             mutation_labels = ['HFPN_DJ1_6x10e6'],
-            plot_title = 'PD - p_chol_mito')
+            plot_title = 'PD - p_Ca_mito')
+
+# create_plot(analysis, 
+#             input_place_list = ['p_ApoEchol_extra'], 
+#             place_labels = [""], 
+#             mutation_list = ['HFPN_Healthy_6x10e6'], 
+#             mutation_labels = ['HFPN_Healthy_6x10e6'],
+#             plot_title = 'PD - p_ApoEchol_extra')
+
+# create_plot(analysis, 
+#             input_place_list = ['p_ApoEchol_EE'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_ApoEchol_EE')
+
+# create_plot(analysis, 
+#             input_place_list = ['p_7HOCA'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_7HOCA')
+
+# create_plot(analysis, 
+#             input_place_list = ['p_preg'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_preg')
+
+# create_plot(analysis, 
+#             input_place_list = ['p_24OHchol_extra'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_24OHchol_extra')
+
+# create_plot(analysis, 
+#             input_place_list = ['p_24OHchol_intra'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_24OHchol_intra')
+
+# create_plot(analysis, 
+#             input_place_list = ['p_ROS_mito'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_ROS_mito')
+# create_plot(analysis, 
+#             input_place_list = ['p_H2O_mito'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_H2O_mito')
+# create_plot(analysis, 
+#             input_place_list = ['p_cas3'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_cas3')
+# create_plot(analysis, 
+#             input_place_list = ['p_Ca_cyto'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_Ca_cyto')
+# create_plot(analysis, 
+#             input_place_list = ['p_Ca_mito'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_Ca_mito')
+# create_plot(analysis, 
+#             input_place_list = ['p_Ca_ER'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_Ca_ER')
+# create_plot(analysis, 
+#             input_place_list = ['p_24OHchol_intra'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_24OHchol_intra')
+# create_plot(analysis, 
+#             input_place_list = ['p_24OHchol_intra'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_24OHchol_intra')
+# create_plot(analysis, 
+#             input_place_list = ['p_24OHchol_intra'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_24OHchol_intra')
+# create_plot(analysis, 
+#             input_place_list = ['p_24OHchol_intra'], 
+#             place_labels = [""], 
+#             mutation_list = ['DJ1_500k_HFPN'], 
+#             mutation_labels = ['DJ1_500k_HFPN'],
+#             plot_title = 'PD - p_24OHchol_intra')
+
 
 
 # create_plot(analysis, 

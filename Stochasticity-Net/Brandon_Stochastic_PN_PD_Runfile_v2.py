@@ -20,6 +20,7 @@ from Brandon_PD_SN_firing_conditions import *
 from Stochastic_Analysis import Analysis
 from Brandon_PD_SN_inputs import *
 
+from datetime import datetime
 
 def main():
         #only runs this chunk of code if running the file directly, not as an import
@@ -106,8 +107,8 @@ def main():
     pn.add_place(it_p_RTN3_PN, place_id="p_RTN3_PN", label="monomeric RTN3 (perinuclear)")
     #Cholesterol Homeostasis Transitions
     
-    SD = 0.1 #Standard Deviation. 0.1 means 10%
-    SDCalcium = 10 #recommend set the value to 10 for some solid stochasticity.
+    SD = 2 #Standard Deviation. 0.1 means 10%
+    SDCalcium = 0 #recommend set the value to 10 for some solid stochasticity.
     
     # Cholesterol Endocytosis
     pn.add_transition(transition_id = 't_LDLR_endocyto',
@@ -353,7 +354,7 @@ def main():
                     input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on3'], 
                     output_arc_weights =  [500000], 
-                    distribution_type = ["calcium",SDCalcium,rate_t_B, fc_t_B, rate_t_B_Extract])
+                    distribution_type = ["calcium",0,rate_t_B, fc_t_B, rate_t_B_Extract])
     
     pn.add_transition(transition_id = 't_D',
                     label      =     "D",
@@ -377,7 +378,7 @@ def main():
                     input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on6'], 
                     output_arc_weights =  [500000], 
-                    distribution_type = ["calcium",SDCalcium,rate_t_F, fc_t_F, rate_t_F_Extract])
+                    distribution_type = ["calcium",0,rate_t_F, fc_t_F, rate_t_F_Extract])
     
     pn.add_transition(transition_id = 't_G',
                     label      =     "G",
@@ -385,7 +386,7 @@ def main():
                     input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on4'], 
                     output_arc_weights =  [500000], 
-                    distribution_type = ["calcium",SDCalcium,rate_t_G, fc_t_G, rate_t_G_Extract])
+                    distribution_type = ["calcium",0,rate_t_G, fc_t_G, rate_t_G_Extract])
         
     pn.add_transition(transition_id = 't_H',
                     label      =     "H",
@@ -393,7 +394,7 @@ def main():
                     input_arc_weights  =  [500000],  
                     output_place_ids         = ['p_on5'], 
                     output_arc_weights =  [500000], 
-                    distribution_type = ["calcium",SDCalcium,rate_t_H, fc_t_H, rate_t_H_Extract])
+                    distribution_type = ["calcium",0,rate_t_H, fc_t_H, rate_t_H_Extract])
 
 
     
@@ -586,16 +587,20 @@ def main():
        
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
+    start_time = datetime.now()
     pn.run(10000, print_stats=False)
+    execution_time = datetime.now()-start_time
+    print('\n\ntime to execute:', execution_time)
+    
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ["p_Ca_extra"] 
+    list_for_plot = ["p_chol_mito"] 
     
     pn.plot_time_evolution(list_for_plot)
     #pn.timeseries_mean_for_place("p_Ca_extra")
     analysis = Analysis(pn)
-    run_save_name = "test"
+    run_save_name = "testlol"
     Analysis.store_to_file(analysis, run_save_name)
     print('Network saved to : "' + run_save_name+'.pkl"')
 

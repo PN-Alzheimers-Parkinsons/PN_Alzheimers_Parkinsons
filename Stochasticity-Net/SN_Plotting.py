@@ -29,7 +29,7 @@ from Stochastic_Analysis import Analysis
 # In[2]:
 
 analysis = {}
-analysis['test'] = Analysis.load_from_file('test')
+analysis['3m_SD40percentCa5_DJ1'] = Analysis.load_from_file('3m_SD40percentCa5_DJ1')
 #Whole_Module_10e6
 #Whole_Module_10e6_SD_10_percent
 # analysis['LRRK2_mut_100000'] = Analysis.load_from_file('LRRK2_mut_100000')
@@ -48,7 +48,7 @@ analysis['test'] = Analysis.load_from_file('test')
 # analysis['DNL'] = Analysis.load_from_file('pd_DNL_ds_smallertimestep')
 # analysis['LAMP2A'] = Analysis.load_from_file('pd_LAMP2A_ds_smallertimestep')
 
-
+desired_plotting_steps = 3000000
 # In[3]:
 
 #brandonadded
@@ -78,14 +78,14 @@ def smoothen(array, filter_size):
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
     
-    t=np.arange(0,6,0.001) #divide middle number by 0.001 to get ur number of time steps
+    t=np.arange(0,(desired_plotting_steps/1000),0.001) #divide middle number by 0.001 to get ur number of time steps
     fig,ax=plt.subplots()
     linestep = 0.3
     line_width = 3
     
     for i, mutation in enumerate(mutation_list):
         for place, place_label in zip(input_place_list, place_labels):
-            data = analysis[mutation].mean_token_history_for_places([place])[0:1000001]
+            data = analysis[mutation].mean_token_history_for_places([place])[0:desired_plotting_steps]
             print(data[3000])
             if place_label == "":
                 ax.plot(t, data, label = mutation_labels[i], linewidth = line_width- i*linestep)
@@ -200,11 +200,11 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 #             plot_title = 'PD - p_tauP')
 
 create_plot(analysis, 
-            input_place_list = ['p_on6'], 
+            input_place_list = ['p_Ca_mito'], 
             place_labels = [""], 
-            mutation_list = ['test'], 
-            mutation_labels = ['test'],
-            plot_title = 'PD - p_on6')
+            mutation_list = ['3m_SD40percentCa5_DJ1'], 
+            mutation_labels = ['3m_SD40percentCa5_DJ1'],
+            plot_title = 'PD - p_Ca_mito')
 
 
 #Whole_Module_10e6_SD_10_percent
