@@ -14,6 +14,7 @@ Created on Sun Nov 29 10:11:55 2020
 import os
 import sys
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import numpy as np
 #from scipy.signal import convolve
 #get_ipython().run_line_magic('matplotlib', 'qt')
@@ -29,7 +30,50 @@ from Stochastic_Analysis import Analysis
 # In[2]:
 
 analysis = {}
-analysis['3m_SD40percentCa5_DJ1'] = Analysis.load_from_file('3m_SD40percentCa5_DJ1')
+
+# analysis['6M_SDall10_healthy'] = Analysis.load_from_file('6M_SDall10_healthy')
+# analysis['6M_SDall5_healthy'] = Analysis.load_from_file('6M_SDall5_healthy')
+# analysis['6M_SDall1_healthy'] = Analysis.load_from_file('6M_SDall1_healthy')
+# analysis['6M_SDall15_healthy'] = Analysis.load_from_file('6M_SDall15_healthy')
+# analysis['6M_SDall20_healthy'] = Analysis.load_from_file('6M_SDall20_healthy')
+# analysis['6M_SDall30_healthy'] = Analysis.load_from_file('6M_SDall30_healthy')
+# analysis['6M_SDall40_healthy'] = Analysis.load_from_file('6M_SDall40_healthy')
+# analysis['SDall50_healthy2'] = Analysis.load_from_file('SDall50_healthy2')
+
+# analysis['6M_SDall1_aged'] = Analysis.load_from_file('6M_SDall1_aged')
+# analysis['6M_SDall5_aged'] = Analysis.load_from_file('6M_SDall5_aged')
+# analysis['6M_SDall5_aged2'] = Analysis.load_from_file('6M_SDall5_aged2')
+# analysis['6M_SDall10_age'] = Analysis.load_from_file('6M_SDall10_age')
+# analysis['6M_SDall10_aged2'] = Analysis.load_from_file('6M_SDall10_aged2')
+# analysis['6M_SDall15_aged2'] = Analysis.load_from_file('6M_SDall15_aged2')
+# analysis['6M_SDall20_aged'] = Analysis.load_from_file('6M_SDall20_aged')
+# analysis['6M_SDall20_aged2'] = Analysis.load_from_file('6M_SDall20_aged2')
+# analysis['6M_SDall30_aged'] = Analysis.load_from_file('6M_SDall30_aged')
+# analysis['6M_SDall30_aged2'] = Analysis.load_from_file('6M_SDall30_aged2')
+# analysis['6M_SDall40_aged'] = Analysis.load_from_file('6M_SDall40_aged')
+# analysis['6M_SDall40_aged2'] = Analysis.load_from_file('6M_SDall40_aged2')
+# analysis['6M_SDall50_aged'] = Analysis.load_from_file('6M_SDall50_aged')
+# analysis['6M_SDall50_aged2'] = Analysis.load_from_file('6M_SDall50_aged2')
+
+#APOE
+# analysis['6M_SDall0_apoe'] = Analysis.load_from_file('6M_SDall0_apoe')
+# analysis['6M_SDall1_apoe'] = Analysis.load_from_file('6M_SDall1_apoe')
+# analysis['6M_SDall1_apoe2'] = Analysis.load_from_file('6M_SDall1_apoe2')
+# analysis['6M_SDall5_apoe'] = Analysis.load_from_file('6M_SDall5_apoe')
+# analysis['6M_SDall5_apoe2'] = Analysis.load_from_file('6M_SDall5_apoe2')
+# analysis['6M_SDall10_apoe'] = Analysis.load_from_file('6M_SDall10_apoe')
+# analysis['6M_SDall10_apoe2'] = Analysis.load_from_file('6M_SDall10_apoe2')
+# analysis['6M_SDall15_apoe'] = Analysis.load_from_file('6M_SDall15_apoe')
+# analysis['6M_SDall15_apoe2'] = Analysis.load_from_file('6M_SDall15_apoe2')
+# analysis['6M_SDall20_apoe'] = Analysis.load_from_file('6M_SDall20_apoe')
+# analysis['6M_SDall20_apoe2'] = Analysis.load_from_file('6M_SDall20_apoe2')
+# analysis['6M_SDall30_apoe'] = Analysis.load_from_file('6M_SDall30_apoe')
+# analysis['6M_SDall30_apoe2'] = Analysis.load_from_file('6M_SDall30_apoe2')
+# analysis['6M_SDall40_apoe'] = Analysis.load_from_file('6M_SDall40_apoe')
+# analysis['6M_SDall40_apoe2'] = Analysis.load_from_file('6M_SDall40_apoe2')
+# analysis['6M_SDall50_apoe'] = Analysis.load_from_file('6M_SDall50_apoe')
+# analysis['6M_SDall50_apoe2'] = Analysis.load_from_file('6M_SDall50_apoe2')
+
 #Whole_Module_10e6
 #Whole_Module_10e6_SD_10_percent
 # analysis['LRRK2_mut_100000'] = Analysis.load_from_file('LRRK2_mut_100000')
@@ -48,7 +92,12 @@ analysis['3m_SD40percentCa5_DJ1'] = Analysis.load_from_file('3m_SD40percentCa5_D
 # analysis['DNL'] = Analysis.load_from_file('pd_DNL_ds_smallertimestep')
 # analysis['LAMP2A'] = Analysis.load_from_file('pd_LAMP2A_ds_smallertimestep')
 
-desired_plotting_steps = 3000000
+analysis['Ab6mil'] = Analysis.load_from_file('Ab6mil')
+analysis['Ab6milagedSD20simp'] = Analysis.load_from_file('Ab6milagedSD20simp')
+analysis['test'] = Analysis.load_from_file('test')
+
+
+desired_plotting_steps = 100000
 # In[3]:
 
 #brandonadded
@@ -78,6 +127,10 @@ def smoothen(array, filter_size):
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
     
+
+    t=np.arange(0,(desired_plotting_steps/1000),0.001) #divide middle number by 0.001 to get ur number of time steps
+
+    t=np.arange(0,100,0.001) #divide middle number by 0.001 to get ur number of time steps
     t=np.arange(0,(desired_plotting_steps/1000),0.001) #divide middle number by 0.001 to get ur number of time steps
     fig,ax=plt.subplots()
     linestep = 0.3
@@ -85,10 +138,15 @@ def create_plot(analysis, input_place_list, place_labels, mutation_list, mutatio
     
     for i, mutation in enumerate(mutation_list):
         for place, place_label in zip(input_place_list, place_labels):
+
+            data = analysis[mutation].mean_token_history_for_places([place])[0:100000]
+            # meandata = data[5000000:6000000]
+            # print(sum(meandata)/len(meandata))
+
             data = analysis[mutation].mean_token_history_for_places([place])[0:desired_plotting_steps]
-            print(data[3000])
+            # print(data[3000])
             if place_label == "":
-                ax.plot(t, data, label = mutation_labels[i], linewidth = line_width- i*linestep)
+                ax.plot(t, data, color = "dimgrey", label = mutation_labels[i], linewidth = line_width- i*linestep)
             else:
                 ax.plot(t, data, label = mutation_labels[i]+' - '+place_label, linewidth = line_width- i*linestep)
     
@@ -200,11 +258,12 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 #             plot_title = 'PD - p_tauP')
 
 create_plot(analysis, 
-            input_place_list = ['p_Ca_mito'], 
+            input_place_list = ['p_Ab_elon'], 
             place_labels = [""], 
-            mutation_list = ['3m_SD40percentCa5_DJ1'], 
-            mutation_labels = ['3m_SD40percentCa5_DJ1'],
-            plot_title = 'PD - p_Ca_mito')
+            mutation_list = ['test'], 
+            mutation_labels = ['aged'],
+            plot_title = 'Ab olig')
+
 
 
 #Whole_Module_10e6_SD_10_percent

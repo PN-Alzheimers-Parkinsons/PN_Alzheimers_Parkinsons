@@ -7,8 +7,8 @@ Abeta_multiplier = 100
 tau_multiplier = 10
 chol_multiplier = 300
 ER_multiplier = 10
-SD = 0.1
-SDCalcium = 0.1
+SD = 0.05
+SDCalcium = 0.05
 
 neurone_cell_volume = 9008e-15 # L
 avagadros_constant = 6.022e23 # mol-1
@@ -129,6 +129,11 @@ kcat_t_APP_bsec_cleav = 0.002
 Km_t_CTF99_gsec_cleav = 169223
 kcat_t_CTF99_gsec_cleav = 0.00167
 
+
+Km_t_Ab_elon = 23456894
+Vmax_t_Ab_elon = 1.108
+
+k_t_Ab_agg2 = 4.817e-8
 
 # Tau Pathology
 k_t_actv_GSK3b = 8.33e-3

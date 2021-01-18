@@ -640,12 +640,12 @@ def main():
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ['p_Ca_extra'] 
+    list_for_plot = ['p_chol_mito'] 
     
     pn.plot_time_evolution(list_for_plot)
-    pn.timeseries_mean_for_place("p_Ca_extra")
+    # pn.timeseries_mean_for_place("p_Ca_extra")
     analysis = Analysis(pn)
-    run_save_name = "6M_SDall10_healthy"
+    run_save_name = "6M_SDall0_aged"
     Analysis.store_to_file(analysis, run_save_name)
     print('Network saved to : "' + run_save_name+'.pkl"')
 

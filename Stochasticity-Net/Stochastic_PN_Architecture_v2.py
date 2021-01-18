@@ -70,7 +70,7 @@ class InArc(BaseArc):
             
     def allowed_firing(self):
         """Check whether the input place has enough tokens for the transition to occur."""
-        return self.place.tokens >= self.arc_weight*self.coefficient_scalar
+        return self.place.tokens >= (self.arc_weight*self.coefficient_scalar)
     # ####BRANDONMADDYHERE
     # def allowed_firing_CALCIUM_ONLY_Not_boolean(self):
     #     if self.place.tokens >= self.arc_weight*self.coefficient_scalar:
@@ -293,8 +293,9 @@ class PetriNet:
         
         # Run all copies and collect result (for later graphing for example)
         for step in range(number_of_steps):
-            if step % 100000 == 0:
+            if step % 200000 == 0:
                 print("We are now at step:", step,flush=True)
+
             # runstep_tokens: array of arrays containing the number of tokens for a given run-step
             #     -> dimension 0: petri-net copy (in order of self.petri_net_copies)
             #     -> dimension 1: place (in order self.petri_net_model.places)
