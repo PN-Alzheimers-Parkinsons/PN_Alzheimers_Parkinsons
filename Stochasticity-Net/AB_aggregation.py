@@ -197,7 +197,7 @@ def main():
                         input_arc_weights  = [1], 
                         output_place_ids       = ['p_Ab_elon'],
                         output_arc_weights = [1],
-                        distribution_type = ["grf", 10, r_t_Ab_elon, fc_t_Ab_elon])
+                        distribution_type = ["grf", SD, r_t_Ab_elon, fc_t_Ab_elon])
 
     pn.add_transition(transition_id = 't_Ab_agg',
                         label                = "Ab aggregation",
@@ -239,12 +239,12 @@ def main():
     
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(100000, print_stats=False)
+    pn.run(1000, print_stats=False)
     
 
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ['p_Ab_elon'] 
+    list_for_plot = ['p_Ab_fib'] 
     
     pn.plot_time_evolution(list_for_plot)
     # pn.timeseries_mean_for_place("p_Ca_extra")

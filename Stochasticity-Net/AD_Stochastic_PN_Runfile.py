@@ -48,6 +48,11 @@ def main():
     #
     pn.add_place(it_p_age, place_id="p_age", label="age risk factor")
     pn.add_place(it_p_ApoE, place_id="p_ApoE", label="ApoE risk factor")
+
+    ##AB aggregation places
+    pn.add_place(it_p_Ab_elon, place_id="p_Ab_elon", label="Elongating Ab")
+    pn.add_place(it_p_Ab_olig, place_id="p_Ab_olig", label="Ab oligomer")
+    pn.add_place(it_p_Ab_fib, place_id="p_Ab_fib", label="Ab fibril")
     
     #Tau Pathology places
     
@@ -221,6 +226,39 @@ def main():
                         output_place_ids = [],
                         output_arc_weights = [],
                         distribution_type = ["grf", SD, r_t_Ab_degr, fc_t_Ab_degr]) # TODO - fix ratio    
+    
+    
+    
+    
+    
+    
+    
+    ##AB Aggregation transitions
+    
+    pn.add_transition(transition_id = 't_Ab_elon',
+                        label                = "Ab elongation step",
+                        input_place_ids       = ['p_Ab'],
+                        input_arc_weights  = [1], 
+                        output_place_ids       = ['p_Ab_elon'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", SD, r_t_Ab_elon, fc_t_Ab_elon])
+
+    pn.add_transition(transition_id = 't_Ab_agg',
+                        label                = "Ab aggregation",
+                        input_place_ids       = ['p_Ab_elon'],
+                        input_arc_weights  = [12.4], 
+                        output_place_ids       = ['p_Ab_olig'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0, r_t_Ab_agg, fc_t_Ab_agg])
+
+    
+    pn.add_transition(transition_id = 't_Ab_fib',
+                        label                = "Ab fibrillation",
+                        input_place_ids       = ['p_Ab_olig'],
+                        input_arc_weights  = [4], 
+                        output_place_ids       = ['p_Ab_fib'],
+                        output_arc_weights = [1],
+                        distribution_type = ["grf", 0, r_t_Ab_fib, fc_t_Ab_fib])
 
     #Tau pathology
 
@@ -645,7 +683,7 @@ def main():
     pn.plot_time_evolution(list_for_plot)
     # pn.timeseries_mean_for_place("p_Ca_extra")
     analysis = Analysis(pn)
-    run_save_name = "6M_SDall0_aged"
+    run_save_name = "6M_SD10_aged_AB"
     Analysis.store_to_file(analysis, run_save_name)
     print('Network saved to : "' + run_save_name+'.pkl"')
 

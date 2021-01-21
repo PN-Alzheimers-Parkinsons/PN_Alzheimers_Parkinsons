@@ -92,12 +92,14 @@ analysis = {}
 # analysis['DNL'] = Analysis.load_from_file('pd_DNL_ds_smallertimestep')
 # analysis['LAMP2A'] = Analysis.load_from_file('pd_LAMP2A_ds_smallertimestep')
 
-analysis['Ab6mil'] = Analysis.load_from_file('Ab6mil')
-analysis['Ab6milagedSD20simp'] = Analysis.load_from_file('Ab6milagedSD20simp')
-analysis['test'] = Analysis.load_from_file('test')
+# analysis['Ab6mil'] = Analysis.load_from_file('Ab6mil')
+# analysis['Ab6milagedSD20simp'] = Analysis.load_from_file('Ab6milagedSD20simp')
+# analysis['test'] = Analysis.load_from_file('test')
+analysis['6M_SD10_aged_AB'] = Analysis.load_from_file('6M_SD10_aged_AB')
+# analysis['agedSD10AB'] = Analysis.load_from_file('agedSD10AB')
 
 
-desired_plotting_steps = 100000
+desired_plotting_steps = 6000000
 # In[3]:
 
 #brandonadded
@@ -130,7 +132,7 @@ def create_plot(analysis, input_place_list, place_labels, mutation_list, mutatio
 
     t=np.arange(0,(desired_plotting_steps/1000),0.001) #divide middle number by 0.001 to get ur number of time steps
 
-    t=np.arange(0,100,0.001) #divide middle number by 0.001 to get ur number of time steps
+    t=np.arange(0,6000,0.001) #divide middle number by 0.001 to get ur number of time steps
     t=np.arange(0,(desired_plotting_steps/1000),0.001) #divide middle number by 0.001 to get ur number of time steps
     fig,ax=plt.subplots()
     linestep = 0.3
@@ -139,7 +141,7 @@ def create_plot(analysis, input_place_list, place_labels, mutation_list, mutatio
     for i, mutation in enumerate(mutation_list):
         for place, place_label in zip(input_place_list, place_labels):
 
-            data = analysis[mutation].mean_token_history_for_places([place])[0:100000]
+            data = analysis[mutation].mean_token_history_for_places([place])[0:6000000]
             # meandata = data[5000000:6000000]
             # print(sum(meandata)/len(meandata))
 
@@ -260,9 +262,9 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 create_plot(analysis, 
             input_place_list = ['p_Ab_elon'], 
             place_labels = [""], 
-            mutation_list = ['test'], 
+            mutation_list = ['6M_SD10_aged_AB'], 
             mutation_labels = ['aged'],
-            plot_title = 'Ab olig')
+            plot_title = 'Ab elon')
 
 
 
