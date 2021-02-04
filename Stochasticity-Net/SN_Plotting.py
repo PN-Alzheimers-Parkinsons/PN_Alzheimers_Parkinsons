@@ -95,11 +95,13 @@ analysis = {}
 # analysis['Ab6mil'] = Analysis.load_from_file('Ab6mil')
 # analysis['Ab6milagedSD20simp'] = Analysis.load_from_file('Ab6milagedSD20simp')
 # analysis['test'] = Analysis.load_from_file('test')
-analysis['6M_SD10_aged_AB'] = Analysis.load_from_file('6M_SD10_aged_AB')
+# analysis['6M_SD10_aged_AB'] = Analysis.load_from_file('6M_SD10_aged_AB')
 # analysis['agedSD10AB'] = Analysis.load_from_file('agedSD10AB')
+analysis['CD33Aged6t'] = Analysis.load_from_file('CD33Aged6t')
+analysis['healthy6t'] = Analysis.load_from_file('healthy6t')
 
 
-desired_plotting_steps = 6000000
+desired_plotting_steps = 600000
 # In[3]:
 
 #brandonadded
@@ -144,7 +146,7 @@ def create_plot(analysis, input_place_list, place_labels, mutation_list, mutatio
             data = analysis[mutation].mean_token_history_for_places([place])[0:6000000]
             # meandata = data[5000000:6000000]
             # print(sum(meandata)/len(meandata))
-
+            print(data[510000])
             data = analysis[mutation].mean_token_history_for_places([place])[0:desired_plotting_steps]
             # print(data[3000])
             if place_label == "":
@@ -260,11 +262,11 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 #             plot_title = 'PD - p_tauP')
 
 create_plot(analysis, 
-            input_place_list = ['p_Ab_elon'], 
+            input_place_list = ['p_Ab_fib'], 
             place_labels = [""], 
-            mutation_list = ['6M_SD10_aged_AB'], 
-            mutation_labels = ['aged'],
-            plot_title = 'Ab elon')
+            mutation_list = ['healthy6t'], 
+            mutation_labels = ['healthy'],
+            plot_title = 'Ab')
 
 
 

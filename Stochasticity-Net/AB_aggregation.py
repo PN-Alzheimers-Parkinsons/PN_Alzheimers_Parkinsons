@@ -7,6 +7,7 @@ Created on Sun Jan 17 10:46:14 2021
 """
 import os
 import sys
+import numpy as np
 
 cwd = os.getcwd() # Get current working directory
 root_folder = os.sep + "PN_Alzheimers_Parkinsons"
@@ -239,7 +240,7 @@ def main():
     
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(1000, print_stats=False)
+    pn.run(100000, print_stats=False)
     
 
     # Plot the time-evolution of the system

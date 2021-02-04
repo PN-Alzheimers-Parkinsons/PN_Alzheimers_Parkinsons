@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Nov  6 15:42:54 2020
-
-@author: brand
 """
 import os
 import sys
@@ -48,6 +46,7 @@ def main():
     #
     pn.add_place(it_p_age, place_id="p_age", label="age risk factor")
     pn.add_place(it_p_ApoE, place_id="p_ApoE", label="ApoE risk factor")
+    pn.add_place(it_p_CD33, place_id="p_CD33", label="CD33 risk factor")
 
     ##AB aggregation places
     pn.add_place(it_p_Ab_elon, place_id="p_Ab_elon", label="Elongating Ab")
@@ -227,7 +226,14 @@ def main():
                         output_arc_weights = [],
                         distribution_type = ["grf", SD, r_t_Ab_degr, fc_t_Ab_degr]) # TODO - fix ratio    
     
-    
+    pn.add_transition(transition_id				 = 't_Ab_phag',
+                        label						 = 'Ab phagocytosis',
+                        input_place_ids				 = ['p_Ab'], 
+                        input_arc_weights	 = [1], 
+                        output_place_ids = [],
+                        output_arc_weights = [],
+                        distribution_type = ["grf", SD, r_t_Ab_phag, fc_t_Ab_phag]) # TODO - fix ratio    
+        
     
     
     
@@ -259,7 +265,22 @@ def main():
                         output_place_ids       = ['p_Ab_fib'],
                         output_arc_weights = [1],
                         distribution_type = ["grf", 0, r_t_Ab_fib, fc_t_Ab_fib])
-
+    
+    pn.add_transition(transition_id = 't_Ab_frag',
+                        label                = "Ab fragmentation",
+                        input_place_ids       = ['p_Ab_fib'],
+                        input_arc_weights  = [1], 
+                        output_place_ids       = ['p_Ab_olig', 'p_Ab'],
+                        output_arc_weights = [3,12.4],
+                        distribution_type = ["grf", SD, r_t_Ab_frag, fc_t_Ab_frag])
+    
+    pn.add_transition(transition_id = 't_Abfib_phag',
+                        label                = "Ab fibril phagocytosis",
+                        input_place_ids       = ['p_Ab_fib'],
+                        input_arc_weights  = [1], 
+                        output_place_ids       = [],
+                        output_arc_weights = [],
+                        distribution_type = ["grf", SD, r_t_Abfib_phag, fc_t_Abfib_frag])
     #Tau pathology
 
     #Tau pathology transitions
@@ -672,18 +693,16 @@ def main():
   
        # Run the network X times
     #a = {place.place_id:place.tokens for place in petri_net_model.places.values()}
-    pn.run(6000000, print_stats=False)
+    pn.run((600000), print_stats=False)
     
-    #BSL: A good looking curve is, 2000 run steps, standard deviation of fixed 1 token, 200 starting tokens for asec. 10% of the mean gives a very smooth curve.
-
     # Plot the time-evolution of the system
     #input the place ids into this list for plotting
-    list_for_plot = ['p_chol_mito'] 
+    list_for_plot = ['p_Ab'] 
     
     pn.plot_time_evolution(list_for_plot)
     # pn.timeseries_mean_for_place("p_Ca_extra")
     analysis = Analysis(pn)
-    run_save_name = "6M_SD10_aged_AB"
+    run_save_name = "healthy6t"
     Analysis.store_to_file(analysis, run_save_name)
     print('Network saved to : "' + run_save_name+'.pkl"')
 
