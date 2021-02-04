@@ -16,6 +16,8 @@ import sys
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import numpy as np
+from pylab import plot, ylim, xlim, show, xlabel, ylabel, grid
+
 #from scipy.signal import convolve
 #get_ipython().run_line_magic('matplotlib', 'qt')
 # Only run this cell once to avoid confusion with directories
@@ -128,6 +130,12 @@ def plot_time_evolution(self, place_ids = []):#so the idea is you have the place
 def smoothen(array, filter_size):
     filt=np.ones(filter_size)/filter_size
     return convolve(array[:-(filter_size-1),0],filt)
+
+
+def movingaverage(interval, window_size):
+    window= np.ones(int(window_size))/float(window_size)
+    return np.convolve(interval, window, 'same')
+
     
 def create_plot(analysis, input_place_list, place_labels, mutation_list, mutation_labels, plot_title):
     
@@ -143,20 +151,27 @@ def create_plot(analysis, input_place_list, place_labels, mutation_list, mutatio
     for i, mutation in enumerate(mutation_list):
         for place, place_label in zip(input_place_list, place_labels):
 
-            data = analysis[mutation].mean_token_history_for_places([place])[0:6000000]
+            # data = analysis[mutation].mean_token_history_for_places([place])[0:6000000]
             # meandata = data[5000000:6000000]
             # print(sum(meandata)/len(meandata))
-            print(data[510000])
+            # print(data[510000])
             data = analysis[mutation].mean_token_history_for_places([place])[0:desired_plotting_steps]
+            y = data[:,0]
             # print(data[3000])
             if place_label == "":
                 ax.plot(t, data, color = "dimgrey", label = mutation_labels[i], linewidth = line_width- i*linestep)
+                y_av = movingaverage(y, 100000)
+                ax.plot(t[1000:], y_av[1000:], label = 'rolling average', linewidth = line_width- i*linestep, color = "r")
+                ylim(min(y), max(y))
             else:
                 ax.plot(t, data, label = mutation_labels[i]+' - '+place_label, linewidth = line_width- i*linestep)
+               
     
     ax.legend()
     Analysis.standardise_plot(ax, title = plot_title, xlabel = "Time (s)",ylabel = "Molecule count")
     plt.show()
+    
+
 
 def plot_stacked_bars(ax, legend, all_data, xs, labels, width):
 
@@ -262,7 +277,7 @@ def create_bar_chart(analysis, places_a, places_a_labels, places_b, places_b_lab
 #             plot_title = 'PD - p_tauP')
 
 create_plot(analysis, 
-            input_place_list = ['p_Ab_fib'], 
+            input_place_list = ['p_Ab'], 
             place_labels = [""], 
             mutation_list = ['healthy6t'], 
             mutation_labels = ['healthy'],

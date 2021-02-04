@@ -7,7 +7,6 @@ Created on Sun Jan 17 10:46:14 2021
 """
 import os
 import sys
-import numpy as np
 
 cwd = os.getcwd() # Get current working directory
 root_folder = os.sep + "PN_Alzheimers_Parkinsons"
